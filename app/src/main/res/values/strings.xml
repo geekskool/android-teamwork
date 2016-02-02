@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Assign Tasks</string>
+    <string name="action_settings">Settings</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="comments">Comments</string>
+    <string name="save_task">Save Task</string>
+    <string name="due_date">Due Date</string>
+    <string name="assignee_prompt">Enter Assignee Name</string>
+    <string name="task_prompt">Enter Task Description</string>
+</resources>
