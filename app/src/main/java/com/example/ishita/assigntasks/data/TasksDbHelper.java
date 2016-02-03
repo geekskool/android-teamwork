@@ -25,7 +25,7 @@ public class TasksDbHelper extends SQLiteOpenHelper {
         final String SQL_CREATE_TASK_TABLE = "CREATE TABLE " + TasksContract.TaskEntry.TABLE_NAME + " (" +
                 TasksContract.COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 TasksContract.TaskEntry.COL_DESCRIPTION + " TEXT NOT NULL, " +
-                TasksContract.TaskEntry.COL_CREATOR_KEY + " TEXT, " + //TODO make this not null after app compiles.
+                TasksContract.TaskEntry.COL_CREATOR_KEY + " TEXT NOT NULL, " +
                 TasksContract.TaskEntry.COL_ASSIGNEE_KEY + " TEXT NOT NULL, "+
                 TasksContract.TaskEntry.COL_DUE_DATE + " DATETIME DEFAULT CURRENT_TIMESTAMP, " +
                 TasksContract.TaskEntry.COL_COMMENTS + " TEXT, " +

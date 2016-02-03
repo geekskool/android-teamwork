@@ -7,4 +7,8 @@
     <string name="due_date">Due Date</string>
     <string name="assignee_prompt">Enter Assignee Name</string>
     <string name="task_prompt">Enter Task Description</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="title_activity_comments">CommentsActivity</string>
 </resources>

@@ -51,7 +51,17 @@
             android:name=".data.TasksProvider"
             android:authorities="com.example.ishita.assigntasks"
             android:enabled="true"
-            android:exported="true"></provider>
+            android:exported="false" />
+
+        <activity
+            android:name=".CommentsActivity"
+            android:label="@string/title_activity_comments"
+            android:parentActivityName=".AddTask"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.ishita.assigntasks.AddTask" />
+        </activity>
     </application>
 
 </manifest>

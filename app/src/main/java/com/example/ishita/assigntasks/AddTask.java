@@ -18,6 +18,9 @@ import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
 
+import java.util.List;
+import java.util.Vector;
+
 public class AddTask extends AppCompatActivity {
 
     /**
@@ -28,12 +31,14 @@ public class AddTask extends AppCompatActivity {
      * may be best to switch to a
      * {@link FragmentStatePagerAdapter}.
      */
-    private SectionsPagerAdapter mSectionsPagerAdapter;
+    private static SectionsPagerAdapter mSectionsPagerAdapter;
 
     /**
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
+    public List<String> fragments = new Vector<String>();
+
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
      * See https://g.co/AppIndexing/AndroidStudio for more information.
@@ -51,8 +56,13 @@ public class AddTask extends AppCompatActivity {
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
+        //fill the fragments list with the fragment classes
+        fragments.add(AddTaskFragment.class.getName());
+        fragments.add(TasksFragment.class.getName());
+
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
+        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
 
@@ -130,36 +140,40 @@ public class AddTask extends AppCompatActivity {
      */
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
+        public List<String> fragmentsA;
+
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
+            fragmentsA = fragments;
         }
 
         @Override
         public Fragment getItem(int position) {
-            // getItem is called to instantiate the fragment for the given page.
-            // Return a PlaceholderFragment (defined as a static inner class below).
-            switch (position) {
-                case 0:
-                    return Fragment.instantiate(getApplicationContext(),AddTaskFragment.class.getName());
-                case 1:
-                    return Fragment.instantiate(getApplicationContext(),TasksFragment.class.getName());
-            }
-            return AddTaskFragment.newInstance(position + 1);
+            //return MyFragment.newInstance();
+            return Fragment.instantiate(getApplicationContext(), fragmentsA.get(position));
+
         }
+
 
         @Override
         public int getCount() {
-            // Show 3 total pages.
-            return 2;
+            // return CONTENT.length;
+            return fragmentsA.size();
         }
+
+        @Override
+        public int getItemPosition(Object object) {
+            return POSITION_NONE;
+        }
+
 
         @Override
         public CharSequence getPageTitle(int position) {
             switch (position) {
                 case 0:
-                    return "SECTION 1";
+                    return "Add Task";
                 case 1:
-                    return "SECTION 2";
+                    return "Tasks List";
                 /*case 2:
                     return "SECTION 3";*/
             }

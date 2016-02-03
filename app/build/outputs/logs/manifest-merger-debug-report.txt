@@ -128,13 +128,13 @@ MERGED from [com.google.android.gms:play-services-basement:8.4.0] /home/ishita/A
 	android:name
 		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:47:13-58
 provider#com.example.ishita.assigntasks.data.TasksProvider
-ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:50:9-54:48
+ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:50:9-54:40
 	android:authorities
 		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:52:13-65
 	android:enabled
 		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:53:13-35
 	android:exported
-		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:54:13-36
+		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:54:13-37
 	android:name
 		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:51:13-47
 uses-sdk

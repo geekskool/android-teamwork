@@ -58,7 +58,7 @@
             android:name="com.example.ishita.assigntasks.data.TasksProvider"
             android:authorities="com.example.ishita.assigntasks"
             android:enabled="true"
-            android:exported="true" />
+            android:exported="false" />
         <provider
             android:name="com.google.android.gms.measurement.AppMeasurementContentProvider"
             android:authorities="com.example.ishita.assigntasks.google_measurement_service"

@@ -7,9 +7,11 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -123,7 +125,9 @@ public class AddTaskFragment extends Fragment {
                     mTaskName = taskDescription.getText().toString();
                     mDueDate = dueDate.getText().toString();
                     mComments = comments.getText().toString();
-                    updateDb();
+                    Log.v("buttonClick", mTaskName + mDueDate + mComments + mAssigneeContact + mAssigneeName);
+                    UpdateTask updateDB = new UpdateTask();
+                    updateDB.execute();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -155,22 +159,35 @@ public class AddTaskFragment extends Fragment {
 
     }
 
-    private void updateDb() {
-        ContentValues taskDetails = new ContentValues();
-        taskDetails.put(TasksContract.TaskEntry.COL_DESCRIPTION,mTaskName);
-        taskDetails.put(TasksContract.TaskEntry.COL_ASSIGNEE_KEY,mAssigneeContact);
-        taskDetails.put(TasksContract.TaskEntry.COL_DUE_DATE,mDueDate);
-        taskDetails.put(TasksContract.TaskEntry.COL_COMMENTS,mComments);
+    public class UpdateTask extends AsyncTask<Void, Void, Void> {
 
-        ContentValues contactDetails = new ContentValues();
-        contactDetails.put(TasksContract.ProfileEntry.COL_NAME,mAssigneeName);
-        contactDetails.put(TasksContract.ProfileEntry.COL_CONTACT,mAssigneeContact);
+        protected Void doInBackground(Void... params) {
+            ContentValues taskDetails = new ContentValues();
+            taskDetails.put(TasksContract.TaskEntry.COL_DESCRIPTION, mTaskName);
+            taskDetails.put(TasksContract.TaskEntry.COL_ASSIGNEE_KEY, mAssigneeContact);
+            taskDetails.put(TasksContract.TaskEntry.COL_CREATOR_KEY, "creatorID");
+            taskDetails.put(TasksContract.TaskEntry.COL_DUE_DATE, mDueDate);
+            taskDetails.put(TasksContract.TaskEntry.COL_COMMENTS, mComments);
 
-        TasksDbHelper dbHelper = new TasksDbHelper(getContext());
-        SQLiteDatabase db = dbHelper.getWritableDatabase();
+            getContext().getContentResolver().insert(TasksContract.TaskEntry.CONTENT_URI, taskDetails);
 
-        db.insert(TasksContract.TaskEntry.TABLE_NAME,null,taskDetails);
-        db.insert(TasksContract.ProfileEntry.TABLE_NAME,null,contactDetails);
+            Cursor cursor = getContext().getContentResolver().query(
+                    TasksContract.ProfileEntry.CONTENT_URI,
+                    new String[] {TasksContract.ProfileEntry._ID},
+                    TasksContract.ProfileEntry.COL_CONTACT + "=?",
+                    new String[]{mAssigneeContact},
+                    null
+            );
+            if(!cursor.moveToFirst()) {
+                ContentValues contactDetails = new ContentValues();
+                contactDetails.put(TasksContract.ProfileEntry.COL_NAME, mAssigneeName);
+                contactDetails.put(TasksContract.ProfileEntry.COL_CONTACT, mAssigneeContact);
+
+                getContext().getContentResolver().insert(TasksContract.ProfileEntry.CONTENT_URI, contactDetails);
+            }
+            cursor.close();
+            return null;
+        }
     }
 
 }
