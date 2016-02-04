@@ -3,7 +3,9 @@ package com.example.ishita.assigntasks;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
@@ -11,6 +13,9 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
+import android.support.v7.app.ActionBar;
+import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +23,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ishita.assigntasks.data.TasksContract;
@@ -90,6 +96,13 @@ public class AddTaskFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_add_task, container, false);
+
+        //TODO ask Santosh what to do about this block
+//        TelephonyManager tMgr = (TelephonyManager) getContext().getSystemService(Context.TELEPHONY_SERVICE);
+//        String phoneNumber = tMgr.getLine1Number(); //returns null
+//        String mSimNumber = tMgr.getSimSerialNumber(); //returns the sim serial number (unique)
+//        Log.v("phone number", "" + mSimNumber);
+
         final EditText dueDate = (EditText) rootView.findViewById(R.id.due_date);
         dueDate.setOnClickListener(new View.OnClickListener() {
 
@@ -102,7 +115,7 @@ public class AddTaskFragment extends Fragment {
                                    }
 
         );
-        EditText assignee = (EditText) rootView.findViewById(R.id.assignee);
+        final EditText assignee = (EditText) rootView.findViewById(R.id.assignee);
         assignee.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -115,6 +128,8 @@ public class AddTaskFragment extends Fragment {
                 }
             }
         });
+
+
         Button saveTask = (Button) rootView.findViewById(R.id.save_task);
         saveTask.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -123,11 +138,19 @@ public class AddTaskFragment extends Fragment {
                     EditText taskDescription = (EditText) rootView.findViewById(R.id.description);
                     EditText comments = (EditText) rootView.findViewById(R.id.comments);
                     mTaskName = taskDescription.getText().toString();
+                    taskDescription.setText("");
                     mDueDate = dueDate.getText().toString();
+                    dueDate.setText("");
                     mComments = comments.getText().toString();
-                    Log.v("buttonClick", mTaskName + mDueDate + mComments + mAssigneeContact + mAssigneeName);
-                    UpdateTask updateDB = new UpdateTask();
-                    updateDB.execute();
+                    comments.setText("");
+                    assignee.setText("");
+                    if (mTaskName == null || mDueDate == null || mAssigneeName == null) {
+                        Toast.makeText(getContext(), "Fields cannot be empty. Please fill some values.", Toast.LENGTH_SHORT).show();
+                    } else {
+                        UpdateTask updateDB = new UpdateTask();
+                        updateDB.execute();
+                        Toast.makeText(getContext(), "Task saved.", Toast.LENGTH_SHORT).show();
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -135,6 +158,10 @@ public class AddTaskFragment extends Fragment {
         });
 
         return rootView;
+    }
+
+    public void saveData() {
+
     }
 
     public void onActivityResult(int reqCode, int resultCode, Intent data) {

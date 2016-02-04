@@ -25,7 +25,7 @@ public class TasksDbHelper extends SQLiteOpenHelper {
         final String SQL_CREATE_TASK_TABLE = "CREATE TABLE " + TasksContract.TaskEntry.TABLE_NAME + " (" +
                 TasksContract.COL_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, " +
                 TasksContract.TaskEntry.COL_DESCRIPTION + " TEXT NOT NULL, " +
-                TasksContract.TaskEntry.COL_CREATOR_KEY + " TEXT NOT NULL, " +
+                TasksContract.TaskEntry.COL_CREATOR_KEY + " TEXT NOT NULL , " +
                 TasksContract.TaskEntry.COL_ASSIGNEE_KEY + " TEXT NOT NULL, "+
                 TasksContract.TaskEntry.COL_DUE_DATE + " DATETIME DEFAULT CURRENT_TIMESTAMP, " +
                 TasksContract.TaskEntry.COL_COMMENTS + " TEXT, " +
@@ -39,8 +39,11 @@ public class TasksDbHelper extends SQLiteOpenHelper {
                 TasksContract.MessageEntry.COL_FROM + " TEXT, " +
                 TasksContract.MessageEntry.COL_TO + " TEXT, " +
                 TasksContract.MessageEntry.COL_AT + " DATETIME  DEFAULT CURRENT_TIMESTAMP, " +
-                TasksContract.MessageEntry.COL_TASK_KEY + " INTEGER NOT NULL" +
-                " )";
+                TasksContract.MessageEntry.COL_TASK_KEY + " INTEGER NOT NULL, " +
+                " FOREIGN KEY (" + TasksContract.MessageEntry.COL_TASK_KEY + ") REFERENCES "
+                + TasksContract.TaskEntry.TABLE_NAME + " (" + TasksContract.TaskEntry._ID + " )" +
+                " ON DELETE CASCADE" +
+                " );";
 
         //Generate query to create a table to hold the profile details
         final String SQL_CREATE_PROFILE_TABLE = "CREATE TABLE " + TasksContract.ProfileEntry.TABLE_NAME + " (" +

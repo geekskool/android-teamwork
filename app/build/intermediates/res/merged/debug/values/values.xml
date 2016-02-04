@@ -334,8 +334,11 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="save_task">Save Task</string>
     <string name="section_format">Hello World from section: %1$d</string>
+    <string name="send">Send</string>
+    <string name="send_btn">Send Message</string>
     <string name="status_bar_notification_info_overflow">999+</string>
     <string name="task_prompt">Enter Task Description</string>
+    <string name="title_activity_comments">CommentsActivity</string>
     <style name="AlertDialog.AppCompat" parent="Base.AlertDialog.AppCompat"/>
     <style name="AlertDialog.AppCompat.Light" parent="Base.AlertDialog.AppCompat.Light"/>
     <style name="Animation.AppCompat.Dialog" parent="Base.Animation.AppCompat.Dialog"/>

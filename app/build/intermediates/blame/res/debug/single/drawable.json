@@ -24,12 +24,12 @@
         "source": "/home/ishita/AndroidStudioProjects/AssignTasks/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/drawable/common_plus_signin_btn_icon_dark.xml"
     },
     {
-        "merged": "/home/ishita/AndroidStudioProjects/AssignTasks/app/build/intermediates/res/merged/debug/drawable/common_google_signin_btn_text_light.xml",
-        "source": "/home/ishita/AndroidStudioProjects/AssignTasks/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/drawable/common_google_signin_btn_text_light.xml"
-    },
-    {
         "merged": "/home/ishita/AndroidStudioProjects/AssignTasks/app/build/intermediates/res/merged/debug/drawable/common_google_signin_btn_text_dark.xml",
         "source": "/home/ishita/AndroidStudioProjects/AssignTasks/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/drawable/common_google_signin_btn_text_dark.xml"
+    },
+    {
+        "merged": "/home/ishita/AndroidStudioProjects/AssignTasks/app/build/intermediates/res/merged/debug/drawable/common_google_signin_btn_text_light.xml",
+        "source": "/home/ishita/AndroidStudioProjects/AssignTasks/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/drawable/common_google_signin_btn_text_light.xml"
     },
     {
         "merged": "/home/ishita/AndroidStudioProjects/AssignTasks/app/build/intermediates/res/merged/debug/drawable/abc_btn_borderless_material.xml",
@@ -86,6 +86,10 @@
     {
         "merged": "/home/ishita/AndroidStudioProjects/AssignTasks/app/build/intermediates/res/merged/debug/drawable/common_google_signin_btn_icon_light.xml",
         "source": "/home/ishita/AndroidStudioProjects/AssignTasks/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/drawable/common_google_signin_btn_icon_light.xml"
+    },
+    {
+        "merged": "/home/ishita/AndroidStudioProjects/AssignTasks/app/build/intermediates/res/merged/debug/drawable/box.xml",
+        "source": "/home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/res/drawable/box.xml"
     },
     {
         "merged": "/home/ishita/AndroidStudioProjects/AssignTasks/app/build/intermediates/res/merged/debug/drawable/abc_list_selector_holo_dark.xml",

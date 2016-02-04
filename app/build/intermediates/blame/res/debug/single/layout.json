@@ -12,6 +12,10 @@
         "source": "/home/ishita/AndroidStudioProjects/AssignTasks/app/build/intermediates/exploded-aar/com.android.support/design/23.1.1/res/layout/design_layout_snackbar_include.xml"
     },
     {
+        "merged": "/home/ishita/AndroidStudioProjects/AssignTasks/app/build/intermediates/res/merged/debug/layout/fragment_comments.xml",
+        "source": "/home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/res/layout/fragment_comments.xml"
+    },
+    {
         "merged": "/home/ishita/AndroidStudioProjects/AssignTasks/app/build/intermediates/res/merged/debug/layout/design_menu_item_action_area.xml",
         "source": "/home/ishita/AndroidStudioProjects/AssignTasks/app/build/intermediates/exploded-aar/com.android.support/design/23.1.1/res/layout/design_menu_item_action_area.xml"
     },
@@ -48,6 +52,10 @@
         "source": "/home/ishita/AndroidStudioProjects/AssignTasks/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.1/res/layout/abc_select_dialog_material.xml"
     },
     {
+        "merged": "/home/ishita/AndroidStudioProjects/AssignTasks/app/build/intermediates/res/merged/debug/layout/comments_list_item.xml",
+        "source": "/home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/res/layout/comments_list_item.xml"
+    },
+    {
         "merged": "/home/ishita/AndroidStudioProjects/AssignTasks/app/build/intermediates/res/merged/debug/layout/activity_add_task.xml",
         "source": "/home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/res/layout/activity_add_task.xml"
     },
@@ -66,10 +74,6 @@
     {
         "merged": "/home/ishita/AndroidStudioProjects/AssignTasks/app/build/intermediates/res/merged/debug/layout/abc_screen_simple_overlay_action_mode.xml",
         "source": "/home/ishita/AndroidStudioProjects/AssignTasks/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.1/res/layout/abc_screen_simple_overlay_action_mode.xml"
-    },
-    {
-        "merged": "/home/ishita/AndroidStudioProjects/AssignTasks/app/build/intermediates/res/merged/debug/layout/task_list_item.xml",
-        "source": "/home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/res/layout/task_list_item.xml"
     },
     {
         "merged": "/home/ishita/AndroidStudioProjects/AssignTasks/app/build/intermediates/res/merged/debug/layout/notification_template_big_media_narrow.xml",
@@ -130,6 +134,10 @@
     {
         "merged": "/home/ishita/AndroidStudioProjects/AssignTasks/app/build/intermediates/res/merged/debug/layout/abc_screen_simple.xml",
         "source": "/home/ishita/AndroidStudioProjects/AssignTasks/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.1/res/layout/abc_screen_simple.xml"
+    },
+    {
+        "merged": "/home/ishita/AndroidStudioProjects/AssignTasks/app/build/intermediates/res/merged/debug/layout/activity_comments.xml",
+        "source": "/home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/res/layout/activity_comments.xml"
     },
     {
         "merged": "/home/ishita/AndroidStudioProjects/AssignTasks/app/build/intermediates/res/merged/debug/layout/abc_action_mode_close_item_material.xml",

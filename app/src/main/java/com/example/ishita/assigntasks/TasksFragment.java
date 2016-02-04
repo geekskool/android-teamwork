@@ -1,5 +1,6 @@
 package com.example.ishita.assigntasks;
 
+import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -7,7 +8,9 @@ import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.widget.SimpleCursorAdapter;
+import android.util.Log;
 import android.view.View;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.ishita.assigntasks.data.TasksContract;
@@ -28,7 +31,7 @@ public class TasksFragment extends ListFragment implements LoaderManager.LoaderC
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-
+    private int taskID;
     //private OnFragmentInteractionListener mListener;
     public TasksFragment() {
         // Required empty public constructor
@@ -59,22 +62,27 @@ public class TasksFragment extends ListFragment implements LoaderManager.LoaderC
         adapter = new SimpleCursorAdapter(getContext(),
                 R.layout.fragment_tasks,
                 null,
-                new String[]{TasksContract.TaskEntry.COL_DESCRIPTION, TasksContract.TaskEntry.COL_MSG_COUNT},
-                new int[]{R.id.task_list_item},
+                new String[]{TasksContract.TaskEntry._ID, TasksContract.TaskEntry.COL_DESCRIPTION, TasksContract.TaskEntry.COL_MSG_COUNT},
+                new int[]{taskID, R.id.task_list_item, R.id.msgcount_list_item},
                 0);
         adapter.setViewBinder(new SimpleCursorAdapter.ViewBinder() {
 
             @Override
             public boolean setViewValue(View view, Cursor cursor, int columnIndex) {
                 switch (view.getId()) {
-                    case R.id.task_list_item:
-                        String taskName = cursor.getString(columnIndex);
-                        ((TextView) view).setText(taskName);
+//                    case R.id.task_list_item:
+//                        ((TextView) view).setText(cursor.getString(columnIndex));
+//                        Log.v("columnIndex", "" + columnIndex);
+//                        Log.v("getViewId",""+view.getId());
+//                        Log.v("case:taskList:getString", cursor.getString(columnIndex));
+//                        view.setTag(cursor.getString(cursor.getColumnIndex(TasksContract.TaskEntry._ID)));
                     case R.id.msgcount_list_item:
                         int count = cursor.getInt(columnIndex);
-                        if (count > 0) {
-                            ((TextView) view).setText(String.format("%d new message%s", count, count == 1 ? "" : "s"));
-                        }
+                        Log.v("case:msgCount:getInt", "" + count);
+                        Log.v("getViewId", "" + view.getId());
+//                        if (count > 0) {
+                        ((TextView) view).setText(String.format("%d new message%s", count, count == 1 ? "" : "s"));
+//                        }
                         return true;
                 }
                 return false;
@@ -108,6 +116,15 @@ public class TasksFragment extends ListFragment implements LoaderManager.LoaderC
         adapter.swapCursor(null);
     }
 
+    @Override
+    public void onListItemClick(ListView l, View v, int position, long id) {
+        TextView taskName = (TextView) v.findViewById(R.id.task_list_item);
+        String description = taskName.getText().toString();
+        Intent intent = new Intent(getActivity(), CommentsActivity.class);
+        intent.putExtra("TASK_ID", "" + taskID);
+        intent.putExtra("TASK_NAME", description);
+        startActivity(intent);
+    }
 
     /*@Override
     protected void onListItemClick(ListView l, View v, int position, long id) {

@@ -45,8 +45,28 @@ public class TasksProvider extends ContentProvider {
 
     @Override
     public int delete(Uri uri, String selection, String[] selectionArgs) {
-        // Implement this to handle requests to delete one or more rows.
-        throw new UnsupportedOperationException("Not yet implemented");
+        SQLiteDatabase writableDatabase = mDbHelper.getWritableDatabase();
+
+        int count;
+        switch(sUriMatcher.match(uri)) {
+            case MESSAGE_ALLROWS:
+            case PROFILE_ALLROWS:
+            case TASK_ALLROWS:
+                count = writableDatabase.delete(getTableName(uri), selection, selectionArgs);
+                break;
+
+            case MESSAGE_SINGLE_ROW:
+            case PROFILE_SINGLE_ROW:
+            case TASK_SINGLE_ROW:
+                count = writableDatabase.delete(getTableName(uri), "_id = ?", new String[]{uri.getLastPathSegment()});
+                break;
+
+            default:
+                throw new IllegalArgumentException("Unsupported URI: " + uri);
+        }
+
+        getContext().getContentResolver().notifyChange(uri, null);
+        return count;
     }
 
     @Override
@@ -91,6 +111,14 @@ public class TasksProvider extends ContentProvider {
                 long _id = db.insert(TasksContract.TaskEntry.TABLE_NAME, null, values);
                 if ( _id > 0 )
                     returnUri = TasksContract.TaskEntry.buildTaskUri(_id);
+                else
+                    throw new android.database.SQLException("Failed to insert row into " + uri);
+                break;
+            }
+            case MESSAGE_ALLROWS: {
+                long _id = db.insert(TasksContract.MessageEntry.TABLE_NAME, null, values);
+                if ( _id > 0 )
+                    returnUri = TasksContract.MessageEntry.buildMessageUri(_id);
                 else
                     throw new android.database.SQLException("Failed to insert row into " + uri);
                 break;
@@ -156,7 +184,27 @@ public class TasksProvider extends ContentProvider {
     @Override
     public int update(Uri uri, ContentValues values, String selection,
                       String[] selectionArgs) {
-        // TODO: Implement this to handle requests to update one or more rows.
-        throw new UnsupportedOperationException("Not yet implemented");
+        SQLiteDatabase writableDatabase = mDbHelper.getWritableDatabase();
+
+        int count;
+        switch(sUriMatcher.match(uri)) {
+            case MESSAGE_ALLROWS:
+            case PROFILE_ALLROWS:
+            case TASK_ALLROWS:
+                count = writableDatabase.update(getTableName(uri), values, selection, selectionArgs);
+                break;
+
+            case MESSAGE_SINGLE_ROW:
+            case PROFILE_SINGLE_ROW:
+            case TASK_SINGLE_ROW:
+                count = writableDatabase.update(getTableName(uri), values, "_id = ?", new String[]{uri.getLastPathSegment()});
+                break;
+
+            default:
+                throw new IllegalArgumentException("Unsupported URI: " + uri);
+        }
+
+        getContext().getContentResolver().notifyChange(uri, null);
+        return count;
     }
 }

@@ -18,6 +18,7 @@
     <uses-permission android:name="android.permission.GET_ACCOUNTS" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
@@ -59,6 +60,17 @@
             android:authorities="com.example.ishita.assigntasks"
             android:enabled="true"
             android:exported="false" />
+
+        <activity
+            android:name="com.example.ishita.assigntasks.CommentsActivity"
+            android:label="@string/title_activity_comments"
+            android:parentActivityName="com.example.ishita.assigntasks.AddTask"
+            android:theme="@style/AppTheme" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.ishita.assigntasks.AddTask" />
+        </activity>
+
         <provider
             android:name="com.google.android.gms.measurement.AppMeasurementContentProvider"
             android:authorities="com.example.ishita.assigntasks.google_measurement_service"
