@@ -8,6 +8,7 @@ import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SimpleCursorAdapter;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -32,6 +33,12 @@ public class CommentsActivityFragment extends ListFragment implements LoaderMana
         super.onAttach(context);
         try {
             mListener = (OnFragmentInteractionListener) getActivity();
+            Bundle bundle = new Bundle();
+            bundle.putString(TasksContract.MessageEntry.COL_TASK_KEY, mListener.getTaskKey());
+//            Log.v("TaskKey", mListener.getTaskKey());
+            getLoaderManager().initLoader(0, bundle, this);
+
+
         } catch (ClassCastException e) {
             throw new ClassCastException(getActivity().toString() + " must implement OnFragmentInteractionListener");
         }
@@ -40,11 +47,6 @@ public class CommentsActivityFragment extends ListFragment implements LoaderMana
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        Bundle bundle = new Bundle();
-        bundle.putString(TasksContract.MessageEntry.COL_TASK_KEY, mListener.getTaskKey());
-//        Log.v("TaskKey", mListener.getTaskKey());
-        getLoaderManager().initLoader(0, bundle, this);
 
         adapter = new SimpleCursorAdapter(getActivity(),
                 R.layout.comments_list_item,
@@ -56,15 +58,19 @@ public class CommentsActivityFragment extends ListFragment implements LoaderMana
 
             @Override
             public boolean setViewValue(View view, Cursor cursor, int columnIndex) {
+                Log.v("view.getID", "" + view.getId());
+                Log.v("R.id.text1", "" + R.id.text1);
                 switch (view.getId()) {
                     case R.id.text1:
-                        LinearLayout root = (LinearLayout) view.getParent().getParent();
+                        LinearLayout root = (LinearLayout) view.getParent();
                         //TODO replace NULL in this check by the sender ID once login activity is done.
-                        if (cursor.getString(cursor.getColumnIndex(TasksContract.MessageEntry.COL_FROM)) == "creatorID") {
+                        if (cursor.getString(cursor.getColumnIndex(TasksContract.MessageEntry.COL_FROM)).equals("creatorID")) {
+                            Log.v("creatorID", cursor.getString(cursor.getColumnIndex(TasksContract.MessageEntry.COL_FROM)));
                             root.setGravity(Gravity.RIGHT);
                             root.setBackgroundColor(Color.GRAY);
                             root.setPadding(50, 10, 10, 10);
                         } else {
+                            Log.v("creatorID", cursor.getString(cursor.getColumnIndex(TasksContract.MessageEntry.COL_FROM)));
                             root.setGravity(Gravity.LEFT);
                             root.setPadding(10, 10, 50, 10);
                         }
@@ -82,11 +88,11 @@ public class CommentsActivityFragment extends ListFragment implements LoaderMana
 
     }
 
-    /*@Override
+    @Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
-    }*/
+    }
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {

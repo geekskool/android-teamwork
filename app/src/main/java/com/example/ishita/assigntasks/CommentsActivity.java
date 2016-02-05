@@ -37,8 +37,9 @@ public class CommentsActivity extends AppCompatActivity implements CommentsActiv
         sendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (msgEdit.getText() != null) {
-                    send(msgEdit.getText().toString());
+                String msg = msgEdit.getText().toString();
+                if (!msg.equals("")) {
+                    send(msg);
                     msgEdit.setText(null);
                 }
             }
@@ -58,8 +59,9 @@ public class CommentsActivity extends AppCompatActivity implements CommentsActiv
                 TasksContract.MessageEntry.COL_AT + " ASC");
         if (c.moveToFirst()) {
             //taskName = c.getString(c.getColumnIndex(TasksContract.MessageEntry.COL_FROM));//remove if redundant
+            taskId = c.getString(c.getColumnIndex(TasksContract.MessageEntry.COL_TASK_KEY));
             String cursorData = c.getString(c.getColumnIndex(TasksContract.MessageEntry.COL_MSG)) + " " + c.getString(c.getColumnIndex(TasksContract.MessageEntry.COL_AT));
-            Log.v("Cursor data:", cursorData);
+            Log.v("Cursor data:", cursorData + " " + taskId);
 //            profileContact = c.getString(c.getColumnIndex(TasksContract.MessageEntry.COL_FROM));
             actionBar.setTitle(taskName);
         }
@@ -71,6 +73,7 @@ public class CommentsActivity extends AppCompatActivity implements CommentsActiv
 
     @Override
     public String getTaskKey() {
+//        Log.v("getTaskKey", taskId);
         return taskId;
     }
 
@@ -102,6 +105,7 @@ public class CommentsActivity extends AppCompatActivity implements CommentsActiv
                     values.put(TasksContract.MessageEntry.COL_TASK_KEY, taskId);
                     Uri rowUri = getContentResolver().insert(TasksContract.MessageEntry.CONTENT_URI, values);
                     Log.v("inserted at:", rowUri.toString());
+                    Log.v("values:", txt + " " + taskId);
 
                 } catch (Exception e) {
                     e.printStackTrace();

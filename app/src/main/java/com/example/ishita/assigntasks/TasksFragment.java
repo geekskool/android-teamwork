@@ -95,6 +95,14 @@ public class TasksFragment extends ListFragment implements LoaderManager.LoaderC
     }
 
     @Override
+    public void onViewCreated(View view, Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        setEmptyText("No tasks saved yet.");
+
+    }
+
+    @Override
     public android.support.v4.content.Loader<Cursor> onCreateLoader(int id, Bundle args) {
         CursorLoader loader = new CursorLoader(getContext(),
                 TasksContract.TaskEntry.CONTENT_URI,
