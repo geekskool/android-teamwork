@@ -1,16 +1,13 @@
 package com.example.ishita.assigntasks;
 
-import android.app.Activity;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Color;
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.Loader;
 import android.support.v4.widget.SimpleCursorAdapter;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,7 +15,6 @@ import android.view.ViewGroup;
 import android.widget.LinearLayout;
 
 import com.example.ishita.assigntasks.data.TasksContract;
-import com.example.ishita.assigntasks.data.TasksProvider;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -64,7 +60,7 @@ public class CommentsActivityFragment extends ListFragment implements LoaderMana
                     case R.id.text1:
                         LinearLayout root = (LinearLayout) view.getParent().getParent();
                         //TODO replace NULL in this check by the sender ID once login activity is done.
-                        if (cursor.getString(cursor.getColumnIndex(TasksContract.MessageEntry.COL_FROM)) == null) {
+                        if (cursor.getString(cursor.getColumnIndex(TasksContract.MessageEntry.COL_FROM)) == "creatorID") {
                             root.setGravity(Gravity.RIGHT);
                             root.setBackgroundColor(Color.GRAY);
                             root.setPadding(50, 10, 10, 10);
@@ -94,6 +90,13 @@ public class CommentsActivityFragment extends ListFragment implements LoaderMana
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        /*CursorLoader loader = new CursorLoader(getContext(),
+                TasksContract.MessageEntry.CONTENT_URI,
+                new String[]{TasksContract.MessageEntry.COL_MSG, TasksContract.MessageEntry.COL_AT, TasksContract.MessageEntry.COL_TASK_KEY},
+                TasksContract.MessageEntry.COL_TASK_KEY + "=?",
+                new String[] {mListener.getTaskKey()},
+                TasksContract.MessageEntry.COL_AT + " ASC");
+        return loader;*/
         return null;
     }
 

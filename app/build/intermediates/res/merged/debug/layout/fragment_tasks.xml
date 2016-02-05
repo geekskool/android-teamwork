@@ -7,6 +7,11 @@
     android:orientation="vertical">
 
     <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/task_id"
+        android:visibility="gone"/>
+    <TextView
         android:id="@+id/task_list_item"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -31,7 +31,6 @@ public class TasksFragment extends ListFragment implements LoaderManager.LoaderC
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
-    private int taskID;
     //private OnFragmentInteractionListener mListener;
     public TasksFragment() {
         // Required empty public constructor
@@ -63,7 +62,7 @@ public class TasksFragment extends ListFragment implements LoaderManager.LoaderC
                 R.layout.fragment_tasks,
                 null,
                 new String[]{TasksContract.TaskEntry._ID, TasksContract.TaskEntry.COL_DESCRIPTION, TasksContract.TaskEntry.COL_MSG_COUNT},
-                new int[]{taskID, R.id.task_list_item, R.id.msgcount_list_item},
+                new int[]{R.id.task_id, R.id.task_list_item, R.id.msgcount_list_item},
                 0);
         adapter.setViewBinder(new SimpleCursorAdapter.ViewBinder() {
 
@@ -119,9 +118,10 @@ public class TasksFragment extends ListFragment implements LoaderManager.LoaderC
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         TextView taskName = (TextView) v.findViewById(R.id.task_list_item);
+        TextView taskID = (TextView) v.findViewById(R.id.task_id);
         String description = taskName.getText().toString();
         Intent intent = new Intent(getActivity(), CommentsActivity.class);
-        intent.putExtra("TASK_ID", "" + taskID);
+        intent.putExtra("TASK_ID", "" + taskID.getText().toString());
         intent.putExtra("TASK_NAME", description);
         startActivity(intent);
     }

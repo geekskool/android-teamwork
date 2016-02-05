@@ -1,16 +1,14 @@
 package com.example.ishita.assigntasks;
 
-import android.app.ActionBar;
 import android.content.ContentValues;
 import android.database.Cursor;
-import android.media.Image;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.Toast;
@@ -29,7 +27,7 @@ public class CommentsActivity extends AppCompatActivity implements CommentsActiv
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comments);
 
-        taskId = getIntent().getStringExtra("TASK_ID");//Task id is 0 no matter what task is clicked...task ID passes as null to fragment...
+        taskId = getIntent().getStringExtra("TASK_ID");//task ID passes as null to fragment...
         taskName = getIntent().getStringExtra("TASK_NAME");//TODO look at this line
         msgEdit = (EditText) findViewById(R.id.msg_edit);
         sendBtn = (ImageButton) findViewById(R.id.send_btn);
@@ -39,8 +37,10 @@ public class CommentsActivity extends AppCompatActivity implements CommentsActiv
         sendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                send(msgEdit.getText().toString());
-                msgEdit.setText(null);
+                if (msgEdit.getText() != null) {
+                    send(msgEdit.getText().toString());
+                    msgEdit.setText(null);
+                }
             }
         });
 
@@ -60,7 +60,7 @@ public class CommentsActivity extends AppCompatActivity implements CommentsActiv
             //taskName = c.getString(c.getColumnIndex(TasksContract.MessageEntry.COL_FROM));//remove if redundant
             String cursorData = c.getString(c.getColumnIndex(TasksContract.MessageEntry.COL_MSG)) + " " + c.getString(c.getColumnIndex(TasksContract.MessageEntry.COL_AT));
             Log.v("Cursor data:", cursorData);
-            profileContact = c.getString(c.getColumnIndex(TasksContract.MessageEntry.COL_FROM));
+//            profileContact = c.getString(c.getColumnIndex(TasksContract.MessageEntry.COL_FROM));
             actionBar.setTitle(taskName);
         }
         //actionBar.setSubtitle("connecting ...");
@@ -91,19 +91,17 @@ public class CommentsActivity extends AppCompatActivity implements CommentsActiv
 //    }
 
     private void send(final String txt) {
-//        new AsyncTask<Void, Void, String>() {
-//            @Override
-//            protected String doInBackground(Void... params) {
-//                String msg = "";
+        new AsyncTask<Void, Void, String>() {
+            @Override
+            protected String doInBackground(Void... params) {
+                String msg = "";
                 try {
-//                    ServerUtilities.send(txt, profileEmail);
-//
-//                    ContentValues values = new ContentValues(2);
-                    ContentValues values = new ContentValues();
+                    ContentValues values = new ContentValues(2);
+//                    ContentValues values = new ContentValues();
                     values.put(TasksContract.MessageEntry.COL_MSG, txt);
-                    values.put(TasksContract.MessageEntry.COL_TASK_KEY,taskId);
-//                    values.put(DataProvider.COL_TO, profileEmail);
-                    getContentResolver().insert(TasksContract.MessageEntry.CONTENT_URI, values);
+                    values.put(TasksContract.MessageEntry.COL_TASK_KEY, taskId);
+                    Uri rowUri = getContentResolver().insert(TasksContract.MessageEntry.CONTENT_URI, values);
+                    Log.v("inserted at:", rowUri.toString());
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -111,16 +109,16 @@ public class CommentsActivity extends AppCompatActivity implements CommentsActiv
                 /*catch (IOException ex) {
                     msg = "Message could not be sent";
                 }*/
-//                return msg;
-//            }
+                return msg;
+            }
 
-//            @Override
-//            protected void onPostExecute(String msg) {
-//                if (!TextUtils.isEmpty(msg)) {
-//                    Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
-//                }
-//            }
-//        }.execute(null, null, null);
+            @Override
+            protected void onPostExecute(String msg) {
+                if (!TextUtils.isEmpty(msg)) {
+                    Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_LONG).show();
+                }
+            }
+        }.execute(null, null, null);
     }
 
 
