@@ -10,7 +10,6 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -64,11 +63,18 @@ public class AddTask extends AppCompatActivity {
         mViewPager = (ViewPager) findViewById(R.id.container);
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(mSectionsPagerAdapter);
+        mViewPager.setCurrentItem(1);
 
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
+                android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+                switch (position){
+                    case 0: actionBar.setTitle("Add New Task");
+                        break;
+                    case 1: actionBar.setTitle("Existing Tasks");
+                        break;
+                }
             }
 
             @Override
@@ -165,7 +171,7 @@ public class AddTask extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
-            //return MyFragment.newInstance();
+            //Instantiate the fragment at the position where the pager is.
             return Fragment.instantiate(getApplicationContext(), fragmentsA.get(position));
 
         }
@@ -173,7 +179,7 @@ public class AddTask extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            // return CONTENT.length;
+            // return how many fragments there are in the tabbed activity
             return fragmentsA.size();
         }
 
@@ -190,8 +196,6 @@ public class AddTask extends AppCompatActivity {
                     return "Add Task";
                 case 1:
                     return "Tasks List";
-                /*case 2:
-                    return "SECTION 3";*/
             }
             return null;
         }

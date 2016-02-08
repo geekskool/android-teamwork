@@ -2,6 +2,7 @@ package com.example.ishita.assigntasks;
 
 import android.content.ContentValues;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -11,15 +12,19 @@ import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ishita.assigntasks.data.TasksContract;
+import com.example.ishita.assigntasks.data.TasksDbHelper;
 
-public class CommentsActivity extends AppCompatActivity implements CommentsActivityFragment.OnFragmentInteractionListener {
+public class CommentsActivity extends AppCompatActivity {
 
     private EditText msgEdit;
     private ImageButton sendBtn;
-    private String taskId, taskName, profileContact;
+    private String taskId, taskName;
+    CommentsCursorAdapter adapter;
     //private GcmUtil gcmUtil;
 
     @Override
@@ -27,12 +32,52 @@ public class CommentsActivity extends AppCompatActivity implements CommentsActiv
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comments);
 
-        taskId = getIntent().getStringExtra("TASK_ID");//task ID passes as null to fragment...
-        taskName = getIntent().getStringExtra("TASK_NAME");//TODO look at this line
+        taskId = getIntent().getStringExtra("TASK_ID");
+        taskName = getIntent().getStringExtra("TASK_NAME");
         msgEdit = (EditText) findViewById(R.id.msg_edit);
         sendBtn = (ImageButton) findViewById(R.id.send_btn);
+        TasksDbHelper dbHelper = new TasksDbHelper(getApplicationContext());
+        SQLiteDatabase readableDatabase = dbHelper.getReadableDatabase();
 
-        Log.v("TaskKey", taskId);
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+        actionBar.setHomeButtonEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setTitle(taskName);
+
+        Cursor taskCursor = readableDatabase.rawQuery("SELECT " + TasksContract.TaskEntry.TABLE_NAME + "." + TasksContract.TaskEntry._ID + ", " +
+                        TasksContract.ProfileEntry.COL_NAME + ", " +
+                        TasksContract.TaskEntry.COL_DUE_DATE +
+                        " FROM " + TasksContract.TaskEntry.TABLE_NAME + ", " + TasksContract.ProfileEntry.TABLE_NAME +
+                        " WHERE " + TasksContract.TaskEntry.TABLE_NAME + "." + TasksContract.TaskEntry._ID + "=" + taskId + " AND " +
+                        TasksContract.ProfileEntry.TABLE_NAME + "." + TasksContract.ProfileEntry.COL_CONTACT + "=" +
+                        TasksContract.TaskEntry.TABLE_NAME + "." + TasksContract.TaskEntry.COL_ASSIGNEE_KEY,
+                null
+        );
+
+        if (taskCursor.moveToFirst()) {
+            String assigneeName = taskCursor.getString(taskCursor.getColumnIndex(TasksContract.ProfileEntry.COL_NAME));
+            String dueDate = taskCursor.getString(taskCursor.getColumnIndex(TasksContract.TaskEntry.COL_DUE_DATE));
+
+            TextView taskDetails = (TextView) findViewById(R.id.task_details);
+            taskDetails.setText("Assignee: " + assigneeName + "\nDue Date: " + dueDate);
+        } else {
+            TextView taskDetails = (TextView) findViewById(R.id.task_details);
+            taskDetails.setText("Task details not updated yet.");
+        }
+
+        Cursor commentCursor = getContentResolver().query(TasksContract.MessageEntry.CONTENT_URI,
+                new String[]{TasksContract.MessageEntry._ID,
+                        TasksContract.MessageEntry.COL_TASK_KEY,
+                        TasksContract.MessageEntry.COL_MSG,
+                        TasksContract.MessageEntry.COL_FROM,
+                        TasksContract.MessageEntry.COL_AT},
+                TasksContract.MessageEntry.COL_TASK_KEY + "=?",
+                new String[]{taskId},
+                TasksContract.MessageEntry.COL_AT + " ASC");
+
+        adapter = new CommentsCursorAdapter(this, commentCursor, 0);
+        ListView list = (ListView) findViewById(R.id.list);
+        list.setAdapter(adapter);
 
         sendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -41,57 +86,21 @@ public class CommentsActivity extends AppCompatActivity implements CommentsActiv
                 if (!msg.equals("")) {
                     send(msg);
                     msgEdit.setText(null);
+                    Cursor updatedCursor = getContentResolver().query(TasksContract.MessageEntry.CONTENT_URI,
+                            new String[]{TasksContract.MessageEntry._ID,
+                                    TasksContract.MessageEntry.COL_TASK_KEY,
+                                    TasksContract.MessageEntry.COL_MSG,
+                                    TasksContract.MessageEntry.COL_FROM,
+                                    TasksContract.MessageEntry.COL_AT},
+                            TasksContract.MessageEntry.COL_TASK_KEY + "=?",
+                            new String[]{taskId},
+                            TasksContract.MessageEntry.COL_AT + " ASC");
+                    adapter.changeCursor(updatedCursor);
                 }
             }
         });
-
-        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
-        actionBar.setHomeButtonEnabled(true);
-        actionBar.setDisplayHomeAsUpEnabled(true);
-
-        Cursor c = getContentResolver().query(TasksContract.MessageEntry.CONTENT_URI,
-                new String[]{TasksContract.MessageEntry.COL_TASK_KEY,
-                        TasksContract.MessageEntry.COL_MSG,
-                        TasksContract.MessageEntry.COL_FROM,
-                        TasksContract.MessageEntry.COL_AT},
-                TasksContract.MessageEntry.COL_TASK_KEY + "=?",
-                new String[]{taskId},
-                TasksContract.MessageEntry.COL_AT + " ASC");
-        if (c.moveToFirst()) {
-            //taskName = c.getString(c.getColumnIndex(TasksContract.MessageEntry.COL_FROM));//remove if redundant
-            taskId = c.getString(c.getColumnIndex(TasksContract.MessageEntry.COL_TASK_KEY));
-            String cursorData = c.getString(c.getColumnIndex(TasksContract.MessageEntry.COL_MSG)) + " " + c.getString(c.getColumnIndex(TasksContract.MessageEntry.COL_AT));
-            Log.v("Cursor data:", cursorData + " " + taskId);
-//            profileContact = c.getString(c.getColumnIndex(TasksContract.MessageEntry.COL_FROM));
-            actionBar.setTitle(taskName);
-        }
-        //actionBar.setSubtitle("connecting ...");
-
-//        registerReceiver(registrationStatusReceiver, new IntentFilter(Common.ACTION_REGISTER));
-//        gcmUtil = new GcmUtil(getApplicationContext());
     }
 
-    @Override
-    public String getTaskKey() {
-//        Log.v("getTaskKey", taskId);
-        return taskId;
-    }
-
-//    @Override
-//    protected void onPause() {
-//        //reset new messages count
-//        ContentValues values = new ContentValues(1);
-//        values.put(DataProvider.COL_COUNT, 0);
-//        getContentResolver().update(Uri.withAppendedPath(DataProvider.CONTENT_URI_PROFILE, profileId), values, null, null);
-//        super.onPause();
-//    }
-
-//    @Override
-//    protected void onDestroy() {
-//        unregisterReceiver(registrationStatusReceiver);
-//        gcmUtil.cleanup();
-//        super.onDestroy();
-//    }
 
     private void send(final String txt) {
         new AsyncTask<Void, Void, String>() {
@@ -100,19 +109,14 @@ public class CommentsActivity extends AppCompatActivity implements CommentsActiv
                 String msg = "";
                 try {
                     ContentValues values = new ContentValues(2);
-//                    ContentValues values = new ContentValues();
                     values.put(TasksContract.MessageEntry.COL_MSG, txt);
                     values.put(TasksContract.MessageEntry.COL_TASK_KEY, taskId);
                     Uri rowUri = getContentResolver().insert(TasksContract.MessageEntry.CONTENT_URI, values);
                     Log.v("inserted at:", rowUri.toString());
                     Log.v("values:", txt + " " + taskId);
-
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-                /*catch (IOException ex) {
-                    msg = "Message could not be sent";
-                }*/
                 return msg;
             }
 
@@ -125,23 +129,4 @@ public class CommentsActivity extends AppCompatActivity implements CommentsActiv
         }.execute(null, null, null);
     }
 
-
-    /*@Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_comments);
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-    }
-*/
 }
