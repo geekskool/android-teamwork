@@ -3,12 +3,10 @@ package com.example.ishita.assigntasks;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
-import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
-import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -44,7 +42,8 @@ public class CommentsActivity extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setTitle(taskName);
 
-        Cursor taskCursor = readableDatabase.rawQuery("SELECT " + TasksContract.TaskEntry.TABLE_NAME + "." + TasksContract.TaskEntry._ID + ", " +
+        Cursor taskCursor = readableDatabase.rawQuery(
+                "SELECT " + TasksContract.TaskEntry.TABLE_NAME + "." + TasksContract.TaskEntry._ID + ", " +
                         TasksContract.ProfileEntry.COL_NAME + ", " +
                         TasksContract.TaskEntry.COL_DUE_DATE +
                         " FROM " + TasksContract.TaskEntry.TABLE_NAME + ", " + TasksContract.ProfileEntry.TABLE_NAME +
@@ -65,7 +64,8 @@ public class CommentsActivity extends AppCompatActivity {
             taskDetails.setText("Task details not updated yet.");
         }
 
-        Cursor commentCursor = getContentResolver().query(TasksContract.MessageEntry.CONTENT_URI,
+        Cursor commentCursor = getContentResolver().query(
+                TasksContract.MessageEntry.CONTENT_URI,
                 new String[]{TasksContract.MessageEntry._ID,
                         TasksContract.MessageEntry.COL_TASK_KEY,
                         TasksContract.MessageEntry.COL_MSG,
@@ -78,6 +78,7 @@ public class CommentsActivity extends AppCompatActivity {
         adapter = new CommentsCursorAdapter(this, commentCursor, 0);
         ListView list = (ListView) findViewById(R.id.list);
         list.setAdapter(adapter);
+        list.setSelection(list.getAdapter().getCount() - 1);
 
         sendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -86,7 +87,8 @@ public class CommentsActivity extends AppCompatActivity {
                 if (!msg.equals("")) {
                     send(msg);
                     msgEdit.setText(null);
-                    Cursor updatedCursor = getContentResolver().query(TasksContract.MessageEntry.CONTENT_URI,
+                    Cursor updatedCursor = getContentResolver().query(
+                            TasksContract.MessageEntry.CONTENT_URI,
                             new String[]{TasksContract.MessageEntry._ID,
                                     TasksContract.MessageEntry.COL_TASK_KEY,
                                     TasksContract.MessageEntry.COL_MSG,
@@ -111,10 +113,7 @@ public class CommentsActivity extends AppCompatActivity {
                     ContentValues values = new ContentValues(2);
                     values.put(TasksContract.MessageEntry.COL_MSG, txt);
                     values.put(TasksContract.MessageEntry.COL_TASK_KEY, taskId);
-                    Uri rowUri = getContentResolver().insert(TasksContract.MessageEntry.CONTENT_URI, values);
-                    Log.v("inserted at:", rowUri.toString());
-                    Log.v("values:", txt + " " + taskId);
-                } catch (Exception e) {
+                 } catch (Exception e) {
                     e.printStackTrace();
                 }
                 return msg;

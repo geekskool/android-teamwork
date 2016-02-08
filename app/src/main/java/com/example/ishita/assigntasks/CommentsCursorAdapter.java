@@ -3,6 +3,7 @@ package com.example.ishita.assigntasks;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -33,20 +34,18 @@ public class CommentsCursorAdapter extends CursorAdapter {
 
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
-//        switch (view.getId()) {
-//            case R.id.text1:
-//                LinearLayout root = (LinearLayout) view.getParent();
-        LinearLayout root = (LinearLayout) view;
+       LinearLayout root = (LinearLayout) view;
         //TODO replace NULL in this check by the sender ID once login activity is done.
         if (cursor.getString(cursor.getColumnIndex(TasksContract.MessageEntry.COL_FROM)) == null) {
             root.setGravity(Gravity.END);
-            root.setBackgroundColor(Color.CYAN);
             root.setPadding(50, 10, 10, 10);
         } else {
-            root.setGravity(Gravity.LEFT);
+            LinearLayout box = (LinearLayout) root.findViewById(R.id.box);
+            GradientDrawable sd = (GradientDrawable) box.getBackground().mutate();
+            sd.setColor(Color.CYAN);
+            sd.invalidateSelf();
+            root.setGravity(Gravity.START);
             root.setPadding(10, 10, 50, 10);
         }
-//        break;
-//    }
     }
 }
