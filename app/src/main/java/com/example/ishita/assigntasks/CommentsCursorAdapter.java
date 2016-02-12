@@ -34,17 +34,17 @@ public class CommentsCursorAdapter extends CursorAdapter {
 
     @Override
     public void bindView(View view, Context context, Cursor cursor) {
-       LinearLayout root = (LinearLayout) view;
+        LinearLayout root = (LinearLayout) view;
         //TODO replace NULL in this check by the sender ID once login activity is done.
         if (cursor.getString(cursor.getColumnIndex(TasksContract.MessageEntry.COL_FROM)) == null) {
-            root.setGravity(Gravity.END);
-            root.setPadding(50, 10, 10, 10);
-        } else {
             LinearLayout box = (LinearLayout) root.findViewById(R.id.box);
             GradientDrawable sd = (GradientDrawable) box.getBackground().mutate();
             sd.setColor(Color.CYAN);
             sd.invalidateSelf();
-            root.setGravity(Gravity.START);
+            root.setGravity(Gravity.END);
+            root.setPadding(50, 10, 10, 10);
+        } else {
+            root.setGravity(Gravity.LEFT);
             root.setPadding(10, 10, 50, 10);
         }
     }
