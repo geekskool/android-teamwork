@@ -2,6 +2,7 @@ package com.example.ishita.assigntasks;
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
@@ -110,38 +111,41 @@ public class TasksFragment extends ListFragment implements LoaderManager.LoaderC
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        View listItem = info.targetView;
         switch (item.getItemId()) {
             case R.id.edit:
                 Toast.makeText(getContext(),"Edit selected.",Toast.LENGTH_SHORT).show();
                 return true;
             case R.id.delete:
-                Toast.makeText(getContext(),"Delete selected.",Toast.LENGTH_SHORT).show();
+                delete(listItem);
+                adapter.notifyDataSetChanged();
                 return true;
             default:
                 return super.onContextItemSelected(item);
         }
     }
 
+    private void edit(View listItem){
+
+    }
+
+    private void delete(View listItem) {
+        TextView taskId = (TextView) listItem.findViewById(R.id.task_id);
+        final String[] selectionArg = new String[]{taskId.getText().toString()};
+        new AsyncTask<Void, Void, Void>(){
+            @Override
+            protected Void doInBackground(Void... params) {
+                getContext().getContentResolver().delete(TasksContract.TaskEntry.CONTENT_URI, TasksContract.TaskEntry._ID + "=?", selectionArg);
+                return null;
+            }
+        }.execute();
+    }
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        setEmptyText("No tasks saved yet.");
+        setEmptyText("No tasks saved yet.\nSwipe left to add a new task.");
         ListView list = getListView();
         registerForContextMenu(list);
-         /*list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-            @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View listItem,
-                                           int pos, long id) {
-                // TODO Auto-generated method stub
-
-                TextView taskId = (TextView) listItem.findViewById(R.id.task_id);
-                TextView taskName = (TextView) listItem.findViewById(R.id.task_list_item);
-
-                Log.v("long clicked", "pos: " + pos);
-
-                return true;
-            }
-        });*/
     }
 
     @Override
