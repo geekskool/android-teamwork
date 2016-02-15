@@ -13,4 +13,6 @@
     <string name="title_activity_comments">CommentsActivity</string>
     <string name="send">Send</string>
     <string name="send_btn">Send Message</string>
+    <string name="action_delete">Delete</string>
+    <string name="action_edit">Edit</string>
 </resources>

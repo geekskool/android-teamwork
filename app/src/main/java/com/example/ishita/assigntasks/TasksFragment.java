@@ -9,9 +9,16 @@ import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.widget.SimpleCursorAdapter;
 import android.util.Log;
+import android.view.ContextMenu;
+import android.view.LayoutInflater;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.ishita.assigntasks.data.TasksContract;
 
@@ -60,8 +67,16 @@ public class TasksFragment extends ListFragment implements LoaderManager.LoaderC
         adapter = new SimpleCursorAdapter(getContext(),
                 R.layout.fragment_tasks,
                 null,
-                new String[]{TasksContract.TaskEntry._ID, TasksContract.TaskEntry.COL_DESCRIPTION, TasksContract.TaskEntry.COL_MSG_COUNT},
-                new int[]{R.id.task_id, R.id.task_list_item, R.id.msgcount_list_item},
+                new String[]{
+                        TasksContract.TaskEntry._ID,
+                        TasksContract.TaskEntry.COL_DESCRIPTION,
+                        TasksContract.TaskEntry.COL_MSG_COUNT
+                },
+                new int[]{
+                        R.id.task_id,
+                        R.id.task_list_item,
+                        R.id.msgcount_list_item
+                },
                 0);
         adapter.setViewBinder(new SimpleCursorAdapter.ViewBinder() {
 
@@ -86,11 +101,47 @@ public class TasksFragment extends ListFragment implements LoaderManager.LoaderC
     }
 
     @Override
+    public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
+        super.onCreateContextMenu(menu, v, menuInfo);
+        MenuInflater inflater = getActivity().getMenuInflater();
+        inflater.inflate(R.menu.tasks_context_menu, menu);
+    }
+
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+        AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
+        switch (item.getItemId()) {
+            case R.id.edit:
+                Toast.makeText(getContext(),"Edit selected.",Toast.LENGTH_SHORT).show();
+                return true;
+            case R.id.delete:
+                Toast.makeText(getContext(),"Delete selected.",Toast.LENGTH_SHORT).show();
+                return true;
+            default:
+                return super.onContextItemSelected(item);
+        }
+    }
+
+    @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
         setEmptyText("No tasks saved yet.");
+        ListView list = getListView();
+        registerForContextMenu(list);
+         /*list.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> parent, View listItem,
+                                           int pos, long id) {
+                // TODO Auto-generated method stub
 
+                TextView taskId = (TextView) listItem.findViewById(R.id.task_id);
+                TextView taskName = (TextView) listItem.findViewById(R.id.task_list_item);
+
+                Log.v("long clicked", "pos: " + pos);
+
+                return true;
+            }
+        });*/
     }
 
     @Override

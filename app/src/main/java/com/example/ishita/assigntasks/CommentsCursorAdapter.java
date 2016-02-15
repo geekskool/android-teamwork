@@ -22,6 +22,11 @@ public class CommentsCursorAdapter extends CursorAdapter {
         super(context, c, flags);
     }
 
+    /*@Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        return super.getView(position, convertView, parent);
+    }*/
+
     @Override
     public View newView(Context context, Cursor cursor, ViewGroup parent) {
         View listItem = LayoutInflater.from(context).inflate(R.layout.comments_list_item, parent, false);
