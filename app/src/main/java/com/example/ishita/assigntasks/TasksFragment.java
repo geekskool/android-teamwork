@@ -113,9 +113,6 @@ public class TasksFragment extends ListFragment implements LoaderManager.LoaderC
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
         View listItem = info.targetView;
         switch (item.getItemId()) {
-            case R.id.edit:
-                Toast.makeText(getContext(),"Edit selected.",Toast.LENGTH_SHORT).show();
-                return true;
             case R.id.delete:
                 delete(listItem);
                 adapter.notifyDataSetChanged();
@@ -125,9 +122,6 @@ public class TasksFragment extends ListFragment implements LoaderManager.LoaderC
         }
     }
 
-    private void edit(View listItem){
-
-    }
 
     private void delete(View listItem) {
         TextView taskId = (TextView) listItem.findViewById(R.id.task_id);
