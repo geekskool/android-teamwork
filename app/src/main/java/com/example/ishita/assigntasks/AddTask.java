@@ -69,10 +69,12 @@ public class AddTask extends AppCompatActivity {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                 android.support.v7.app.ActionBar actionBar = getSupportActionBar();
-                switch (position){
-                    case 0: actionBar.setTitle("Add New Task");
+                switch (position) {
+                    case 0:
+                        actionBar.setTitle("Add New Task");
                         break;
-                    case 1: actionBar.setTitle("Existing Tasks");
+                    case 1:
+                        actionBar.setTitle("Existing Tasks");
                         break;
                 }
             }

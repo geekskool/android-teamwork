@@ -188,12 +188,12 @@ public class AddTaskFragment extends Fragment {
 
             Cursor cursor = getContext().getContentResolver().query(
                     TasksContract.ProfileEntry.CONTENT_URI,
-                    new String[] {TasksContract.ProfileEntry._ID},
+                    new String[]{TasksContract.ProfileEntry._ID},
                     TasksContract.ProfileEntry.COL_CONTACT + "=?",
                     new String[]{mAssigneeContact},
                     null
             );
-            if(!cursor.moveToFirst()) {
+            if (!cursor.moveToFirst()) {
                 ContentValues contactDetails = new ContentValues();
                 contactDetails.put(TasksContract.ProfileEntry.COL_NAME, mAssigneeName);
                 contactDetails.put(TasksContract.ProfileEntry.COL_CONTACT, mAssigneeContact);
