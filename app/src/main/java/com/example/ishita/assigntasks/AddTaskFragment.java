@@ -3,31 +3,22 @@ package com.example.ishita.assigntasks;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.ContentValues;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.ActionBar;
-import android.telephony.TelephonyManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ishita.assigntasks.data.TasksContract;
-import com.example.ishita.assigntasks.data.TasksDbHelper;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -129,7 +120,7 @@ public class AddTaskFragment extends Fragment {
             }
         });
 
-
+//TODO find a way to implement this from the onpagechangelistener in the main activity.
         Button saveTask = (Button) rootView.findViewById(R.id.save_task);
         saveTask.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -160,9 +151,6 @@ public class AddTaskFragment extends Fragment {
         return rootView;
     }
 
-    public void saveData() {
-
-    }
 
     public void onActivityResult(int reqCode, int resultCode, Intent data) {
         super.onActivityResult(reqCode, resultCode, data);

@@ -78,6 +78,7 @@ public class CommentsActivity extends AppCompatActivity {
         adapter = new CommentsCursorAdapter(this, commentCursor, 0);
         ListView list = (ListView) findViewById(R.id.list);
         list.setAdapter(adapter);
+        list.setSelection(list.getAdapter().getCount() - 1);
 
         sendBtn.setOnClickListener(new View.OnClickListener() {
             @Override
