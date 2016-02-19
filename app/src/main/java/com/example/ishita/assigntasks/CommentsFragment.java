@@ -31,34 +31,48 @@ public class CommentsFragment extends Fragment {
     private String taskId, taskName;
     CommentsCursorAdapter adapter;
 
-    private OnFragmentInteractionListener mListener;
+    static final String TASK_ID = "taskId";
+    static final String TASK_NAME = "taskName";
+
+//    private OnFragmentInteractionListener mListener;
 
     public CommentsFragment() {
         // Required empty public constructor
     }
 
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+//        taskId = getArguments().getString(TASK_ID);
+//        taskName = getArguments().getString(TASK_NAME);
+        Log.v("CommentsFragment", "onCreate");
+    }
+
     /**
-     * Use this factory method to create a new instance of
+     * To create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param
-     * @param
+     * @param taskId to set the taskId passed from the Tasks list when a list item was selected
+     * @param taskName to set the taskName of the same
      * @return A new instance of fragment CommentsFragment.
      */
     // TODO: Rename and change types and number of parameters
-    /*public static CommentsFragment newInstance(String param1, String param2) {
+    public static CommentsFragment newInstance(String taskId, String taskName) {
         CommentsFragment fragment = new CommentsFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putString(TASK_ID, taskId);
+        args.putString(TASK_NAME, taskName);
         fragment.setArguments(args);
+        Log.v("CommentsFragment", "new instance created");
+        Log.v("CommentsFragment", "taskId: " + taskId + ", taskName: " + taskName);
         return fragment;
-    }*/
+    }
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.activity_comments, container, false);
+        Log.v("onCreateView", "getArgs.taskId: " + getArguments().getString(TASK_ID));
         msgEdit = (EditText) rootView.findViewById(R.id.msg_edit);
         sendBtn = (ImageButton) rootView.findViewById(R.id.send_btn);
         TasksDbHelper dbHelper = new TasksDbHelper(getContext());
@@ -164,7 +178,7 @@ public class CommentsFragment extends Fragment {
         }
     }*/
 
-    @Override
+    /*@Override
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof OnFragmentInteractionListener) {
@@ -183,13 +197,13 @@ public class CommentsFragment extends Fragment {
             throw new RuntimeException(context.toString()
                     + " must implement OnFragmentInteractionListener");
         }
-    }
+    }*/
 
-    @Override
+    /*@Override
     public void onDetach() {
         super.onDetach();
         mListener = null;
-    }
+    }*/
 
     /**
      * This interface must be implemented by activities that contain this
@@ -201,7 +215,7 @@ public class CommentsFragment extends Fragment {
      * "http://developer.android.com/training/basics/fragments/communicating.html"
      * >Communicating with Other Fragments</a> for more information.
      */
-    public interface OnFragmentInteractionListener {
+    /*public interface OnFragmentInteractionListener {
         String[] getTaskDetails();
-    }
+    }*/
 }

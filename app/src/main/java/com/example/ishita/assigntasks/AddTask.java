@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
-public class AddTask extends AppCompatActivity implements TasksFragment.OnListItemSelectedListener, CommentsFragment.OnFragmentInteractionListener {
+public class AddTask extends AppCompatActivity /*implements TasksFragment.OnListItemSelectedListener*//*, CommentsFragment.OnFragmentInteractionListener*/ {
 
     /**
      * The {@link PagerAdapter} that will provide
@@ -175,18 +175,19 @@ public class AddTask extends AppCompatActivity implements TasksFragment.OnListIt
         client.disconnect();
     }
 
-    @Override
+    /*@Override
     public void setTaskDetails(String taskId, String taskName) {
         mTaskId = taskId;
         mTaskName = taskName;
+        CommentsFragment.newInstance(mTaskId, mTaskName);
         Log.v("setTaskDetails", mTaskId + ", " + mTaskName);
-    }
+    }*/
 
-    @Override
+    /*@Override
     public String[] getTaskDetails() {
         Log.v("getTaskDetails", mTaskId + ", " + mTaskName);
         return new String[]{mTaskId, mTaskName};
-    }
+    }*/
 
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
@@ -210,7 +211,6 @@ public class AddTask extends AppCompatActivity implements TasksFragment.OnListIt
         @Override
         public Fragment getItem(int position) {
             //Instantiate the fragment at the position where the pager is.
-//            return Fragment.instantiate(getApplicationContext(), fragmentsA.get(position));
             return fragmentList.get(position);
         }
 
