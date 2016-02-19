@@ -10,6 +10,7 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -20,7 +21,7 @@ import com.google.android.gms.common.api.GoogleApiClient;
 import java.util.List;
 import java.util.Vector;
 
-public class AddTask extends AppCompatActivity {
+public class AddTask extends AppCompatActivity implements TasksFragment.OnListItemSelectedListener, CommentsFragment.OnFragmentInteractionListener {
 
     /**
      * The {@link PagerAdapter} that will provide
@@ -37,6 +38,9 @@ public class AddTask extends AppCompatActivity {
      */
     private ViewPager mViewPager;
     public List<String> fragments = new Vector<String>();
+
+    private String mTaskId;
+    private String mTaskName;
 
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -58,13 +62,16 @@ public class AddTask extends AppCompatActivity {
         //fill the fragments list with the fragment classes
         fragments.add(AddTaskFragment.class.getName());
         fragments.add(TasksFragment.class.getName());
+        fragments.add(CommentsFragment.class.getName());
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(mSectionsPagerAdapter);
+//        mViewPager.setOffscreenPageLimit(2);
         mViewPager.setCurrentItem(1);
 
+        final AddTaskFragment addTaskFrag = (AddTaskFragment) mSectionsPagerAdapter.getItem(0);
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -75,6 +82,9 @@ public class AddTask extends AppCompatActivity {
                         break;
                     case 1:
                         actionBar.setTitle("Existing Tasks");
+                        break;
+                    case 2:
+                        actionBar.setTitle("Comments");
                         break;
                 }
             }
@@ -88,7 +98,13 @@ public class AddTask extends AppCompatActivity {
 
             @Override
             public void onPageScrollStateChanged(int state) {
-
+                if (mViewPager.getCurrentItem() == 0) {
+                    if (state == ViewPager.SCROLL_STATE_DRAGGING) {
+                        if (addTaskFrag != null) {
+                            addTaskFrag.saveTaskBtn.performClick();
+                        }
+                    }
+                }
             }
         });
         // ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -158,6 +174,19 @@ public class AddTask extends AppCompatActivity {
         client.disconnect();
     }
 
+    @Override
+    public void setTaskDetails(String taskId, String taskName) {
+        mTaskId = taskId;
+        mTaskName = taskName;
+        Log.v("setTaskDetails", mTaskId + ", " + mTaskName);
+    }
+
+    @Override
+    public String[] getTaskDetails() {
+        Log.v("getTaskDetails", mTaskId + ", " + mTaskName);
+        return new String[]{mTaskId, mTaskName};
+    }
+
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
@@ -198,6 +227,8 @@ public class AddTask extends AppCompatActivity {
                     return "Add Task";
                 case 1:
                     return "Tasks List";
+                case 2:
+                    return "Comments";
             }
             return null;
         }

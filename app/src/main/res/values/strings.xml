@@ -15,4 +15,5 @@
     <string name="send_btn">Send Message</string>
     <string name="action_delete">Delete</string>
     <string name="action_edit">Edit</string>
+    <string name="no_task_yet">Task details not updated yet.</string>
 </resources>

@@ -10,6 +10,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -45,6 +46,11 @@ public class AddTaskFragment extends Fragment {
     public AddTaskFragment() {
     }
 
+    EditText dueDate;
+    EditText assignee;
+    EditText taskDescription;
+    EditText comments;
+    Button saveTaskBtn;
     View rootView;
     Calendar myCalendar = Calendar.getInstance();
 
@@ -67,7 +73,6 @@ public class AddTaskFragment extends Fragment {
         String displayFormat = "MMM dd, yyyy"; //setting the format in which the date will be displayed
         SimpleDateFormat sdf = new SimpleDateFormat(displayFormat, Locale.US);
 
-        EditText dueDate = (EditText) rootView.findViewById(R.id.due_date);
         dueDate.setText(sdf.format(myCalendar.getTime()));
     }
 
@@ -83,6 +88,7 @@ public class AddTaskFragment extends Fragment {
         return fragment;
     }
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -94,7 +100,11 @@ public class AddTaskFragment extends Fragment {
 //        String mSimNumber = tMgr.getSimSerialNumber(); //returns the sim serial number (unique)
 //        Log.v("phone number", "" + mSimNumber);
 
-        final EditText dueDate = (EditText) rootView.findViewById(R.id.due_date);
+        dueDate = (EditText) rootView.findViewById(R.id.due_date);
+        taskDescription = (EditText) rootView.findViewById(R.id.description);
+        comments = (EditText) rootView.findViewById(R.id.comments);
+        assignee = (EditText) rootView.findViewById(R.id.assignee);
+
         dueDate.setOnClickListener(new View.OnClickListener() {
 
                                        @Override
@@ -106,7 +116,7 @@ public class AddTaskFragment extends Fragment {
                                    }
 
         );
-        final EditText assignee = (EditText) rootView.findViewById(R.id.assignee);
+
         assignee.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -120,37 +130,38 @@ public class AddTaskFragment extends Fragment {
             }
         });
 
-//TODO find a way to implement this from the onpagechangelistener in the main activity.
-        Button saveTask = (Button) rootView.findViewById(R.id.save_task);
-        saveTask.setOnClickListener(new View.OnClickListener() {
+        saveTaskBtn = (Button) rootView.findViewById(R.id.save_task);
+//        Log.v("AddTaskFragment", "saveTaskBtn assigned to " + R.id.save_task);
+        saveTaskBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                try {
-                    EditText taskDescription = (EditText) rootView.findViewById(R.id.description);
-                    EditText comments = (EditText) rootView.findViewById(R.id.comments);
-                    mTaskName = taskDescription.getText().toString();
-                    taskDescription.setText("");
-                    mDueDate = dueDate.getText().toString();
-                    dueDate.setText("");
-                    mComments = comments.getText().toString();
-                    comments.setText("");
-                    assignee.setText(R.string.assignee_prompt);
-                    if (mTaskName == null || mDueDate == null || mAssigneeName == null) {
-                        Toast.makeText(getContext(), "Fields cannot be empty. Please fill some values.", Toast.LENGTH_SHORT).show();
-                    } else {
-                        UpdateTask updateDB = new UpdateTask();
-                        updateDB.execute();
-                        Toast.makeText(getContext(), "Task saved.", Toast.LENGTH_SHORT).show();
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                saveTask();
             }
         });
 
         return rootView;
     }
 
+    public void saveTask() {
+        try {
+            mTaskName = taskDescription.getText().toString();
+            taskDescription.setText("");
+            mDueDate = dueDate.getText().toString();
+            dueDate.setText("");
+            mComments = comments.getText().toString();
+            comments.setText("");
+            assignee.setText(R.string.assignee_prompt);
+            if (mTaskName == null || mDueDate == null || mAssigneeName == null) {
+                Toast.makeText(getContext(), "Fields cannot be empty. Please fill some values.", Toast.LENGTH_SHORT).show();
+            } else {
+                UpdateTask updateDB = new UpdateTask();
+                updateDB.execute();
+                Toast.makeText(getContext(), "Task saved.", Toast.LENGTH_SHORT).show();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
     public void onActivityResult(int reqCode, int resultCode, Intent data) {
         super.onActivityResult(reqCode, resultCode, data);

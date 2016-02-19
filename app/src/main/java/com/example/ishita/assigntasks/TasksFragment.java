@@ -1,5 +1,6 @@
 package com.example.ishita.assigntasks;
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.AsyncTask;
@@ -42,6 +43,8 @@ public class TasksFragment extends ListFragment implements LoaderManager.LoaderC
     public TasksFragment() {
         // Required empty public constructor
     }
+
+    OnListItemSelectedListener mListener;
 
     /**
      * Use this factory method to create a new instance of
@@ -102,6 +105,18 @@ public class TasksFragment extends ListFragment implements LoaderManager.LoaderC
     }
 
     @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        if (context instanceof OnListItemSelectedListener) {
+            mListener = (OnListItemSelectedListener) context;
+        } else {
+            throw new RuntimeException(context.toString()
+                    + " must implement OnListItemSelectedListener");
+        }
+    }
+
+
+    @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
         MenuInflater inflater = getActivity().getMenuInflater();
@@ -144,7 +159,8 @@ public class TasksFragment extends ListFragment implements LoaderManager.LoaderC
 
     @Override
     public android.support.v4.content.Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        CursorLoader loader = new CursorLoader(getContext(),
+        CursorLoader loader = new CursorLoader(
+                getContext(),
                 TasksContract.TaskEntry.CONTENT_URI,
                 new String[]{TasksContract.TaskEntry._ID, TasksContract.TaskEntry.COL_DESCRIPTION, TasksContract.TaskEntry.COL_MSG_COUNT},
                 null,
@@ -163,14 +179,24 @@ public class TasksFragment extends ListFragment implements LoaderManager.LoaderC
         adapter.swapCursor(null);
     }
 
+    //TODO find a way to implement comments in the fragment instead of the activity.
+    //maybe use an onFragmentInteractionListener to pass the info from the AddTask activity to the comments fragment
+    //but how to pass the task details from TasksFragment to AddTask? Let's try this:
+
+    public interface OnListItemSelectedListener {
+        public void setTaskDetails(String taskId, String taskName);
+    }
+
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         TextView taskName = (TextView) v.findViewById(R.id.task_list_item);
         TextView taskID = (TextView) v.findViewById(R.id.task_id);
-        String description = taskName.getText().toString();
+        mListener.setTaskDetails(taskID.getText().toString(), taskName.getText().toString());
+        this.getFragmentManager().beginTransaction().replace(R.id.container, new CommentsFragment()).addToBackStack(null).commit();
+        /*String description = taskName.getText().toString();
         Intent intent = new Intent(getActivity(), CommentsActivity.class);
         intent.putExtra("TASK_ID", "" + taskID.getText().toString());
         intent.putExtra("TASK_NAME", description);
-        startActivity(intent);
+        startActivity(intent);*/
     }
 }

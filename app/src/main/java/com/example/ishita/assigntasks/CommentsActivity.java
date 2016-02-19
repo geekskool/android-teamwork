@@ -62,10 +62,11 @@ public class CommentsActivity extends AppCompatActivity {
             taskDetails.setText("Assignee: " + assigneeName + "\nDue Date: " + dueDate);
         } else {
             TextView taskDetails = (TextView) findViewById(R.id.task_details);
-            taskDetails.setText("Task details not updated yet.");
+            taskDetails.setText(R.string.no_task_yet);
         }
 
-        Cursor commentCursor = getContentResolver().query(TasksContract.MessageEntry.CONTENT_URI,
+        Cursor commentCursor = getContentResolver().query(
+                TasksContract.MessageEntry.CONTENT_URI,
                 new String[]{TasksContract.MessageEntry._ID,
                         TasksContract.MessageEntry.COL_TASK_KEY,
                         TasksContract.MessageEntry.COL_MSG,
@@ -87,7 +88,8 @@ public class CommentsActivity extends AppCompatActivity {
                 if (!msg.equals("")) {
                     send(msg);
                     msgEdit.setText(null);
-                    Cursor updatedCursor = getContentResolver().query(TasksContract.MessageEntry.CONTENT_URI,
+                    Cursor updatedCursor = getContentResolver().query(
+                            TasksContract.MessageEntry.CONTENT_URI,
                             new String[]{TasksContract.MessageEntry._ID,
                                     TasksContract.MessageEntry.COL_TASK_KEY,
                                     TasksContract.MessageEntry.COL_MSG,
@@ -100,6 +102,8 @@ public class CommentsActivity extends AppCompatActivity {
                 }
             }
         });
+//        taskCursor.close();
+//        commentCursor.close();
     }
 
 

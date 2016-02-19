@@ -105,8 +105,8 @@ public final class R {
 	public static final class raw {
 	}
 	public static final class string {
-		public static final int auth_google_play_services_client_facebook_display_name = 0x7f060035;
-		public static final int auth_google_play_services_client_google_display_name = 0x7f060036;
+		public static final int auth_google_play_services_client_facebook_display_name = 0x7f060037;
+		public static final int auth_google_play_services_client_google_display_name = 0x7f060038;
 		public static final int common_google_play_services_api_unavailable_text = 0x7f060013;
 		public static final int common_google_play_services_enable_button = 0x7f060014;
 		public static final int common_google_play_services_enable_text = 0x7f060015;
