@@ -130,6 +130,7 @@ public class CommentsFragment extends Fragment {
         return rootView;
     }
 
+
     private void send(final String txt) {
         new AsyncTask<Void, Void, String>() {
             @Override
@@ -173,6 +174,7 @@ public class CommentsFragment extends Fragment {
                 taskId = taskDetails[0];
                 taskName = taskDetails[1];
                 Log.v("CommentsFragment", "onAttach");
+                Log.v("CommentsFragment", "taskId: " + taskId + ", taskName: " + taskName);
             }
 //            Log.v("taskName", taskName);
 //            Log.v("taskDetails[0]", taskDetails[0]);

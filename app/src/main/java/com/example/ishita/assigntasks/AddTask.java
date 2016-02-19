@@ -18,6 +18,7 @@ import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
@@ -57,7 +58,7 @@ public class AddTask extends AppCompatActivity implements TasksFragment.OnListIt
         setSupportActionBar(toolbar);
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+//        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         //fill the fragments list with the fragment classes
         fragments.add(AddTaskFragment.class.getName());
@@ -194,17 +195,23 @@ public class AddTask extends AppCompatActivity implements TasksFragment.OnListIt
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
         public List<String> fragmentsA;
+        private List<Fragment> fragmentList;
 
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
             fragmentsA = fragments;
+            fragmentList = new ArrayList<Fragment>();
+
+            for (int i = 0; i < 3; i++) {
+                fragmentList.add(Fragment.instantiate(getApplicationContext(), fragmentsA.get(i)));
+            }
         }
 
         @Override
         public Fragment getItem(int position) {
             //Instantiate the fragment at the position where the pager is.
-            return Fragment.instantiate(getApplicationContext(), fragmentsA.get(position));
-
+//            return Fragment.instantiate(getApplicationContext(), fragmentsA.get(position));
+            return fragmentList.get(position);
         }
 
 
