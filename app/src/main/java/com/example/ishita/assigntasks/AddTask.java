@@ -1,5 +1,6 @@
 package com.example.ishita.assigntasks;
 
+import android.app.FragmentTransaction;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -22,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
-public class AddTask extends AppCompatActivity /*implements TasksFragment.OnListItemSelectedListener*//*, CommentsFragment.OnFragmentInteractionListener*/ {
+public class AddTask extends AppCompatActivity implements TasksFragment.OnListItemSelectedListener/*, CommentsFragment.OnFragmentInteractionListener*/ {
 
     /**
      * The {@link PagerAdapter} that will provide
@@ -58,7 +59,6 @@ public class AddTask extends AppCompatActivity /*implements TasksFragment.OnList
         setSupportActionBar(toolbar);
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
-//        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         //fill the fragments list with the fragment classes
         fragments.add(AddTaskFragment.class.getName());
@@ -92,18 +92,16 @@ public class AddTask extends AppCompatActivity /*implements TasksFragment.OnList
 
             @Override
             public void onPageSelected(int position) {
-                if (fragments.get(position).equals(TasksFragment.class.getName())) {
 
-                }
             }
 
             @Override
             public void onPageScrollStateChanged(int state) {
                 if (mViewPager.getCurrentItem() == 0) {
                     if (state == ViewPager.SCROLL_STATE_DRAGGING) {
-                        if (addTaskFrag != null) {
+//                        if (addTaskFrag != null) {
                             addTaskFrag.saveTaskBtn.performClick();
-                        }
+//                        }
                     }
                 }
             }
@@ -175,13 +173,18 @@ public class AddTask extends AppCompatActivity /*implements TasksFragment.OnList
         client.disconnect();
     }
 
-    /*@Override
+    @Override
     public void setTaskDetails(String taskId, String taskName) {
         mTaskId = taskId;
         mTaskName = taskName;
-        CommentsFragment.newInstance(mTaskId, mTaskName);
+        FragmentManager fm = getSupportFragmentManager();
+        android.support.v4.app.FragmentTransaction ft = fm.beginTransaction();
+        CommentsFragment commentsFragment = CommentsFragment.newInstance(mTaskId, mTaskName);
+        ft.replace(R.id.container, commentsFragment);
+        ft.addToBackStack(null);
+        ft.commit();
         Log.v("setTaskDetails", mTaskId + ", " + mTaskName);
-    }*/
+    }
 
     /*@Override
     public String[] getTaskDetails() {

@@ -36,6 +36,7 @@ public class TasksFragment extends ListFragment implements LoaderManager.LoaderC
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_SECTION_NUMBER = "section_number";
+    private OnListItemSelectedListener mListener;
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -104,7 +105,7 @@ public class TasksFragment extends ListFragment implements LoaderManager.LoaderC
         setListAdapter(adapter);
     }
 
-    /*@Override
+    @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         if (context instanceof OnListItemSelectedListener) {
@@ -113,7 +114,7 @@ public class TasksFragment extends ListFragment implements LoaderManager.LoaderC
             throw new RuntimeException(context.toString()
                     + " must implement OnListItemSelectedListener");
         }
-    }*/
+    }
 
 
     @Override
@@ -191,8 +192,8 @@ public class TasksFragment extends ListFragment implements LoaderManager.LoaderC
     public void onListItemClick(ListView l, View v, int position, long id) {
         TextView taskName = (TextView) v.findViewById(R.id.task_list_item);
         TextView taskID = (TextView) v.findViewById(R.id.task_id);
-//        mListener.setTaskDetails(taskID.getText().toString(), taskName.getText().toString());
-        this.getFragmentManager().beginTransaction().replace(R.id.container, CommentsFragment.newInstance(taskID.getText().toString(), taskName.getText().toString())).addToBackStack(null).commit();
+        mListener.setTaskDetails(taskID.getText().toString(), taskName.getText().toString());
+//        this.getFragmentManager().beginTransaction().replace(R.id.container, CommentsFragment.newInstance(taskID.getText().toString(), taskName.getText().toString())).addToBackStack(null).commit();
         /*String description = taskName.getText().toString();
         Intent intent = new Intent(getActivity(), CommentsActivity.class);
         intent.putExtra("TASK_ID", "" + taskID.getText().toString());
