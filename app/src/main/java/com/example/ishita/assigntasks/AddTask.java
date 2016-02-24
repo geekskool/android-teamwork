@@ -206,8 +206,14 @@ public class AddTask extends AppCompatActivity implements TasksFragment.OnListIt
             fragmentsA = fragments;
             fragmentList = new ArrayList<Fragment>();
 
-            for (int i = 0; i < 3; i++) {
+            for (int i = 0; i < 2; i++) {
                 fragmentList.add(Fragment.instantiate(getApplicationContext(), fragmentsA.get(i)));
+            }
+            if(mTaskId==null){
+                fragmentList.add(Fragment.instantiate(getApplicationContext(),fragmentsA.get(2)));
+            } else {
+                fragmentList.remove(2);
+                fragmentList.add(CommentsFragment.newInstance(mTaskId, mTaskName));
             }
         }
 
