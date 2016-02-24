@@ -184,6 +184,8 @@ public class AddTaskFragment extends Fragment {
     public class UpdateTask extends AsyncTask<Void, Void, Void> {
 
         protected Void doInBackground(Void... params) {
+
+            //Update the task details in the Tasks table
             ContentValues taskDetails = new ContentValues();
             taskDetails.put(TasksContract.TaskEntry.COL_DESCRIPTION, mTaskName);
             taskDetails.put(TasksContract.TaskEntry.COL_ASSIGNEE_KEY, mAssigneeContact);
@@ -192,6 +194,8 @@ public class AddTaskFragment extends Fragment {
             taskDetails.put(TasksContract.TaskEntry.COL_COMMENTS, mComments);
 
             getContext().getContentResolver().insert(TasksContract.TaskEntry.CONTENT_URI, taskDetails);
+
+            //If the assignee doesn't already exist in the profiles table, update the assignee name into the profiles table
 
             Cursor cursor = getContext().getContentResolver().query(
                     TasksContract.ProfileEntry.CONTENT_URI,
@@ -208,6 +212,31 @@ public class AddTaskFragment extends Fragment {
                 getContext().getContentResolver().insert(TasksContract.ProfileEntry.CONTENT_URI, contactDetails);
             }
             cursor.close();
+
+            //If there is a comment, update the comment and its task key into the messages table
+            if (!mComments.equals("")) {
+                Cursor commentCursor = getContext().getContentResolver().query(
+                        TasksContract.TaskEntry.CONTENT_URI,
+                        new String[]{TasksContract.TaskEntry._ID},
+                        TasksContract.TaskEntry.COL_DESCRIPTION + "=?",
+                        new String[]{mTaskName},
+                        TasksContract.TaskEntry._ID + " DESC"
+                );
+                if (commentCursor.moveToFirst()) {
+                    ContentValues messages = new ContentValues();
+                    messages.put(TasksContract.MessageEntry.COL_TASK_KEY, commentCursor.getInt(commentCursor.getColumnIndex(TasksContract.TaskEntry._ID)));
+                    messages.put(TasksContract.MessageEntry.COL_MSG, mComments);
+                    messages.put(TasksContract.MessageEntry.COL_FROM, "creatorID");
+                    getContext().getContentResolver().insert(TasksContract.MessageEntry.CONTENT_URI, messages);
+                }
+                commentCursor.close();
+            }
+            mComments = null;
+            mTaskName = null;
+            mAssigneeName = null;
+            mAssigneeContact = null;
+            mDueDate = null;
+
             return null;
         }
     }
