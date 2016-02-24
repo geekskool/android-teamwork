@@ -62,7 +62,7 @@ public class CommentsActivity extends AppCompatActivity {
             taskDetails.setText("Assignee: " + assigneeName + "\nDue Date: " + dueDate);
         } else {
             TextView taskDetails = (TextView) findViewById(R.id.task_details);
-            taskDetails.setText("Task details not updated yet.");
+            taskDetails.setText(R.string.no_task_details);
         }
 
         Cursor commentCursor = getContentResolver().query(TasksContract.MessageEntry.CONTENT_URI,
