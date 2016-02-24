@@ -1,0 +1,51 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/darker_gray"
+    android:orientation="vertical"
+    tools:context="com.example.ishita.assigntasks.CommentsFragment">
+
+    <TextView
+        android:id="@+id/frag_task_details"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#dd55ff"
+        android:padding="10dp" />
+
+    <ListView xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/frag_comment_list"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:transcriptMode="normal"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:background="@android:color/white">
+
+        <EditText
+            android:id="@+id/frag_msg_edit"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:inputType="textMultiLine"
+            android:layout_weight="1" />
+
+        <ImageButton
+            android:id="@+id/frag_send_btn"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0"
+            android:background="@android:color/background_light"
+            android:contentDescription="@string/send_btn"
+            android:src="@android:drawable/ic_menu_send" />
+
+    </LinearLayout>
+
+</LinearLayout>

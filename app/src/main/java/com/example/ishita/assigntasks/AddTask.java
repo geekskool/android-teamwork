@@ -56,6 +56,7 @@ public class AddTask extends AppCompatActivity {
         //fill the fragments list with the fragment classes
         fragments.add(AddTaskFragment.class.getName());
         fragments.add(TasksFragment.class.getName());
+        fragments.add(CommentsFragment.class.getName());
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
@@ -77,6 +78,8 @@ public class AddTask extends AppCompatActivity {
                     case 1:
                         actionBar.setTitle("Existing Tasks");
                         break;
+                    case 2:
+                        actionBar.setTitle("Comments");
                 }
             }
 
@@ -179,7 +182,7 @@ public class AddTask extends AppCompatActivity {
             fragmentsA = fragments;
             fragmentList = new ArrayList<Fragment>();
 
-            for (int i = 0; i < 2; i++) {
+            for (int i = 0; i < 3; i++) {
                 fragmentList.add(Fragment.instantiate(getApplicationContext(), fragmentsA.get(i)));
             }
         }
@@ -210,6 +213,8 @@ public class AddTask extends AppCompatActivity {
                     return "Add Task";
                 case 1:
                     return "Tasks List";
+                case 2:
+                    return "Comments";
             }
             return null;
         }

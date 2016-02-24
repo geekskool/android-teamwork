@@ -334,6 +334,7 @@
     <string name="gcm_defaultSenderId" translatable="false">352679909753</string>
     <string name="google_app_id" translatable="false">1:352679909753:android:22be08c668663d31</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="no_task_details">Task details not updated yet.</string>
     <string name="save_task">Save Task</string>
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="send">Send</string>
