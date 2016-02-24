@@ -2372,6 +2372,7 @@ containing a value of this type.
         public static final int date=0x7f0c0085;
         public static final int decor_content_parent=0x7f0c0060;
         public static final int default_activity_button=0x7f0c0048;
+        public static final int delete=0x7f0c0099;
         public static final int description=0x7f0c0083;
         public static final int design_menu_item_action_area=0x7f0c0082;
         public static final int design_menu_item_action_area_stub=0x7f0c0081;
@@ -2547,6 +2548,7 @@ containing a value of this type.
     public static final class menu {
         public static final int menu_add_task=0x7f0d0000;
         public static final int menu_comments=0x7f0d0001;
+        public static final int tasks_context_menu=0x7f0d0002;
     }
     public static final class mipmap {
         public static final int ic_launcher=0x7f030000;
@@ -2571,14 +2573,16 @@ containing a value of this type.
         public static final int abc_shareactionprovider_share_with=0x7f060010;
         public static final int abc_shareactionprovider_share_with_application=0x7f060011;
         public static final int abc_toolbar_collapse_description=0x7f060012;
-        public static final int action_settings=0x7f060031;
-        public static final int app_name=0x7f060032;
-        public static final int appbar_scrolling_view_behavior=0x7f060033;
-        public static final int assignee_prompt=0x7f060034;
-        public static final int auth_google_play_services_client_facebook_display_name=0x7f060035;
-        public static final int auth_google_play_services_client_google_display_name=0x7f060036;
-        public static final int character_counter_pattern=0x7f060037;
-        public static final int comments=0x7f060038;
+        public static final int action_delete=0x7f060031;
+        public static final int action_edit=0x7f060032;
+        public static final int action_settings=0x7f060033;
+        public static final int app_name=0x7f060034;
+        public static final int appbar_scrolling_view_behavior=0x7f060035;
+        public static final int assignee_prompt=0x7f060036;
+        public static final int auth_google_play_services_client_facebook_display_name=0x7f060037;
+        public static final int auth_google_play_services_client_google_display_name=0x7f060038;
+        public static final int character_counter_pattern=0x7f060039;
+        public static final int comments=0x7f06003a;
         public static final int common_google_play_services_api_unavailable_text=0x7f060013;
         public static final int common_google_play_services_enable_button=0x7f060014;
         public static final int common_google_play_services_enable_text=0x7f060015;
@@ -2608,17 +2612,17 @@ containing a value of this type.
         public static final int common_open_on_phone=0x7f06002d;
         public static final int common_signin_button_text=0x7f06002e;
         public static final int common_signin_button_text_long=0x7f06002f;
-        public static final int due_date=0x7f060039;
-        public static final int gcm_defaultSenderId=0x7f06003a;
-        public static final int google_app_id=0x7f06003b;
-        public static final int hello_blank_fragment=0x7f06003c;
-        public static final int save_task=0x7f06003d;
-        public static final int section_format=0x7f06003e;
-        public static final int send=0x7f06003f;
-        public static final int send_btn=0x7f060040;
+        public static final int due_date=0x7f06003b;
+        public static final int gcm_defaultSenderId=0x7f06003c;
+        public static final int google_app_id=0x7f06003d;
+        public static final int hello_blank_fragment=0x7f06003e;
+        public static final int save_task=0x7f06003f;
+        public static final int section_format=0x7f060040;
+        public static final int send=0x7f060041;
+        public static final int send_btn=0x7f060042;
         public static final int status_bar_notification_info_overflow=0x7f060030;
-        public static final int task_prompt=0x7f060041;
-        public static final int title_activity_comments=0x7f060042;
+        public static final int task_prompt=0x7f060043;
+        public static final int title_activity_comments=0x7f060044;
     }
     public static final class style {
         public static final int AlertDialog_AppCompat=0x7f09007f;

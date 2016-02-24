@@ -17,6 +17,7 @@ import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
@@ -51,9 +52,6 @@ public class AddTask extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        // Create the adapter that will return a fragment for each of the three
-        // primary sections of the activity.
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         //fill the fragments list with the fragment classes
         fragments.add(AddTaskFragment.class.getName());
@@ -61,10 +59,13 @@ public class AddTask extends AppCompatActivity {
 
         // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
+        // Create the adapter that will return a fragment for each of the three
+        // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(mSectionsPagerAdapter);
         mViewPager.setCurrentItem(1);
 
+        final AddTaskFragment addTaskFrag = (AddTaskFragment) mSectionsPagerAdapter.getItem(0);
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -88,7 +89,13 @@ public class AddTask extends AppCompatActivity {
 
             @Override
             public void onPageScrollStateChanged(int state) {
-
+                if (mViewPager.getCurrentItem() == 0) {
+                    if (state == ViewPager.SCROLL_STATE_DRAGGING) {
+                        if (addTaskFrag != null) {
+                            addTaskFrag.saveTaskBtn.performClick();
+                        }
+                    }
+                }
             }
         });
         // ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -165,17 +172,22 @@ public class AddTask extends AppCompatActivity {
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
         public List<String> fragmentsA;
+        private List<Fragment> fragmentList;
 
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
             fragmentsA = fragments;
+            fragmentList = new ArrayList<Fragment>();
+
+            for (int i = 0; i < 2; i++) {
+                fragmentList.add(Fragment.instantiate(getApplicationContext(), fragmentsA.get(i)));
+            }
         }
 
         @Override
         public Fragment getItem(int position) {
             //Instantiate the fragment at the position where the pager is.
-            return Fragment.instantiate(getApplicationContext(), fragmentsA.get(position));
-
+            return fragmentList.get(position);
         }
 
 
