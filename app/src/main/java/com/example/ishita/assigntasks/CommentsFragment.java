@@ -88,6 +88,10 @@ public class CommentsFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.activity_comments, container, false);
         msgEdit = (EditText) rootView.findViewById(R.id.msg_edit);
         sendBtn = (ImageButton) rootView.findViewById(R.id.send_btn);
+        Log.v("CommentsFragment", "onCreateView");
+
+        Log.v("CommentsFragment", "msgEdit = " + msgEdit + ", sendBtn = " + sendBtn);
+
         TasksDbHelper dbHelper = new TasksDbHelper(getContext());
         SQLiteDatabase readableDatabase = dbHelper.getReadableDatabase();
 
@@ -105,10 +109,6 @@ public class CommentsFragment extends Fragment {
         taskName = tempCursor.getString(tempCursor.getColumnIndex(TasksContract.TaskEntry.COL_DESCRIPTION));
         tempCursor.close();
 
-        Log.v("CommentsFragment", "onCreateView");
-        android.support.v7.app.ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
-        actionBar.setTitle(taskName);
-
         Cursor taskCursor = readableDatabase.rawQuery(
                 "SELECT " + TasksContract.TaskEntry.TABLE_NAME + "." + TasksContract.TaskEntry._ID + ", " +
                         TasksContract.ProfileEntry.COL_NAME + ", " +
@@ -124,8 +124,7 @@ public class CommentsFragment extends Fragment {
             String dueDate = taskCursor.getString(taskCursor.getColumnIndex(TasksContract.TaskEntry.COL_DUE_DATE));
 
             TextView taskDetails = (TextView) rootView.findViewById(R.id.task_details);
-            taskDetails.setText("Assignee: " + assigneeName + "\nDue Date: " + dueDate);
-
+            taskDetails.setText("Task Name: " + taskName + "\nAssignee: " + assigneeName + "\nDue Date: " + dueDate);
 
             Cursor commentCursor = getActivity().getContentResolver().query(
                     TasksContract.MessageEntry.CONTENT_URI,
