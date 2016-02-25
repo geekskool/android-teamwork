@@ -85,9 +85,9 @@ public class CommentsFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.activity_comments, container, false);
-        msgEdit = (EditText) rootView.findViewById(R.id.msg_edit);
-        sendBtn = (ImageButton) rootView.findViewById(R.id.send_btn);
+        View rootView = inflater.inflate(R.layout.fragment_comments, container, false);
+        msgEdit = (EditText) rootView.findViewById(R.id.frag_msg_edit);
+        sendBtn = (ImageButton) rootView.findViewById(R.id.frag_send_btn);
         Log.v("CommentsFragment", "onCreateView");
 
         Log.v("CommentsFragment", "msgEdit = " + msgEdit + ", sendBtn = " + sendBtn);
@@ -123,7 +123,7 @@ public class CommentsFragment extends Fragment {
             String assigneeName = taskCursor.getString(taskCursor.getColumnIndex(TasksContract.ProfileEntry.COL_NAME));
             String dueDate = taskCursor.getString(taskCursor.getColumnIndex(TasksContract.TaskEntry.COL_DUE_DATE));
 
-            TextView taskDetails = (TextView) rootView.findViewById(R.id.task_details);
+            TextView taskDetails = (TextView) rootView.findViewById(R.id.frag_task_details);
             taskDetails.setText("Task Name: " + taskName + "\nAssignee: " + assigneeName + "\nDue Date: " + dueDate);
 
             Cursor commentCursor = getActivity().getContentResolver().query(
@@ -138,7 +138,7 @@ public class CommentsFragment extends Fragment {
                     TasksContract.MessageEntry.COL_AT + " ASC");
 
             adapter = new CommentsCursorAdapter(getActivity(), commentCursor, 0);
-            ListView list = (ListView) rootView.findViewById(R.id.list);
+            ListView list = (ListView) rootView.findViewById(R.id.frag_comment_list);
             list.setAdapter(adapter);
             list.setSelection(list.getAdapter().getCount() - 1);
             sendBtn.setOnClickListener(new View.OnClickListener() {
@@ -163,7 +163,7 @@ public class CommentsFragment extends Fragment {
                 }
             });
         } else {
-            TextView taskDetails = (TextView) rootView.findViewById(R.id.task_details);
+            TextView taskDetails = (TextView) rootView.findViewById(R.id.frag_task_details);
             taskDetails.setText(R.string.no_task_details);
         }
         taskCursor.close();
