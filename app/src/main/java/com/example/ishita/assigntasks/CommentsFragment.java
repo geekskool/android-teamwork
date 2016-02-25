@@ -166,7 +166,7 @@ public class CommentsFragment extends Fragment {
             TextView taskDetails = (TextView) rootView.findViewById(R.id.task_details);
             taskDetails.setText(R.string.no_task_details);
         }
-        //taskCursor.close();
+        taskCursor.close();
         return rootView;
     }
 

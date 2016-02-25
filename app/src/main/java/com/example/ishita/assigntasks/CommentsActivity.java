@@ -100,6 +100,7 @@ public class CommentsActivity extends AppCompatActivity {
                 }
             }
         });
+        taskCursor.close();
     }
 
 
