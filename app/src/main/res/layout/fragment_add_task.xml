@@ -63,11 +63,19 @@
             android:hint="@string/comments"
             android:minHeight="?android:listPreferredItemHeight" />
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/swipe_right_to_save"
+            android:layout_marginTop="50dp"
+            android:layout_gravity="center" />
+
         <Button
             android:id="@+id/save_task"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
+            android:visibility="gone"
             android:text="@string/save_task" />
 
 

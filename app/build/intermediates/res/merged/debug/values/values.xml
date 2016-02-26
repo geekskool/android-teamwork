@@ -340,6 +340,7 @@
     <string name="send">Send</string>
     <string name="send_btn">Send Message</string>
     <string name="status_bar_notification_info_overflow">999+</string>
+    <string name="swipe_right_to_save">Swipe right to save this task</string>
     <string name="task_prompt">Enter Task Description</string>
     <string name="title_activity_comments">CommentsActivity</string>
     <style name="AlertDialog.AppCompat" parent="Base.AlertDialog.AppCompat"/>
