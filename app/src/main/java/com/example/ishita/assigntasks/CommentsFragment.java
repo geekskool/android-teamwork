@@ -104,69 +104,71 @@ public class CommentsFragment extends Fragment {
                 null,
                 TasksContract.TaskEntry._ID + " DESC"
         );
-        tempCursor.moveToFirst();
-        taskId = tempCursor.getString(tempCursor.getColumnIndex(TasksContract.TaskEntry._ID));
-        taskName = tempCursor.getString(tempCursor.getColumnIndex(TasksContract.TaskEntry.COL_DESCRIPTION));
-        tempCursor.close();
+        if (tempCursor.moveToFirst()) {
+            taskId = tempCursor.getString(tempCursor.getColumnIndex(TasksContract.TaskEntry._ID));
+            taskName = tempCursor.getString(tempCursor.getColumnIndex(TasksContract.TaskEntry.COL_DESCRIPTION));
 
-        Cursor taskCursor = readableDatabase.rawQuery(
-                "SELECT " + TasksContract.TaskEntry.TABLE_NAME + "." + TasksContract.TaskEntry._ID + ", " +
-                        TasksContract.ProfileEntry.COL_NAME + ", " +
-                        TasksContract.TaskEntry.COL_DUE_DATE +
-                        " FROM " + TasksContract.TaskEntry.TABLE_NAME + ", " + TasksContract.ProfileEntry.TABLE_NAME +
-                        " WHERE " + TasksContract.TaskEntry.TABLE_NAME + "." + TasksContract.TaskEntry._ID + "=" + taskId + " AND " +
-                        TasksContract.ProfileEntry.TABLE_NAME + "." + TasksContract.ProfileEntry.COL_CONTACT + "=" +
-                        TasksContract.TaskEntry.TABLE_NAME + "." + TasksContract.TaskEntry.COL_ASSIGNEE_KEY,
-                null
-        );
-        if (taskCursor.moveToFirst()) {
-            String assigneeName = taskCursor.getString(taskCursor.getColumnIndex(TasksContract.ProfileEntry.COL_NAME));
-            String dueDate = taskCursor.getString(taskCursor.getColumnIndex(TasksContract.TaskEntry.COL_DUE_DATE));
+            tempCursor.close();
 
-            TextView taskDetails = (TextView) rootView.findViewById(R.id.frag_task_details);
-            taskDetails.setText("Task Name: " + taskName + "\nAssignee: " + assigneeName + "\nDue Date: " + dueDate);
+            Cursor taskCursor = readableDatabase.rawQuery(
+                    "SELECT " + TasksContract.TaskEntry.TABLE_NAME + "." + TasksContract.TaskEntry._ID + ", " +
+                            TasksContract.ProfileEntry.COL_NAME + ", " +
+                            TasksContract.TaskEntry.COL_DUE_DATE +
+                            " FROM " + TasksContract.TaskEntry.TABLE_NAME + ", " + TasksContract.ProfileEntry.TABLE_NAME +
+                            " WHERE " + TasksContract.TaskEntry.TABLE_NAME + "." + TasksContract.TaskEntry._ID + "=" + taskId + " AND " +
+                            TasksContract.ProfileEntry.TABLE_NAME + "." + TasksContract.ProfileEntry.COL_CONTACT + "=" +
+                            TasksContract.TaskEntry.TABLE_NAME + "." + TasksContract.TaskEntry.COL_ASSIGNEE_KEY,
+                    null
+            );
+            if (taskCursor.moveToFirst()) {
+                String assigneeName = taskCursor.getString(taskCursor.getColumnIndex(TasksContract.ProfileEntry.COL_NAME));
+                String dueDate = taskCursor.getString(taskCursor.getColumnIndex(TasksContract.TaskEntry.COL_DUE_DATE));
 
-            Cursor commentCursor = getActivity().getContentResolver().query(
-                    TasksContract.MessageEntry.CONTENT_URI,
-                    new String[]{TasksContract.MessageEntry._ID,
-                            TasksContract.MessageEntry.COL_TASK_KEY,
-                            TasksContract.MessageEntry.COL_MSG,
-                            TasksContract.MessageEntry.COL_FROM,
-                            TasksContract.MessageEntry.COL_AT},
-                    TasksContract.MessageEntry.COL_TASK_KEY + "=?",
-                    new String[]{taskId},
-                    TasksContract.MessageEntry.COL_AT + " ASC");
+                TextView taskDetails = (TextView) rootView.findViewById(R.id.frag_task_details);
+                taskDetails.setText("Task Name: " + taskName + "\nAssignee: " + assigneeName + "\nDue Date: " + dueDate);
 
-            adapter = new CommentsCursorAdapter(getActivity(), commentCursor, 0);
-            ListView list = (ListView) rootView.findViewById(R.id.frag_comment_list);
-            list.setAdapter(adapter);
-            list.setSelection(list.getAdapter().getCount() - 1);
-            sendBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    String msg = msgEdit.getText().toString();
-                    if (!msg.equals("")) {
-                        send(msg);
-                        msgEdit.setText(null);
-                        Cursor updatedCursor = getActivity().getContentResolver().query(
-                                TasksContract.MessageEntry.CONTENT_URI,
-                                new String[]{TasksContract.MessageEntry._ID,
-                                        TasksContract.MessageEntry.COL_TASK_KEY,
-                                        TasksContract.MessageEntry.COL_MSG,
-                                        TasksContract.MessageEntry.COL_FROM,
-                                        TasksContract.MessageEntry.COL_AT},
-                                TasksContract.MessageEntry.COL_TASK_KEY + "=?",
-                                new String[]{taskId},
-                                TasksContract.MessageEntry.COL_AT + " ASC");
-                        adapter.changeCursor(updatedCursor);
+                Cursor commentCursor = getActivity().getContentResolver().query(
+                        TasksContract.MessageEntry.CONTENT_URI,
+                        new String[]{TasksContract.MessageEntry._ID,
+                                TasksContract.MessageEntry.COL_TASK_KEY,
+                                TasksContract.MessageEntry.COL_MSG,
+                                TasksContract.MessageEntry.COL_FROM,
+                                TasksContract.MessageEntry.COL_AT},
+                        TasksContract.MessageEntry.COL_TASK_KEY + "=?",
+                        new String[]{taskId},
+                        TasksContract.MessageEntry.COL_AT + " ASC");
+
+                adapter = new CommentsCursorAdapter(getActivity(), commentCursor, 0);
+                ListView list = (ListView) rootView.findViewById(R.id.frag_comment_list);
+                list.setAdapter(adapter);
+                list.setSelection(list.getAdapter().getCount() - 1);
+                sendBtn.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        String msg = msgEdit.getText().toString();
+                        if (!msg.equals("")) {
+                            send(msg);
+                            msgEdit.setText(null);
+                            Cursor updatedCursor = getActivity().getContentResolver().query(
+                                    TasksContract.MessageEntry.CONTENT_URI,
+                                    new String[]{TasksContract.MessageEntry._ID,
+                                            TasksContract.MessageEntry.COL_TASK_KEY,
+                                            TasksContract.MessageEntry.COL_MSG,
+                                            TasksContract.MessageEntry.COL_FROM,
+                                            TasksContract.MessageEntry.COL_AT},
+                                    TasksContract.MessageEntry.COL_TASK_KEY + "=?",
+                                    new String[]{taskId},
+                                    TasksContract.MessageEntry.COL_AT + " ASC");
+                            adapter.changeCursor(updatedCursor);
+                        }
                     }
-                }
-            });
+                });
+            }
+            taskCursor.close();
         } else {
             TextView taskDetails = (TextView) rootView.findViewById(R.id.frag_task_details);
             taskDetails.setText(R.string.no_task_details);
         }
-        taskCursor.close();
         return rootView;
     }
 
