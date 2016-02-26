@@ -4,6 +4,8 @@ import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
+import android.text.format.Time;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +16,13 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.ishita.assigntasks.data.TasksContract;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.TimeZone;
 
 /**
  * Created by ishita on 5/2/16.
@@ -66,6 +75,21 @@ public class CommentsCursorAdapter extends CursorAdapter {
             root.setPadding(10, 10, 50, 10);
         }
         viewHolder.message.setText(cursor.getString(cursor.getColumnIndex(TasksContract.MessageEntry.COL_MSG)));
-        viewHolder.timeStamp.setText(cursor.getString(cursor.getColumnIndex(TasksContract.MessageEntry.COL_AT)));
+        viewHolder.timeStamp.setText(formatDate(cursor.getString(cursor.getColumnIndex(TasksContract.MessageEntry.COL_AT))));
+    }
+
+    public String formatDate(String stringDate) {
+        DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd' 'HH:mm:ss");
+        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+        try {
+            Date date = sdf.parse(stringDate);
+            TimeZone tz = TimeZone.getDefault();
+            sdf.setTimeZone(tz);
+            Log.v("formatDate", "TimeZone   " + tz.getDisplayName(false, TimeZone.SHORT) + " Timezon id :: " + tz.getID());
+            return sdf.format(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return stringDate;
     }
 }

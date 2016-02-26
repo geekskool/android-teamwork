@@ -1,3 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -13,15 +14,12 @@
         android:background="#dd55ff"
         android:padding="10dp" />
 
-    <ListView xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <ListView
         android:id="@+id/frag_comment_list"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
-        android:transcriptMode="normal"
-        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+        android:transcriptMode="normal" />
 
     <LinearLayout
         android:layout_width="match_parent"
