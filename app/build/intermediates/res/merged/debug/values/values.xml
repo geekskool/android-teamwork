@@ -331,7 +331,7 @@
     <string name="common_signin_button_text">Sign in</string>
     <string name="common_signin_button_text_long">Sign in with Google</string>
     <string name="due_date">Due Date</string>
-    <string name="due_date_validation">Tasks can be assigned at least one day before it is due.</string>
+    <string name="due_date_validation">Due date cannot be earlier than today.</string>
     <string name="gcm_defaultSenderId" translatable="false">352679909753</string>
     <string name="google_app_id" translatable="false">1:352679909753:android:22be08c668663d31</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -341,7 +341,7 @@
     <string name="send">Send</string>
     <string name="send_btn">Send Message</string>
     <string name="status_bar_notification_info_overflow">999+</string>
-    <string name="swipe_right_to_save">Swipe right to save this task</string>
+    <string name="swipe_right_to_save">You can also swipe right to save this task</string>
     <string name="task_prompt">Enter Task Description</string>
     <string name="title_activity_comments">CommentsActivity</string>
     <style name="AlertDialog.AppCompat" parent="Base.AlertDialog.AppCompat"/>

@@ -95,7 +95,11 @@ public class AddTask extends AppCompatActivity {
                 if (mViewPager.getCurrentItem() == 0) {
                     if (state == ViewPager.SCROLL_STATE_DRAGGING) {
                         if (addTaskFrag != null) {
-                            addTaskFrag.saveTaskBtn.performClick();
+                            if (!addTaskFrag.mDueDate.equals("") &&
+                                    !addTaskFrag.mTaskName.equals("") &&
+                                    !addTaskFrag.mAssigneeName.equals("")) {
+                                addTaskFrag.saveTaskBtn.performClick();
+                            }
                         }
                     }
                 }

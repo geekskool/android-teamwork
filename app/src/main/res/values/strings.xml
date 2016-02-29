@@ -16,6 +16,6 @@
     <string name="action_delete">Delete</string>
     <string name="action_edit">Edit</string>
     <string name="no_task_details">Task details not updated yet.</string>
-    <string name="swipe_right_to_save">Swipe right to save this task</string>
+    <string name="swipe_right_to_save">You can also swipe right to save this task</string>
     <string name="due_date_validation">Due date cannot be earlier than today.</string>
 </resources>

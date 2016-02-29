@@ -38,10 +38,10 @@ public class AddTaskFragment extends Fragment {
 
     private static final String ARG_SECTION_NUMBER = "section_number";
 
-    public String mAssigneeName;
-    public String mAssigneeContact;
-    public String mTaskName;
-    public String mDueDate;
+    public String mAssigneeName = "";
+    public String mAssigneeContact = "";
+    public String mTaskName = "";
+    public String mDueDate = "";
     public String mComments = null;
 
     public AddTaskFragment() {
@@ -167,6 +167,8 @@ public class AddTaskFragment extends Fragment {
                 dueDate.setText("");
                 comments.setText("");
                 assignee.setText(R.string.assignee_prompt);
+            } else {
+                Toast.makeText(getContext(), "Fields cannot be empty. Please enter some values.", Toast.LENGTH_SHORT).show();
             }
         } catch (Exception e) {
             e.printStackTrace();
