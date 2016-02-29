@@ -68,17 +68,19 @@ public class AddTaskFragment extends Fragment {
     };
 
     private void updateLabel() {
+        //setting the format in which the date will be displayed
+        String displayFormat = "MMM dd, yyyy";
+        SimpleDateFormat sdf = new SimpleDateFormat(displayFormat, Locale.US);
 
+        //comparing the date picked with today's date
         Date now = new Date(System.currentTimeMillis());
-        int result = myCalendar.getTime().compareTo(now);
-        Log.v("updateLabel()", "result = " + result);
+        String datePicked = sdf.format(myCalendar.getTime());
+        int result = datePicked.compareTo(sdf.format(now));
 
-        if (result > 0) {
-            String displayFormat = "MMM dd, yyyy"; //setting the format in which the date will be displayed
-            SimpleDateFormat sdf = new SimpleDateFormat(displayFormat, Locale.US);
-
+        //setting due date after validation
+        if (result >= 0) {
             EditText dueDate = (EditText) rootView.findViewById(R.id.due_date);
-            dueDate.setText(sdf.format(myCalendar.getTime()));
+            dueDate.setText(datePicked);
         } else {
             Toast.makeText(getContext(), R.string.due_date_validation, Toast.LENGTH_SHORT).show();
         }
