@@ -18,4 +18,5 @@
     <string name="no_task_details">Task details not updated yet.</string>
     <string name="swipe_right_to_save">You can also swipe right to save this task</string>
     <string name="due_date_validation">Due date cannot be earlier than today.</string>
+    <string name="title_activity_temp">TempActivity</string>
 </resources>

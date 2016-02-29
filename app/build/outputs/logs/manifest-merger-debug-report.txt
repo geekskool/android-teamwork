@@ -50,7 +50,7 @@ MERGED from [com.google.android.gms:play-services-gcm:8.4.0] /home/ishita/Androi
 	android:name
 		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:14:22-79
 uses-permission#android.permission.READ_PHONE_STATE
-ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:15:5-74
+ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:15:5-75
 	android:name
 		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:15:22-72
 application

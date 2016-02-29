@@ -2,6 +2,8 @@ package com.example.ishita.assigntasks;
 
 import android.net.Uri;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -13,6 +15,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
@@ -72,15 +75,26 @@ public class AddTask extends AppCompatActivity {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                 android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+                FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+
                 switch (position) {
                     case 0:
                         actionBar.setTitle("Add New Task");
+                        fab.hide();
                         break;
                     case 1:
                         actionBar.setTitle("Existing Tasks");
+                        fab.show();
+                        fab.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                mViewPager.setCurrentItem(0);
+                            }
+                        });
                         break;
                     case 2:
                         actionBar.setTitle("Comments");
+                        fab.hide();
                 }
             }
 
