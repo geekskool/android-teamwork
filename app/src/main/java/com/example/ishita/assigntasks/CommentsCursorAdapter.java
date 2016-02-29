@@ -66,11 +66,14 @@ public class CommentsCursorAdapter extends CursorAdapter {
         //TODO replace NULL in this check by the sender ID once login activity is done.
         if (cursor.getString(cursor.getColumnIndex(TasksContract.MessageEntry.COL_FROM)) == null) {
             GradientDrawable sd = (GradientDrawable) viewHolder.box.getBackground().mutate();
-            sd.setColor(Color.CYAN);
+            sd.setColor(Color.parseColor("#FBE9E7"));
             sd.invalidateSelf();
             root.setGravity(Gravity.END);
             root.setPadding(50, 10, 10, 10);
         } else {
+            GradientDrawable sd = (GradientDrawable) viewHolder.box.getBackground().mutate();
+            sd.setColor(Color.parseColor("#fffeee"));
+            sd.invalidateSelf();
             root.setGravity(Gravity.LEFT);
             root.setPadding(10, 10, 50, 10);
         }
