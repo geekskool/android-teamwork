@@ -13,6 +13,7 @@
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
         android:elevation="2dp"
+        android:visibility="gone"
         android:padding="10dp" />
 
     <ListView

@@ -40,7 +40,7 @@ public class AddTask extends AppCompatActivity {
     /**
      * The {@link ViewPager} that will host the section contents.
      */
-    private ViewPager mViewPager;
+    public ViewPager mViewPager;
     public List<String> fragments = new Vector<String>();
 
     /**
@@ -70,7 +70,7 @@ public class AddTask extends AppCompatActivity {
         mViewPager.setAdapter(mSectionsPagerAdapter);
         mViewPager.setCurrentItem(1);
 
-        final AddTaskFragment addTaskFrag = (AddTaskFragment) mSectionsPagerAdapter.getItem(0);
+        final CommentsFragment commentsFragment = (CommentsFragment) mSectionsPagerAdapter.getItem(2);
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -93,7 +93,7 @@ public class AddTask extends AppCompatActivity {
                         });
                         break;
                     case 2:
-                        actionBar.setTitle("Comments");
+                        actionBar.setTitle(commentsFragment.taskName == null ? "Comments" : commentsFragment.taskName);
                         fab.hide();
                 }
             }

@@ -1,5 +1,6 @@
 package com.example.ishita.assigntasks;
 
+import android.app.ActionBar;
 import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -45,7 +46,7 @@ public class CommentsFragment extends Fragment {
 
     private EditText msgEdit;
     private ImageButton sendBtn;
-    private String taskId, taskName;
+    String taskId, taskName;
     CommentsCursorAdapter adapter;
 
     public CommentsFragment() {

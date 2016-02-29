@@ -67,12 +67,14 @@ public class TasksFragment extends ListFragment implements LoaderManager.LoaderC
                 new String[]{
                         TasksContract.TaskEntry._ID,
                         TasksContract.TaskEntry.COL_DESCRIPTION,
-                        TasksContract.TaskEntry.COL_ASSIGNEE_KEY
+                        TasksContract.TaskEntry.COL_ASSIGNEE_KEY,
+                        TasksContract.TaskEntry.COL_DUE_DATE
                 },
                 new int[]{
                         R.id.task_id,
                         R.id.task_list_item,
-                        R.id.msgcount_list_item
+                        R.id.assignee_taskList,
+                        R.id.due_date_taskList
                 },
                 0);
         adapter.setViewBinder(new SimpleCursorAdapter.ViewBinder() {
@@ -80,7 +82,7 @@ public class TasksFragment extends ListFragment implements LoaderManager.LoaderC
             @Override
             public boolean setViewValue(View view, Cursor cursor, int columnIndex) {
                 switch (view.getId()) {
-                    case R.id.msgcount_list_item:
+                    case R.id.assignee_taskList:
                         String assigneeContact = cursor.getString(columnIndex);
 //                        Log.v("case:msgCount:getInt", "" + count);
 //                        Log.v("getViewId", "" + view.getId());
@@ -138,7 +140,11 @@ public class TasksFragment extends ListFragment implements LoaderManager.LoaderC
         new AsyncTask<Void, Void, Void>(){
             @Override
             protected Void doInBackground(Void... params) {
-                getContext().getContentResolver().delete(TasksContract.TaskEntry.CONTENT_URI, TasksContract.TaskEntry._ID + "=?", selectionArg);
+                getContext().getContentResolver().delete(
+                        TasksContract.TaskEntry.CONTENT_URI,
+                        TasksContract.TaskEntry._ID + "=?",
+                        selectionArg
+                );
                 return null;
             }
         }.execute();
@@ -155,7 +161,12 @@ public class TasksFragment extends ListFragment implements LoaderManager.LoaderC
     public android.support.v4.content.Loader<Cursor> onCreateLoader(int id, Bundle args) {
         CursorLoader loader = new CursorLoader(getContext(),
                 TasksContract.TaskEntry.CONTENT_URI,
-                new String[]{TasksContract.TaskEntry._ID, TasksContract.TaskEntry.COL_DESCRIPTION, TasksContract.TaskEntry.COL_ASSIGNEE_KEY},
+                new String[]{
+                        TasksContract.TaskEntry._ID,
+                        TasksContract.TaskEntry.COL_DESCRIPTION,
+                        TasksContract.TaskEntry.COL_ASSIGNEE_KEY,
+                        TasksContract.TaskEntry.COL_DUE_DATE
+                },
                 null,
                 null,
                 TasksContract.TaskEntry._ID + " DESC");
