@@ -2414,7 +2414,7 @@ containing a value of this type.
         public static final int media_actions=0x7f0c0092;
         public static final int middle=0x7f0c0031;
         public static final int mini=0x7f0c002f;
-        public static final int msg_edit=0x7f0c0078;
+        public static final int msg_edit=0x7f0c0077;
         public static final int msgcount_list_item=0x7f0c008e;
         public static final int multiply=0x7f0c0026;
         public static final int navigation_header_container=0x7f0c007e;
@@ -2446,7 +2446,7 @@ containing a value of this type.
         public static final int search_src_text=0x7f0c006b;
         public static final int search_voice_btn=0x7f0c006f;
         public static final int select_dialog_listview=0x7f0c0070;
-        public static final int send_btn=0x7f0c0077;
+        public static final int send_btn=0x7f0c0078;
         public static final int shortcut=0x7f0c005b;
         public static final int showCustom=0x7f0c0011;
         public static final int showHome=0x7f0c0012;

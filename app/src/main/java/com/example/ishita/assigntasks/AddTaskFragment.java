@@ -166,7 +166,7 @@ public class AddTaskFragment extends Fragment {
                 taskDescription.setText("");
                 dueDate.setText("");
                 comments.setText("");
-                assignee.setText(R.string.assignee_prompt);
+                assignee.setText("");
             } else {
                 Toast.makeText(getContext(), "Fields cannot be empty. Please enter some values.", Toast.LENGTH_SHORT).show();
             }
