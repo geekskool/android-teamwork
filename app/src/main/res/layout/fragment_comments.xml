@@ -11,7 +11,9 @@
         android:id="@+id/frag_task_details"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#dd55ff"
+        android:background="@color/colorPrimary"
+        android:elevation="2dp"
+        android:textColor="#dddddd"
         android:padding="10dp" />
 
     <ListView
@@ -19,6 +21,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:divider="@null"
         android:transcriptMode="normal" />
 
     <LinearLayout
@@ -26,7 +29,8 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_marginBottom="?attr/actionBarSize"
-        android:background="@android:color/white">
+        android:background="@android:color/white"
+        android:elevation="2dp">
 
         <EditText
             android:id="@+id/frag_msg_edit"

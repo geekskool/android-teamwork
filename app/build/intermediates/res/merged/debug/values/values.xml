@@ -31,8 +31,8 @@
     <color name="button_material_dark">#ff5a595b</color>
     <color name="button_material_light">#ffd6d7d7</color>
     <color name="colorAccent">#FF4081</color>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorPrimary">#2196F3</color>
+    <color name="colorPrimaryDark">#00695C</color>
     <color name="common_action_bar_splitter">#d2d2d2</color>
     <color name="common_google_signin_btn_text_dark_default">@android:color/white</color>
     <color name="common_google_signin_btn_text_dark_disabled">#1F000000</color>
@@ -331,6 +331,7 @@
     <string name="common_signin_button_text">Sign in</string>
     <string name="common_signin_button_text_long">Sign in with Google</string>
     <string name="due_date">Due Date</string>
+    <string name="due_date_validation">Tasks can be assigned at least one day before it is due.</string>
     <string name="gcm_defaultSenderId" translatable="false">352679909753</string>
     <string name="google_app_id" translatable="false">1:352679909753:android:22be08c668663d31</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
@@ -348,10 +349,10 @@
     <style name="Animation.AppCompat.Dialog" parent="Base.Animation.AppCompat.Dialog"/>
     <style name="Animation.AppCompat.DropDownUp" parent="Base.Animation.AppCompat.DropDownUp"/>
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
-        <item name="colorPrimary">@color/colorPrimary</item>
-        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-        <item name="colorAccent">@color/colorAccent</item>
+        <!-- Primary theme color of the app (sets background color of app bar) -->
+        <item name="colorPrimary">#3F51B5</item>
+        <!-- Background color of buttons in the app -->
+        <item name="colorButtonNormal">#3F51B5</item>
     </style>
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
     <style name="AppTheme.NoActionBar">

@@ -2618,18 +2618,19 @@ containing a value of this type.
         public static final int common_signin_button_text=0x7f06002e;
         public static final int common_signin_button_text_long=0x7f06002f;
         public static final int due_date=0x7f06003b;
-        public static final int gcm_defaultSenderId=0x7f06003c;
-        public static final int google_app_id=0x7f06003d;
-        public static final int hello_blank_fragment=0x7f06003e;
-        public static final int no_task_details=0x7f06003f;
-        public static final int save_task=0x7f060040;
-        public static final int section_format=0x7f060041;
-        public static final int send=0x7f060042;
-        public static final int send_btn=0x7f060043;
+        public static final int due_date_validation=0x7f06003c;
+        public static final int gcm_defaultSenderId=0x7f06003d;
+        public static final int google_app_id=0x7f06003e;
+        public static final int hello_blank_fragment=0x7f06003f;
+        public static final int no_task_details=0x7f060040;
+        public static final int save_task=0x7f060041;
+        public static final int section_format=0x7f060042;
+        public static final int send=0x7f060043;
+        public static final int send_btn=0x7f060044;
         public static final int status_bar_notification_info_overflow=0x7f060030;
-        public static final int swipe_right_to_save=0x7f060044;
-        public static final int task_prompt=0x7f060045;
-        public static final int title_activity_comments=0x7f060046;
+        public static final int swipe_right_to_save=0x7f060045;
+        public static final int task_prompt=0x7f060046;
+        public static final int title_activity_comments=0x7f060047;
     }
     public static final class style {
         public static final int AlertDialog_AppCompat=0x7f09007f;

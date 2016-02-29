@@ -10,6 +10,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,7 @@ import com.example.ishita.assigntasks.data.TasksContract;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.Locale;
 
 /**
@@ -56,9 +58,7 @@ public class AddTaskFragment extends Fragment {
     DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
 
         @Override
-        public void onDateSet(DatePicker view, int year, int monthOfYear,
-                              int dayOfMonth) {
-            // TODO Auto-generated method stub
+        public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
             myCalendar.set(Calendar.YEAR, year);
             myCalendar.set(Calendar.MONTH, monthOfYear);
             myCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
@@ -69,11 +69,19 @@ public class AddTaskFragment extends Fragment {
 
     private void updateLabel() {
 
-        String displayFormat = "MMM dd, yyyy"; //setting the format in which the date will be displayed
-        SimpleDateFormat sdf = new SimpleDateFormat(displayFormat, Locale.US);
+        Date now = new Date(System.currentTimeMillis());
+        int result = myCalendar.getTime().compareTo(now);
+        Log.v("updateLabel()", "result = " + result);
 
-        EditText dueDate = (EditText) rootView.findViewById(R.id.due_date);
-        dueDate.setText(sdf.format(myCalendar.getTime()));
+        if (result > 0) {
+            String displayFormat = "MMM dd, yyyy"; //setting the format in which the date will be displayed
+            SimpleDateFormat sdf = new SimpleDateFormat(displayFormat, Locale.US);
+
+            EditText dueDate = (EditText) rootView.findViewById(R.id.due_date);
+            dueDate.setText(sdf.format(myCalendar.getTime()));
+        } else {
+            Toast.makeText(getContext(), R.string.due_date_validation, Toast.LENGTH_SHORT).show();
+        }
     }
 
     /**
@@ -104,9 +112,13 @@ public class AddTaskFragment extends Fragment {
 
                                        @Override
                                        public void onClick(View v) {
-                                           new DatePickerDialog(getActivity(), date, myCalendar
-                                                   .get(Calendar.YEAR), myCalendar.get(Calendar.MONTH),
-                                                   myCalendar.get(Calendar.DAY_OF_MONTH)).show();
+                                           new DatePickerDialog(
+                                                   getActivity(),
+                                                   date,
+                                                   myCalendar.get(Calendar.YEAR),
+                                                   myCalendar.get(Calendar.MONTH),
+                                                   myCalendar.get(Calendar.DAY_OF_MONTH)
+                                           ).show();
                                        }
                                    }
 
@@ -142,18 +154,17 @@ public class AddTaskFragment extends Fragment {
             taskDescription = (EditText) rootView.findViewById(R.id.description);
             comments = (EditText) rootView.findViewById(R.id.comments);
             mTaskName = taskDescription.getText().toString();
-            taskDescription.setText("");
             mDueDate = dueDate.getText().toString();
-            dueDate.setText("");
             mComments = comments.getText().toString();
-            comments.setText("");
-            assignee.setText(R.string.assignee_prompt);
-            if (mTaskName == null || mDueDate == null || mAssigneeName == null) {
-                Toast.makeText(getContext(), "Fields cannot be empty. Please fill some values.", Toast.LENGTH_SHORT).show();
-            } else {
+            if (!mTaskName.equals("") && !mDueDate.equals("") && !mAssigneeName.equals("")) {
+                Log.v("saveTask()", "mTaskName = " + mTaskName);
                 UpdateTask updateDB = new UpdateTask();
                 updateDB.execute();
                 Toast.makeText(getContext(), "Task saved.", Toast.LENGTH_SHORT).show();
+                taskDescription.setText("");
+                dueDate.setText("");
+                comments.setText("");
+                assignee.setText(R.string.assignee_prompt);
             }
         } catch (Exception e) {
             e.printStackTrace();
@@ -166,13 +177,21 @@ public class AddTaskFragment extends Fragment {
             case (PICK_CONTACT):
                 if (resultCode == Activity.RESULT_OK) {
                     Uri contactData = data.getData();
-                    Cursor cursor = getContext().getContentResolver().query(contactData, new String[]{ContactsContract.CommonDataKinds.Phone._ID, ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME, ContactsContract.CommonDataKinds.Phone.NUMBER}, null, null, null);
+                    Cursor cursor = getContext().getContentResolver().query(
+                            contactData,
+                            new String[]{
+                                    ContactsContract.CommonDataKinds.Phone._ID,
+                                    ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
+                                    ContactsContract.CommonDataKinds.Phone.NUMBER},
+                            null,
+                            null,
+                            null);
 
                     if (cursor.moveToFirst()) {
                         mAssigneeName = cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
                         mAssigneeContact = cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.NUMBER));
                         assignee.setText(mAssigneeName);
-                        Toast.makeText(getActivity(), mAssigneeName + " has number " + mAssigneeContact, Toast.LENGTH_LONG).show();
+                        /*Toast.makeText(getActivity(), mAssigneeName + " has number " + mAssigneeContact, Toast.LENGTH_LONG).show();*/
                     }
                     cursor.close();
                 }

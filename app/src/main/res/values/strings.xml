@@ -17,4 +17,5 @@
     <string name="action_edit">Edit</string>
     <string name="no_task_details">Task details not updated yet.</string>
     <string name="swipe_right_to_save">Swipe right to save this task</string>
+    <string name="due_date_validation">Tasks can be assigned at least one day before it is due.</string>
 </resources>
