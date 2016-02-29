@@ -3,9 +3,9 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Primary theme color of the app (sets background color of app bar) -->
-        <item name="colorPrimary">#3F51B5</item>
+        <item name="colorPrimary">@color/colorPrimary</item>
         <!-- Background color of buttons in the app -->
-        <item name="colorButtonNormal">#3F51B5</item>
+        <item name="colorButtonNormal">@color/colorPrimary</item>
     </style>
 
     <style name="AppTheme.NoActionBar">

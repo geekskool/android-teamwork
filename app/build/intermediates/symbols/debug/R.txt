@@ -625,8 +625,7 @@ int drawable common_plus_signin_btn_text_light_pressed 0x7f02006f
 int drawable design_fab_background 0x7f020070
 int drawable design_snackbar_background 0x7f020071
 int drawable ic_menu_sending 0x7f020072
-int drawable ic_send_holo_light 0x7f020073
-int drawable notification_template_icon_bg 0x7f020074
+int drawable notification_template_icon_bg 0x7f020073
 int id action0 0x7f0c008f
 int id action_bar 0x7f0c0062
 int id action_bar_activity_content 0x7f0c0000

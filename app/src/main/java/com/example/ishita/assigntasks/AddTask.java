@@ -10,6 +10,7 @@ import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
@@ -92,17 +93,18 @@ public class AddTask extends AppCompatActivity {
 
             @Override
             public void onPageScrollStateChanged(int state) {
-                if (mViewPager.getCurrentItem() == 0) {
+                /*if (mViewPager.getCurrentItem() == 0) {
                     if (state == ViewPager.SCROLL_STATE_DRAGGING) {
                         if (addTaskFrag != null) {
-                            if (!addTaskFrag.mDueDate.equals("") &&
-                                    !addTaskFrag.mTaskName.equals("") &&
-                                    !addTaskFrag.mAssigneeName.equals("")) {
+                            if (!addTaskFrag.taskDescription.getText().equals("") &&
+                                    !addTaskFrag.dueDate.getText().equals("") &&
+                                    !addTaskFrag.assignee.getText().equals("")) {
                                 addTaskFrag.saveTaskBtn.performClick();
+                                Log.v("AddTask", "saveTaskBtn clicked");
                             }
                         }
                     }
-                }
+                }*/
             }
         });
         // ATTENTION: This was auto-generated to implement the App Indexing API.

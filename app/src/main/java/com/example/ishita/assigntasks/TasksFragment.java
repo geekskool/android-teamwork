@@ -9,17 +9,13 @@ import android.support.v4.app.ListFragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.widget.SimpleCursorAdapter;
-import android.util.Log;
 import android.view.ContextMenu;
-import android.view.LayoutInflater;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.ishita.assigntasks.data.TasksContract;
 
@@ -71,7 +67,7 @@ public class TasksFragment extends ListFragment implements LoaderManager.LoaderC
                 new String[]{
                         TasksContract.TaskEntry._ID,
                         TasksContract.TaskEntry.COL_DESCRIPTION,
-                        TasksContract.TaskEntry.COL_MSG_COUNT
+                        TasksContract.TaskEntry.COL_ASSIGNEE_KEY
                 },
                 new int[]{
                         R.id.task_id,
@@ -85,11 +81,24 @@ public class TasksFragment extends ListFragment implements LoaderManager.LoaderC
             public boolean setViewValue(View view, Cursor cursor, int columnIndex) {
                 switch (view.getId()) {
                     case R.id.msgcount_list_item:
-                        int count = cursor.getInt(columnIndex);
-                        Log.v("case:msgCount:getInt", "" + count);
-                        Log.v("getViewId", "" + view.getId());
+                        String assigneeContact = cursor.getString(columnIndex);
+//                        Log.v("case:msgCount:getInt", "" + count);
+//                        Log.v("getViewId", "" + view.getId());
 //                        if (count > 0) {
-                        ((TextView) view).setText(String.format("%d new message%s", count, count == 1 ? "" : "s"));
+                        Cursor tempCursor = getActivity().getContentResolver().query(
+                                TasksContract.ProfileEntry.CONTENT_URI,
+                                new String[]{TasksContract.ProfileEntry.COL_NAME},
+                                TasksContract.ProfileEntry.COL_CONTACT + "=?",
+                                new String[]{assigneeContact},
+                                null
+                        );
+                        if (tempCursor.moveToFirst()) {
+                            ((TextView) view).setText(
+                                    String.format("Assignee: %s", tempCursor.getString(tempCursor.getColumnIndex(TasksContract.ProfileEntry.COL_NAME)))
+                            );
+                        }
+                        tempCursor.close();
+//                        ((TextView) view).setText(String.format("%d new message%s", count, count == 1 ? "" : "s"));
 //                        }
                         return true;
                 }
@@ -146,7 +155,7 @@ public class TasksFragment extends ListFragment implements LoaderManager.LoaderC
     public android.support.v4.content.Loader<Cursor> onCreateLoader(int id, Bundle args) {
         CursorLoader loader = new CursorLoader(getContext(),
                 TasksContract.TaskEntry.CONTENT_URI,
-                new String[]{TasksContract.TaskEntry._ID, TasksContract.TaskEntry.COL_DESCRIPTION, TasksContract.TaskEntry.COL_MSG_COUNT},
+                new String[]{TasksContract.TaskEntry._ID, TasksContract.TaskEntry.COL_DESCRIPTION, TasksContract.TaskEntry.COL_ASSIGNEE_KEY},
                 null,
                 null,
                 TasksContract.TaskEntry._ID + " DESC");

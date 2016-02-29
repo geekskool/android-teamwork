@@ -88,7 +88,6 @@ public class CommentsCursorAdapter extends CursorAdapter {
             Date date = sdf.parse(stringDate);
             TimeZone tz = TimeZone.getDefault();
             sdf.setTimeZone(tz);
-            Log.v("formatDate", "TimeZone   " + tz.getDisplayName(false, TimeZone.SHORT) + " Timezon id :: " + tz.getID());
             return sdf.format(date);
         } catch (ParseException e) {
             e.printStackTrace();
