@@ -95,9 +95,7 @@ public class TasksFragment extends ListFragment implements LoaderManager.LoaderC
                                 null
                         );
                         if (tempCursor.moveToFirst()) {
-                            ((TextView) view).setText(
-                                    String.format("Assignee: %s", tempCursor.getString(tempCursor.getColumnIndex(TasksContract.ProfileEntry.COL_NAME)))
-                            );
+                            ((TextView) view).setText(tempCursor.getString(tempCursor.getColumnIndex(TasksContract.ProfileEntry.COL_NAME)));
                         }
                         tempCursor.close();
 //                        ((TextView) view).setText(String.format("%d new message%s", count, count == 1 ? "" : "s"));
