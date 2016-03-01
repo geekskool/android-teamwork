@@ -1,6 +1,9 @@
 package com.example.ishita.assigntasks;
 
+import android.app.LoaderManager;
 import android.content.ContentValues;
+import android.content.CursorLoader;
+import android.content.Loader;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
@@ -19,7 +22,7 @@ import android.widget.Toast;
 import com.example.ishita.assigntasks.data.TasksContract;
 import com.example.ishita.assigntasks.data.TasksDbHelper;
 
-public class CommentsActivity extends AppCompatActivity {
+public class CommentsActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
     private EditText msgEdit;
     private ImageButton sendBtn;
@@ -65,17 +68,10 @@ public class CommentsActivity extends AppCompatActivity {
             taskDetails.setText(R.string.no_task_details);
         }
 
-        Cursor commentCursor = getContentResolver().query(TasksContract.MessageEntry.CONTENT_URI,
-                new String[]{TasksContract.MessageEntry._ID,
-                        TasksContract.MessageEntry.COL_TASK_KEY,
-                        TasksContract.MessageEntry.COL_MSG,
-                        TasksContract.MessageEntry.COL_FROM,
-                        TasksContract.MessageEntry.COL_AT},
-                TasksContract.MessageEntry.COL_TASK_KEY + "=?",
-                new String[]{taskId},
-                TasksContract.MessageEntry.COL_AT + " ASC");
 
-        adapter = new CommentsCursorAdapter(this, commentCursor, 0);
+        adapter = new CommentsCursorAdapter(this, null, 0);
+        getLoaderManager().initLoader(0, null, this);
+
         ListView list = (ListView) findViewById(R.id.list);
         list.setAdapter(adapter);
         list.setSelection(list.getAdapter().getCount() - 1);
@@ -87,16 +83,6 @@ public class CommentsActivity extends AppCompatActivity {
                 if (!msg.equals("")) {
                     send(msg);
                     msgEdit.setText(null);
-                    Cursor updatedCursor = getContentResolver().query(TasksContract.MessageEntry.CONTENT_URI,
-                            new String[]{TasksContract.MessageEntry._ID,
-                                    TasksContract.MessageEntry.COL_TASK_KEY,
-                                    TasksContract.MessageEntry.COL_MSG,
-                                    TasksContract.MessageEntry.COL_FROM,
-                                    TasksContract.MessageEntry.COL_AT},
-                            TasksContract.MessageEntry.COL_TASK_KEY + "=?",
-                            new String[]{taskId},
-                            TasksContract.MessageEntry.COL_AT + " ASC");
-                    adapter.changeCursor(updatedCursor);
                 }
             }
         });
@@ -129,6 +115,32 @@ public class CommentsActivity extends AppCompatActivity {
                 }
             }
         }.execute(null, null, null);
+        getLoaderManager().restartLoader(0, null, this);
     }
 
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        return new CursorLoader(
+                getApplicationContext(),
+                TasksContract.MessageEntry.CONTENT_URI,
+                new String[]{TasksContract.MessageEntry._ID,
+                        TasksContract.MessageEntry.COL_TASK_KEY,
+                        TasksContract.MessageEntry.COL_MSG,
+                        TasksContract.MessageEntry.COL_FROM,
+                        TasksContract.MessageEntry.COL_AT},
+                TasksContract.MessageEntry.COL_TASK_KEY + "=?",
+                new String[]{taskId},
+                TasksContract.MessageEntry.COL_AT + " ASC"
+        );
+    }
+
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        adapter.swapCursor(data);
+    }
+
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        adapter.swapCursor(null);
+    }
 }
