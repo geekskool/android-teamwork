@@ -147,6 +147,7 @@ public class CommentsFragment extends Fragment implements LoaderManager.LoaderCa
         } else {
             TextView taskDetails = (TextView) rootView.findViewById(R.id.frag_task_details);
             taskDetails.setText(R.string.no_task_details);
+            taskDetails.setVisibility(View.VISIBLE);
         }
         return rootView;
     }
