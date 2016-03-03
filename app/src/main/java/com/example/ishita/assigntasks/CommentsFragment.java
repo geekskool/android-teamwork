@@ -50,6 +50,10 @@ public class CommentsFragment extends Fragment implements LoaderManager.LoaderCa
     private ImageButton sendBtn;
     String taskId, taskName;
     CommentsCursorAdapter adapter;
+    View rootView;
+
+    TasksDbHelper dbHelper;
+    SQLiteDatabase readableDatabase;
 
     public CommentsFragment() {
         // Required empty public constructor
@@ -86,12 +90,17 @@ public class CommentsFragment extends Fragment implements LoaderManager.LoaderCa
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View rootView = inflater.inflate(R.layout.fragment_comments, container, false);
+        rootView = inflater.inflate(R.layout.fragment_comments, container, false);
+        populateView();
+        return rootView;
+    }
+
+    private void populateView() {
         msgEdit = (EditText) rootView.findViewById(R.id.frag_msg_edit);
         sendBtn = (ImageButton) rootView.findViewById(R.id.frag_send_btn);
 
-        TasksDbHelper dbHelper = new TasksDbHelper(getContext());
-        SQLiteDatabase readableDatabase = dbHelper.getReadableDatabase();
+        dbHelper = new TasksDbHelper(getContext());
+        readableDatabase = dbHelper.getReadableDatabase();
 
         Cursor tempCursor = readableDatabase.query(
                 TasksContract.TaskEntry.TABLE_NAME,
@@ -106,50 +115,52 @@ public class CommentsFragment extends Fragment implements LoaderManager.LoaderCa
             taskId = tempCursor.getString(tempCursor.getColumnIndex(TasksContract.TaskEntry._ID));
             taskName = tempCursor.getString(tempCursor.getColumnIndex(TasksContract.TaskEntry.COL_DESCRIPTION));
 
-            tempCursor.close();
-
-            Cursor taskCursor = readableDatabase.rawQuery(
-                    "SELECT " + TasksContract.TaskEntry.TABLE_NAME + "." + TasksContract.TaskEntry._ID + ", " +
-                            TasksContract.ProfileEntry.COL_NAME + ", " +
-                            TasksContract.TaskEntry.COL_DUE_DATE +
-                            " FROM " + TasksContract.TaskEntry.TABLE_NAME + ", " + TasksContract.ProfileEntry.TABLE_NAME +
-                            " WHERE " + TasksContract.TaskEntry.TABLE_NAME + "." + TasksContract.TaskEntry._ID + "=" + taskId + " AND " +
-                            TasksContract.ProfileEntry.TABLE_NAME + "." + TasksContract.ProfileEntry.COL_CONTACT + "=" +
-                            TasksContract.TaskEntry.TABLE_NAME + "." + TasksContract.TaskEntry.COL_ASSIGNEE_KEY,
-                    null
-            );
-            if (taskCursor.moveToFirst()) {
-                String assigneeName = taskCursor.getString(taskCursor.getColumnIndex(TasksContract.ProfileEntry.COL_NAME));
-                String dueDate = taskCursor.getString(taskCursor.getColumnIndex(TasksContract.TaskEntry.COL_DUE_DATE));
-
-                TextView taskDetails = (TextView) rootView.findViewById(R.id.frag_task_details);
-                taskDetails.setText("Task Name: " + taskName + "\nAssignee: " + assigneeName + "\nDue Date: " + dueDate);
-
-                adapter = new CommentsCursorAdapter(getActivity(), null, 0);
-                ListView list = (ListView) rootView.findViewById(R.id.frag_comment_list);
-                getLoaderManager().initLoader(0, null, this);
-
-                list.setAdapter(adapter);
-                list.setSelection(list.getAdapter().getCount() - 1);
-
-                sendBtn.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        String msg = msgEdit.getText().toString();
-                        if (!msg.equals("")) {
-                            send(msg);
-                            msgEdit.setText(null);
-                        }
-                    }
-                });
-            }
-            taskCursor.close();
+            setTaskDetails();
         } else {
             TextView taskDetails = (TextView) rootView.findViewById(R.id.frag_task_details);
             taskDetails.setText(R.string.no_task_details);
             taskDetails.setVisibility(View.VISIBLE);
         }
-        return rootView;
+        tempCursor.close();
+    }
+
+    private void setTaskDetails() {
+        Cursor taskCursor = readableDatabase.rawQuery(
+                "SELECT " + TasksContract.TaskEntry.TABLE_NAME + "." + TasksContract.TaskEntry._ID + ", " +
+                        TasksContract.ProfileEntry.COL_NAME + ", " +
+                        TasksContract.TaskEntry.COL_DUE_DATE +
+                        " FROM " + TasksContract.TaskEntry.TABLE_NAME + ", " + TasksContract.ProfileEntry.TABLE_NAME +
+                        " WHERE " + TasksContract.TaskEntry.TABLE_NAME + "." + TasksContract.TaskEntry._ID + "=" + taskId + " AND " +
+                        TasksContract.ProfileEntry.TABLE_NAME + "." + TasksContract.ProfileEntry.COL_CONTACT + "=" +
+                        TasksContract.TaskEntry.TABLE_NAME + "." + TasksContract.TaskEntry.COL_ASSIGNEE_KEY,
+                null
+        );
+        if (taskCursor.moveToFirst()) {
+            /*String assigneeName = taskCursor.getString(taskCursor.getColumnIndex(TasksContract.ProfileEntry.COL_NAME));
+            String dueDate = taskCursor.getString(taskCursor.getColumnIndex(TasksContract.TaskEntry.COL_DUE_DATE));
+
+            TextView taskDetails = (TextView) rootView.findViewById(R.id.frag_task_details);
+            taskDetails.setText("Task Name: " + taskName + "\nAssignee: " + assigneeName + "\nDue Date: " + dueDate);
+*/
+            adapter = new CommentsCursorAdapter(getActivity(), null, 0);
+            ListView list = (ListView) rootView.findViewById(R.id.frag_comment_list);
+            getLoaderManager().initLoader(0, null, this);
+
+            list.setAdapter(adapter);
+            list.setSelection(list.getAdapter().getCount() - 1);
+
+            sendBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    String msg = msgEdit.getText().toString();
+                    if (!msg.equals("")) {
+                        send(msg);
+                        msgEdit.setText(null);
+                    }
+                }
+            });
+        }
+        taskCursor.close();
     }
 
     private void send(final String txt) {
@@ -177,6 +188,12 @@ public class CommentsFragment extends Fragment implements LoaderManager.LoaderCa
                 }
             }
         }.execute(null, null, null);
+        getLoaderManager().restartLoader(0, null, this);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
         getLoaderManager().restartLoader(0, null, this);
     }
 
