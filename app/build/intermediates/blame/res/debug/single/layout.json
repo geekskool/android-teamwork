@@ -136,6 +136,10 @@
         "source": "/home/ishita/AndroidStudioProjects/AssignTasks/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.1/res/layout/abc_screen_simple.xml"
     },
     {
+        "merged": "/home/ishita/AndroidStudioProjects/AssignTasks/app/build/intermediates/res/merged/debug/layout/activity_login.xml",
+        "source": "/home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/res/layout/activity_login.xml"
+    },
+    {
         "merged": "/home/ishita/AndroidStudioProjects/AssignTasks/app/build/intermediates/res/merged/debug/layout/activity_comments.xml",
         "source": "/home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/res/layout/activity_comments.xml"
     },

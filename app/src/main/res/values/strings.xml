@@ -8,8 +8,6 @@
     <string name="assignee_prompt">Enter Assignee Name</string>
     <string name="task_prompt">Enter Task Description</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="title_activity_comments">CommentsActivity</string>
     <string name="send">Send</string>
     <string name="send_btn">Send Message</string>
@@ -18,18 +16,17 @@
     <string name="no_task_details">Task details not updated yet.</string>
     <string name="swipe_right_to_save">You can also swipe right to save this task</string>
     <string name="due_date_validation">Due date cannot be earlier than today.</string>
-    <string name="title_activity_temp">TempActivity</string>
-    <string name="title_activity_login">Sign in</string>
+    <!--<string name="title_activity_login">Sign in</string>-->
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password (optional)</string>
     <string name="action_sign_in">Sign in or register</string>
     <string name="action_sign_in_short">Sign in</string>
-    <string name="error_invalid_number">This phone number is invalid</string>
-    <string name="error_invalid_password">This password is too short</string>
-    <string name="error_incorrect_password">This password is incorrect</string>
-    <string name="error_field_required">This field is required</string>
+    <string name="error_invalid_number">This phone number is invalid.</string>
+    <string name="error_invalid_password">This password is too short.</string>
+    <string name="error_incorrect_password">This password is incorrect.</string>
+    <string name="error_field_required">This field is required.</string>
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>

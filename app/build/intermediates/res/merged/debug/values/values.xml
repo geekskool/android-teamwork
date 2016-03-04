@@ -334,13 +334,12 @@
     <string name="common_signin_button_text_long">Sign in with Google</string>
     <string name="due_date">Due Date</string>
     <string name="due_date_validation">Due date cannot be earlier than today.</string>
-    <string name="error_field_required">This field is required</string>
-    <string name="error_incorrect_password">This password is incorrect</string>
-    <string name="error_invalid_number">This phone number is invalid</string>
-    <string name="error_invalid_password">This password is too short</string>
+    <string name="error_field_required">This field is required.</string>
+    <string name="error_incorrect_password">This password is incorrect.</string>
+    <string name="error_invalid_number">This phone number is invalid.</string>
+    <string name="error_invalid_password">This password is too short.</string>
     <string name="gcm_defaultSenderId" translatable="false">352679909753</string>
     <string name="google_app_id" translatable="false">1:352679909753:android:22be08c668663d31</string>
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="msg_enter_mobile">Enter your mobile number to get started.</string>
     <string name="no_task_details">Task details not updated yet.</string>
     <string name="permission_rationale">"Contacts permissions are needed for providing email
@@ -358,8 +357,6 @@
     <string name="swipe_right_to_save">You can also swipe right to save this task</string>
     <string name="task_prompt">Enter Task Description</string>
     <string name="title_activity_comments">CommentsActivity</string>
-    <string name="title_activity_login">Sign in</string>
-    <string name="title_activity_temp">TempActivity</string>
     <style name="AlertDialog.AppCompat" parent="Base.AlertDialog.AppCompat"/>
     <style name="AlertDialog.AppCompat.Light" parent="Base.AlertDialog.AppCompat.Light"/>
     <style name="Animation.AppCompat.Dialog" parent="Base.Animation.AppCompat.Dialog"/>
