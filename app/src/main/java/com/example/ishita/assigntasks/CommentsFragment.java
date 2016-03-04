@@ -194,7 +194,8 @@ public class CommentsFragment extends Fragment implements LoaderManager.LoaderCa
     @Override
     public void onResume() {
         super.onResume();
-        getLoaderManager().restartLoader(0, null, this);
+        if (taskId != null)
+            getLoaderManager().restartLoader(0, null, this);
     }
 
     @Override

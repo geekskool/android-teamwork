@@ -6,6 +6,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <!-- Background color of buttons in the app -->
         <item name="colorButtonNormal">@color/colorPrimary</item>
+        <item name="android:textColorPrimary">#FFFFFF</item>
     </style>
 
     <style name="AppTheme.NoActionBar">

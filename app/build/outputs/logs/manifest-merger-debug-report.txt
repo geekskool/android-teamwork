@@ -115,16 +115,16 @@ ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidMa
 		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:37:13-73
 	android:name
 		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:36:13-66
-intent-filter#com.appsrox.instachat+com.google.android.c2dm.intent.RECEIVE
+intent-filter#com.example.ishita.assigntasks+com.google.android.c2dm.intent.RECEIVE
 ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:38:13-42:29
 action#com.google.android.c2dm.intent.RECEIVE
 ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:39:17-81
 	android:name
 		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:39:25-78
-category#com.appsrox.instachat
-ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:41:17-66
+category#com.example.ishita.assigntasks
+ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:41:17-75
 	android:name
-		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:41:27-63
+		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:41:27-72
 meta-data#com.google.android.gms.version
 ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:48:9-50:69
 MERGED from [com.google.android.gms:play-services-basement:8.4.0] /home/ishita/AndroidStudioProjects/AssignTasks/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-basement/8.4.0/AndroidManifest.xml:21:9-23:69

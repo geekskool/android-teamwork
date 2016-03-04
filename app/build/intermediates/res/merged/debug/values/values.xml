@@ -336,17 +336,20 @@
     <string name="due_date_validation">Due date cannot be earlier than today.</string>
     <string name="error_field_required">This field is required</string>
     <string name="error_incorrect_password">This password is incorrect</string>
-    <string name="error_invalid_email">This email address is invalid</string>
+    <string name="error_invalid_number">This phone number is invalid</string>
     <string name="error_invalid_password">This password is too short</string>
     <string name="gcm_defaultSenderId" translatable="false">352679909753</string>
     <string name="google_app_id" translatable="false">1:352679909753:android:22be08c668663d31</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="msg_enter_mobile">Enter your mobile number to get started.</string>
     <string name="no_task_details">Task details not updated yet.</string>
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
     <string name="prompt_email">Email</string>
+    <string name="prompt_name">Name</string>
     <string name="prompt_password">Password (optional)</string>
+    <string name="prompt_phone">Phone number</string>
     <string name="save_task">Save Task</string>
     <string name="section_format">Hello World from section: %1$d</string>
     <string name="send">Send</string>
@@ -366,6 +369,7 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <!-- Background color of buttons in the app -->
         <item name="colorButtonNormal">@color/colorPrimary</item>
+        <item name="android:textColorPrimary">#FFFFFF</item>
     </style>
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar"/>
     <style name="AppTheme.NoActionBar">
