@@ -52,6 +52,10 @@
         "source": "/home/ishita/AndroidStudioProjects/AssignTasks/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.1/res/layout/abc_select_dialog_material.xml"
     },
     {
+        "merged": "/home/ishita/AndroidStudioProjects/AssignTasks/app/build/intermediates/res/merged/debug/layout/fragment_firebase_login.xml",
+        "source": "/home/ishita/AndroidStudioProjects/AssignTasks/app/build/intermediates/exploded-aar/com.firebaseui/firebase-ui/0.3.1/res/layout/fragment_firebase_login.xml"
+    },
+    {
         "merged": "/home/ishita/AndroidStudioProjects/AssignTasks/app/build/intermediates/res/merged/debug/layout/comments_list_item.xml",
         "source": "/home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/res/layout/comments_list_item.xml"
     },
