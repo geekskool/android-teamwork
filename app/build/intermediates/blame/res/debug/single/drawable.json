@@ -44,6 +44,10 @@
         "source": "/home/ishita/AndroidStudioProjects/AssignTasks/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.1/res/drawable/abc_dialog_material_background_light.xml"
     },
     {
+        "merged": "/home/ishita/AndroidStudioProjects/AssignTasks/app/build/intermediates/res/merged/debug/drawable/or_line.xml",
+        "source": "/home/ishita/AndroidStudioProjects/AssignTasks/app/build/intermediates/exploded-aar/com.firebaseui/firebase-ui/0.3.1/res/drawable/or_line.xml"
+    },
+    {
         "merged": "/home/ishita/AndroidStudioProjects/AssignTasks/app/build/intermediates/res/merged/debug/drawable/abc_seekbar_track_material.xml",
         "source": "/home/ishita/AndroidStudioProjects/AssignTasks/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.1/res/drawable/abc_seekbar_track_material.xml"
     },
@@ -92,6 +96,14 @@
         "source": "/home/ishita/AndroidStudioProjects/AssignTasks/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.1/res/drawable/abc_cab_background_top_material.xml"
     },
     {
+        "merged": "/home/ishita/AndroidStudioProjects/AssignTasks/app/build/intermediates/res/merged/debug/drawable/google_button.xml",
+        "source": "/home/ishita/AndroidStudioProjects/AssignTasks/app/build/intermediates/exploded-aar/com.firebaseui/firebase-ui/0.3.1/res/drawable/google_button.xml"
+    },
+    {
+        "merged": "/home/ishita/AndroidStudioProjects/AssignTasks/app/build/intermediates/res/merged/debug/drawable/facebook_button.xml",
+        "source": "/home/ishita/AndroidStudioProjects/AssignTasks/app/build/intermediates/exploded-aar/com.firebaseui/firebase-ui/0.3.1/res/drawable/facebook_button.xml"
+    },
+    {
         "merged": "/home/ishita/AndroidStudioProjects/AssignTasks/app/build/intermediates/res/merged/debug/drawable/common_google_signin_btn_icon_light.xml",
         "source": "/home/ishita/AndroidStudioProjects/AssignTasks/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/drawable/common_google_signin_btn_icon_light.xml"
     },
@@ -128,8 +140,16 @@
         "source": "/home/ishita/AndroidStudioProjects/AssignTasks/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.1/res/drawable/abc_item_background_holo_dark.xml"
     },
     {
+        "merged": "/home/ishita/AndroidStudioProjects/AssignTasks/app/build/intermediates/res/merged/debug/drawable/twitter_button.xml",
+        "source": "/home/ishita/AndroidStudioProjects/AssignTasks/app/build/intermediates/exploded-aar/com.firebaseui/firebase-ui/0.3.1/res/drawable/twitter_button.xml"
+    },
+    {
         "merged": "/home/ishita/AndroidStudioProjects/AssignTasks/app/build/intermediates/res/merged/debug/drawable/design_snackbar_background.xml",
         "source": "/home/ishita/AndroidStudioProjects/AssignTasks/app/build/intermediates/exploded-aar/com.android.support/design/23.1.1/res/drawable/design_snackbar_background.xml"
+    },
+    {
+        "merged": "/home/ishita/AndroidStudioProjects/AssignTasks/app/build/intermediates/res/merged/debug/drawable/password_button.xml",
+        "source": "/home/ishita/AndroidStudioProjects/AssignTasks/app/build/intermediates/exploded-aar/com.firebaseui/firebase-ui/0.3.1/res/drawable/password_button.xml"
     },
     {
         "merged": "/home/ishita/AndroidStudioProjects/AssignTasks/app/build/intermediates/res/merged/debug/drawable/abc_spinner_textfield_background_material.xml",

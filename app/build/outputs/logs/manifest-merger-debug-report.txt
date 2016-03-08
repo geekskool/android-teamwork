@@ -1,64 +1,66 @@
 -- Merging decision tree log ---
 manifest
-ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:2:1-75:12
+ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:2:1-76:12
 	package
-		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:3:5-45
+		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:4:5-45
 		INJECTED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml
 		INJECTED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml
 	android:versionName
 		INJECTED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml
 		INJECTED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml
+	xmlns:tools
+		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:3:5-51
 	xmlns:android
 		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:2:11-69
 	android:versionCode
 		INJECTED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml
 		INJECTED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml
 permission#com.example.ishita.assigntasks.permission.C2D_MESSAGE
-ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:5:5-7:47
+ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:6:5-8:47
 	android:protectionLevel
-		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:7:9-44
+		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:8:9-44
 	android:name
-		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:6:9-77
+		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:7:9-77
 uses-permission#com.example.ishita.assigntasks.permission.C2D_MESSAGE
-ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:9:5-93
+ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:10:5-93
 	android:name
-		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:9:22-90
+		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:10:22-90
 uses-permission#android.permission.READ_CONTACTS
-ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:10:5-72
+ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:11:5-72
 	android:name
-		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:10:22-69
+		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:11:22-69
 uses-permission#android.permission.INTERNET
-ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:11:5-67
+ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:12:5-67
 MERGED from [com.google.android.gms:play-services-gcm:8.4.0] /home/ishita/AndroidStudioProjects/AssignTasks/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-gcm/8.4.0/AndroidManifest.xml:22:5-67
 MERGED from [com.google.android.gms:play-services-measurement:8.4.0] /home/ishita/AndroidStudioProjects/AssignTasks/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-measurement/8.4.0/AndroidManifest.xml:21:5-67
 MERGED from [com.google.android.gms:play-services-measurement:8.4.0] /home/ishita/AndroidStudioProjects/AssignTasks/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-measurement/8.4.0/AndroidManifest.xml:21:5-67
 	android:name
-		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:11:22-64
+		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:12:22-64
 uses-permission#android.permission.GET_ACCOUNTS
-ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:12:5-71
+ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:13:5-71
 	android:name
-		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:12:22-68
+		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:13:22-68
 uses-permission#android.permission.WAKE_LOCK
-ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:13:5-68
+ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:14:5-68
 MERGED from [com.google.android.gms:play-services-measurement:8.4.0] /home/ishita/AndroidStudioProjects/AssignTasks/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-measurement/8.4.0/AndroidManifest.xml:24:5-67
 MERGED from [com.google.android.gms:play-services-measurement:8.4.0] /home/ishita/AndroidStudioProjects/AssignTasks/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-measurement/8.4.0/AndroidManifest.xml:24:5-67
 	android:name
-		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:13:22-65
+		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:14:22-65
 uses-permission#com.google.android.c2dm.permission.RECEIVE
-ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:14:5-82
+ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:15:5-82
 MERGED from [com.google.android.gms:play-services-gcm:8.4.0] /home/ishita/AndroidStudioProjects/AssignTasks/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-gcm/8.4.0/AndroidManifest.xml:21:5-82
 	android:name
-		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:14:22-79
+		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:15:22-79
 uses-permission#android.permission.READ_PHONE_STATE
-ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:15:5-75
+ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:16:5-75
 	android:name
-		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:15:22-72
+		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:16:22-72
 uses-permission#android.permission.READ_PROFILE
-ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:16:5-71
+ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:17:5-71
 	android:name
-		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:16:22-68
+		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:17:22-68
 application
-ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:18:5-73:19
+ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:19:5-74:19
 MERGED from [com.android.support:appcompat-v7:23.1.1] /home/ishita/AndroidStudioProjects/AssignTasks/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.1/AndroidManifest.xml:22:5-20
 MERGED from [com.android.support:support-v4:23.1.1] /home/ishita/AndroidStudioProjects/AssignTasks/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.1.1/AndroidManifest.xml:22:5-20
 MERGED from [com.android.support:design:23.1.1] /home/ishita/AndroidStudioProjects/AssignTasks/app/build/intermediates/exploded-aar/com.android.support/design/23.1.1/AndroidManifest.xml:22:5-20
@@ -82,93 +84,95 @@ MERGED from [com.google.android.gms:play-services-measurement:8.4.0] /home/ishit
 MERGED from [com.google.android.gms:play-services-basement:8.4.0] /home/ishita/AndroidStudioProjects/AssignTasks/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-basement/8.4.0/AndroidManifest.xml:20:5-24:19
 MERGED from [com.android.support:support-v4:23.1.1] /home/ishita/AndroidStudioProjects/AssignTasks/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.1.1/AndroidManifest.xml:22:5-20
 	android:label
-		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:21:9-41
+		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:22:9-41
 	android:supportsRtl
-		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:22:9-35
+		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:23:9-35
+	tools:overrideLibrary
+		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:24:9-48
 	android:allowBackup
-		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:19:9-35
+		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:20:9-35
 	android:icon
-		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:20:9-43
+		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:21:9-43
 	android:theme
-		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:23:9-40
+		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:25:9-40
 activity#com.example.ishita.assigntasks.AddTask
-ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:24:9-29:20
+ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:26:9-30:20
 	android:label
-		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:26:13-45
+		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:28:13-59
 	android:theme
-		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:27:13-56
+		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:29:13-56
 	android:name
-		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:25:13-36
+		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:27:13-36
 receiver#com.google.android.gms.gcm.GcmReceiver
-ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:31:9-39:20
+ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:32:9-40:20
 	android:permission
-		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:33:13-73
+		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:34:13-73
 	android:name
-		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:32:13-66
+		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:33:13-66
 intent-filter#com.example.ishita.assigntasks+com.google.android.c2dm.intent.RECEIVE
-ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:34:13-38:29
+ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:35:13-39:29
 action#com.google.android.c2dm.intent.RECEIVE
-ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:35:17-81
+ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:36:17-81
 	android:name
-		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:35:25-78
+		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:36:25-78
 category#com.example.ishita.assigntasks
-ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:37:17-75
+ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:38:17-75
 	android:name
-		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:37:27-72
+		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:38:27-72
 meta-data#com.google.android.gms.version
-ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:44:9-46:69
+ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:45:9-47:69
 MERGED from [com.google.android.gms:play-services-basement:8.4.0] /home/ishita/AndroidStudioProjects/AssignTasks/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-basement/8.4.0/AndroidManifest.xml:21:9-23:69
 MERGED from [com.google.android.gms:play-services-basement:8.4.0] /home/ishita/AndroidStudioProjects/AssignTasks/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-basement/8.4.0/AndroidManifest.xml:21:9-23:69
 MERGED from [com.google.android.gms:play-services-basement:8.4.0] /home/ishita/AndroidStudioProjects/AssignTasks/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-basement/8.4.0/AndroidManifest.xml:21:9-23:69
 MERGED from [com.google.android.gms:play-services-basement:8.4.0] /home/ishita/AndroidStudioProjects/AssignTasks/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-basement/8.4.0/AndroidManifest.xml:21:9-23:69
 	android:value
-		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:46:13-66
+		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:47:13-66
 	android:name
-		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:45:13-58
+		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:46:13-58
 provider#com.example.ishita.assigntasks.data.TasksProvider
-ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:48:9-52:40
+ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:49:9-53:40
 	android:authorities
-		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:50:13-65
+		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:51:13-65
 	android:enabled
-		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:51:13-35
+		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:52:13-35
 	android:exported
-		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:52:13-37
+		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:53:13-37
 	android:name
-		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:49:13-47
+		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:50:13-47
 activity#com.example.ishita.assigntasks.CommentsActivity
-ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:54:9-62:20
+ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:55:9-63:20
 	android:label
-		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:56:13-60
+		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:57:13-60
 	android:parentActivityName
-		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:57:13-50
+		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:58:13-50
 	android:theme
-		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:58:13-44
+		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:59:13-44
 	android:name
-		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:55:13-45
+		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:56:13-45
 meta-data#android.support.PARENT_ACTIVITY
-ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:59:13-61:74
+ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:60:13-62:74
 	android:value
-		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:61:17-71
+		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:62:17-71
 	android:name
-		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:60:17-63
+		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:61:17-63
 activity#com.example.ishita.assigntasks.LoginActivity
-ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:63:9-72:20
+ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:64:9-73:20
 	android:label
-		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:65:13-45
+		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:66:13-45
 	android:theme
-		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:66:13-56
+		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:67:13-56
 	android:name
-		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:64:13-42
+		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:65:13-42
 intent-filter#android.intent.action.MAIN+android.intent.category.LAUNCHER
-ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:67:13-71:29
+ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:68:13-72:29
 action#android.intent.action.MAIN
-ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:68:17-69
+ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:69:17-69
 	android:name
-		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:68:25-66
+		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:69:25-66
 category#android.intent.category.LAUNCHER
-ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:70:17-77
+ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:71:17-77
 	android:name
-		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:70:27-74
+		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:71:27-74
 uses-sdk
 INJECTED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml reason: use-sdk injection requested
 MERGED from [com.android.support:appcompat-v7:23.1.1] /home/ishita/AndroidStudioProjects/AssignTasks/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.1.1/AndroidManifest.xml:20:5-43
@@ -194,6 +198,7 @@ MERGED from [com.android.support:support-v4:23.1.1] /home/ishita/AndroidStudioPr
 MERGED from [com.android.support:recyclerview-v7:23.1.1] /home/ishita/AndroidStudioProjects/AssignTasks/app/build/intermediates/exploded-aar/com.android.support/recyclerview-v7/23.1.1/AndroidManifest.xml:20:5-43
 MERGED from [com.android.support:support-v4:23.1.1] /home/ishita/AndroidStudioProjects/AssignTasks/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.1.1/AndroidManifest.xml:20:5-43
 MERGED from [com.mcxiaoke.volley:library:1.0.6] /home/ishita/AndroidStudioProjects/AssignTasks/app/build/intermediates/exploded-aar/com.mcxiaoke.volley/library/1.0.6/AndroidManifest.xml:7:5-9:41
+MERGED from [com.firebaseui:firebase-ui:0.3.1] /home/ishita/AndroidStudioProjects/AssignTasks/app/build/intermediates/exploded-aar/com.firebaseui/firebase-ui/0.3.1/AndroidManifest.xml:7:5-9:41
 MERGED from [com.google.android.gms:play-services-measurement:8.4.0] /home/ishita/AndroidStudioProjects/AssignTasks/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-measurement/8.4.0/AndroidManifest.xml:18:5-42
 MERGED from [com.google.android.gms:play-services-basement:8.4.0] /home/ishita/AndroidStudioProjects/AssignTasks/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-basement/8.4.0/AndroidManifest.xml:18:5-42
 MERGED from [com.android.support:support-v4:23.1.1] /home/ishita/AndroidStudioProjects/AssignTasks/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.1.1/AndroidManifest.xml:20:5-43
