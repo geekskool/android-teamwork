@@ -17,6 +17,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
+import com.firebase.client.Firebase;
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -41,7 +42,7 @@ public class AddTask extends AppCompatActivity {
      * The {@link ViewPager} that will host the section contents.
      */
     public ViewPager mViewPager;
-    public List<String> fragments = new Vector<String>();
+    public List<String> fragments = new Vector<>();
 
     /**
      * ATTENTION: This was auto-generated to implement the App Indexing API.
@@ -53,6 +54,7 @@ public class AddTask extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_task);
+        Firebase.setAndroidContext(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -200,7 +202,7 @@ public class AddTask extends AppCompatActivity {
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
             fragmentsA = fragments;
-            fragmentList = new ArrayList<Fragment>();
+            fragmentList = new ArrayList<>();
 
             for (int i = 0; i < 3; i++) {
                 fragmentList.add(Fragment.instantiate(getApplicationContext(), fragmentsA.get(i)));
