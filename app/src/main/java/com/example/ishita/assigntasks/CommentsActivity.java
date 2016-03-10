@@ -21,6 +21,7 @@ import android.widget.Toast;
 
 import com.example.ishita.assigntasks.data.TasksContract;
 import com.example.ishita.assigntasks.data.TasksDbHelper;
+import com.firebase.client.Firebase;
 
 public class CommentsActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
 
@@ -34,11 +35,14 @@ public class CommentsActivity extends AppCompatActivity implements LoaderManager
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comments);
+        Firebase.setAndroidContext(this);
 
         taskId = getIntent().getStringExtra("TASK_ID");
         taskName = getIntent().getStringExtra("TASK_NAME");
         msgEdit = (EditText) findViewById(R.id.msg_edit);
         sendBtn = (ImageButton) findViewById(R.id.send_btn);
+
+        Firebase rootref = new Firebase("https://teamkarma.firebaseio.com/tasks");
         TasksDbHelper dbHelper = new TasksDbHelper(getApplicationContext());
         SQLiteDatabase readableDatabase = dbHelper.getReadableDatabase();
 
@@ -47,7 +51,9 @@ public class CommentsActivity extends AppCompatActivity implements LoaderManager
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setTitle(taskName);
 
-        Cursor taskCursor = readableDatabase.rawQuery("SELECT " + TasksContract.TaskEntry.TABLE_NAME + "." + TasksContract.TaskEntry._ID + ", " +
+        //Select tasks._id, name, due_date from tasks, profile where tasks._id=taskId and profile.contact=task.assignee_contact
+        Cursor taskCursor = readableDatabase.rawQuery(
+                "SELECT " + TasksContract.TaskEntry.TABLE_NAME + "." + TasksContract.TaskEntry._ID + ", " +
                         TasksContract.ProfileEntry.COL_NAME + ", " +
                         TasksContract.TaskEntry.COL_DUE_DATE +
                         " FROM " + TasksContract.TaskEntry.TABLE_NAME + ", " + TasksContract.ProfileEntry.TABLE_NAME +

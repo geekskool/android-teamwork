@@ -20,7 +20,11 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.ishita.assigntasks.data.TasksContract;
+import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.Query;
+import com.firebase.client.ValueEventListener;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -41,7 +45,8 @@ public class AddTaskFragment extends Fragment {
 
     private static final String ARG_SECTION_NUMBER = "section_number";
 
-    public static final Firebase rootref = new Firebase("https://teamkarma.firebaseio.com/tasks");
+    public static final Firebase rootrefUsers = new Firebase("https://teamkarma.firebaseio.com/users");
+    public static final Firebase rootrefTasks = new Firebase("https://teamkarma.firebaseio.com/tasks");
 
     public String mAssigneeName = "";
     public String mAssigneeContact = "";
@@ -159,9 +164,9 @@ public class AddTaskFragment extends Fragment {
         try {
             taskDescription = (EditText) rootView.findViewById(R.id.description);
             comments = (EditText) rootView.findViewById(R.id.comments);
-            mTaskName = taskDescription.getText().toString();
+            mTaskName = taskDescription.getText().toString().trim();
             mDueDate = dueDate.getText().toString();
-            mComments = comments.getText().toString();
+            mComments = comments.getText().toString().trim();
             if (!mTaskName.equals("") && !mDueDate.equals("") && !mAssigneeName.equals("")) {
                 Log.v("saveTask()", "mTaskName = " + mTaskName);
                 UpdateTask updateDB = new UpdateTask();
@@ -196,8 +201,9 @@ public class AddTaskFragment extends Fragment {
                             null);
 
                     if (cursor.moveToFirst()) {
-                        mAssigneeName = cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME));
-                        mAssigneeContact = cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.NUMBER));
+                        mAssigneeName = cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME)).trim();
+                        //TODO ask Santosh if only the last 10 digits of the phone number should be used for safe side
+                        mAssigneeContact = cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.NUMBER)).replaceAll("\\s+", "");
                         assignee.setText(mAssigneeName);
                         /*Toast.makeText(getActivity(), mAssigneeName + " has number " + mAssigneeContact, Toast.LENGTH_LONG).show();*/
                     }
@@ -222,19 +228,17 @@ public class AddTaskFragment extends Fragment {
 
             getContext().getContentResolver().insert(TasksContract.TaskEntry.CONTENT_URI, taskDetails);
 
-            //upload data to firebase
-
+            //upload task data to firebase
             Map<String, String> task = new HashMap<>();
             task.put(TasksContract.TaskEntry.COL_DESCRIPTION, mTaskName);
             task.put(TasksContract.TaskEntry.COL_ASSIGNEE_KEY, mAssigneeContact);
             task.put(TasksContract.TaskEntry.COL_CREATOR_KEY, "creatorID");
             task.put(TasksContract.TaskEntry.COL_DUE_DATE, mDueDate);
 
-            Firebase taskRef = rootref.push();
+            Firebase taskRef = rootrefTasks.push();
             taskRef.setValue(task);
 
             //If the assignee doesn't already exist in the profiles table, update the assignee name into the profiles table
-
             Cursor cursor = getContext().getContentResolver().query(
                     TasksContract.ProfileEntry.CONTENT_URI,
                     new String[]{TasksContract.ProfileEntry._ID},
@@ -250,6 +254,10 @@ public class AddTaskFragment extends Fragment {
                 getContext().getContentResolver().insert(TasksContract.ProfileEntry.CONTENT_URI, contactDetails);
             }
             cursor.close();
+
+            //also upload assignee details to firebase. if the contact already exists, it will be
+            //overwritten by the setValue().
+            rootrefUsers.child(mAssigneeContact).setValue(mAssigneeName);
 
             //If there is a comment, update the comment and its task key into the messages table
             if (!mComments.equals("")) {
