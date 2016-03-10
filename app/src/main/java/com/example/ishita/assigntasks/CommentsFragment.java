@@ -120,6 +120,12 @@ public class CommentsFragment extends Fragment implements LoaderManager.LoaderCa
             TextView taskDetails = (TextView) rootView.findViewById(R.id.frag_task_details);
             taskDetails.setText(R.string.no_task_details);
             taskDetails.setVisibility(View.VISIBLE);
+            sendBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Toast.makeText(getContext(), R.string.empty_task_comment_error, Toast.LENGTH_SHORT).show();
+                }
+            });
         }
         tempCursor.close();
     }

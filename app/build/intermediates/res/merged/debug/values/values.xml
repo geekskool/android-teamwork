@@ -334,6 +334,7 @@
     <string name="common_signin_button_text_long">Sign in with Google</string>
     <string name="due_date">Due Date</string>
     <string name="due_date_validation">Due date cannot be earlier than today.</string>
+    <string name="empty_task_comment_error">No task to comment on.</string>
     <string name="error_field_required">This field is required.</string>
     <string name="error_incorrect_password">This password is incorrect.</string>
     <string name="error_invalid_number">This phone number is invalid.</string>

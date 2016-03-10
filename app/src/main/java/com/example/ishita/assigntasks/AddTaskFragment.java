@@ -20,11 +20,14 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.ishita.assigntasks.data.TasksContract;
+import com.firebase.client.Firebase;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.Locale;
+import java.util.Map;
 
 /**
  * A placeholder fragment containing a simple view.
@@ -37,6 +40,8 @@ public class AddTaskFragment extends Fragment {
     final int PICK_CONTACT = 1;
 
     private static final String ARG_SECTION_NUMBER = "section_number";
+
+    public static final Firebase rootref = new Firebase("https://teamkarma.firebaseio.com/tasks");
 
     public String mAssigneeName = "";
     public String mAssigneeContact = "";
@@ -139,7 +144,6 @@ public class AddTaskFragment extends Fragment {
             }
         });
 
-//TODO find a way to implement this from the onpagechangelistener in the main activity.
         saveTaskBtn = (Button) rootView.findViewById(R.id.save_task);
         saveTaskBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -218,6 +222,17 @@ public class AddTaskFragment extends Fragment {
 
             getContext().getContentResolver().insert(TasksContract.TaskEntry.CONTENT_URI, taskDetails);
 
+            //upload data to firebase
+
+            Map<String, String> task = new HashMap<>();
+            task.put(TasksContract.TaskEntry.COL_DESCRIPTION, mTaskName);
+            task.put(TasksContract.TaskEntry.COL_ASSIGNEE_KEY, mAssigneeContact);
+            task.put(TasksContract.TaskEntry.COL_CREATOR_KEY, "creatorID");
+            task.put(TasksContract.TaskEntry.COL_DUE_DATE, mDueDate);
+
+            Firebase taskRef = rootref.push();
+            taskRef.setValue(task);
+
             //If the assignee doesn't already exist in the profiles table, update the assignee name into the profiles table
 
             Cursor cursor = getContext().getContentResolver().query(
@@ -253,6 +268,14 @@ public class AddTaskFragment extends Fragment {
                     getContext().getContentResolver().insert(TasksContract.MessageEntry.CONTENT_URI, messages);
                 }
                 commentCursor.close();
+
+                //also upload the comment to the firebase tasks table
+                Map<String, String> comment = new HashMap<>();
+                comment.put(TasksContract.MessageEntry.COL_MSG, mComments);
+                comment.put(TasksContract.MessageEntry.COL_FROM, "creatorID");
+                comment.put("timestamp", "" + System.currentTimeMillis());
+                Firebase commentRef = taskRef.child("comments");
+                commentRef.push().setValue(comment);
             }
             mComments = null;
             mTaskName = null;

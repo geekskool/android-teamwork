@@ -34,4 +34,5 @@
     <string name="prompt_phone">Phone number</string>
     <string name="msg_enter_mobile">Enter your mobile number to get started.</string>
     <string name="title_activity_addtask">Tasks</string>
+    <string name="empty_task_comment_error">No task to comment on.</string>
 </resources>
