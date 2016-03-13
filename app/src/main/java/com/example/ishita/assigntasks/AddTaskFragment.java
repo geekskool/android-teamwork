@@ -256,7 +256,13 @@ public class AddTaskFragment extends Fragment {
             cursor.close();
 
             //also upload assignee details to firebase. if the contact already exists, it will be
-            //overwritten by the setValue().
+            //overwritten by the setValue(). If the users need to be implemented as objects, use
+            //updateChildren() like this, so as to overwrite node:
+            /*Map<String, Object> newFeature = new HashMap<String, Object>();
+            newFeature.put("key", "value"); //use more put() statements to put other attributes into newFeature
+            Map<String, Object> user = new HashMap<String, Object>();
+            user.put(mAssigneeContact, newFeature);
+            rootrefUsers.updateChildren(user);*/
             rootrefUsers.child(mAssigneeContact).setValue(mAssigneeName);
 
             //If there is a comment, update the comment and its task key into the messages table

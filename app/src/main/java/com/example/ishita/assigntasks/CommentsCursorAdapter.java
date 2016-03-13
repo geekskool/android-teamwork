@@ -74,7 +74,7 @@ public class CommentsCursorAdapter extends CursorAdapter {
             GradientDrawable sd = (GradientDrawable) viewHolder.box.getBackground().mutate();
             sd.setColor(Color.parseColor("#fffeee"));
             sd.invalidateSelf();
-            root.setGravity(Gravity.LEFT);
+            root.setGravity(Gravity.START);
             root.setPadding(10, 10, 50, 10);
         }
         viewHolder.message.setText(cursor.getString(cursor.getColumnIndex(TasksContract.MessageEntry.COL_MSG)));
