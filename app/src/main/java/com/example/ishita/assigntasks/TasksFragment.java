@@ -1,14 +1,11 @@
 package com.example.ishita.assigntasks;
 
 import android.content.Intent;
-import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
-import android.support.v4.app.LoaderManager;
-import android.support.v4.content.CursorLoader;
-import android.support.v4.widget.SimpleCursorAdapter;
+import android.util.Log;
 import android.view.ContextMenu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -17,7 +14,13 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.example.ishita.assigntasks.data.TaskItem;
 import com.example.ishita.assigntasks.data.TasksContract;
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
+import com.firebase.ui.FirebaseListAdapter;
 
 
 /**
@@ -27,7 +30,7 @@ import com.example.ishita.assigntasks.data.TasksContract;
  * Use the {@link TasksFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TasksFragment extends ListFragment implements LoaderManager.LoaderCallbacks<Cursor> {
+public class TasksFragment extends ListFragment /*implements LoaderManager.LoaderCallbacks<Cursor> */ {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_SECTION_NUMBER = "section_number";
@@ -55,13 +58,43 @@ public class TasksFragment extends ListFragment implements LoaderManager.LoaderC
         return fragment;
     }
 
-    private SimpleCursorAdapter adapter;
+    private /*SimpleCursorAdapter*/ FirebaseListAdapter adapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        adapter = new SimpleCursorAdapter(getContext(),
+//        ListView tasksList = getListView();
+        Firebase tasksRef = new Firebase("https://teamkarma.firebaseio.com/tasks");
+        final Firebase usersRef = new Firebase("https://teamkarma.firebaseio.com/users");
+
+        adapter = new FirebaseListAdapter<TaskItem>(getActivity(), TaskItem.class, R.layout.fragment_tasks, tasksRef) {
+            String assigneeName;
+
+            @Override
+            protected void populateView(final View view, final TaskItem taskItem, int position) {
+                usersRef.addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot snapshot) {
+                        for (DataSnapshot userSnapshot : snapshot.getChildren()) {
+                            if (taskItem.getAssignee_id().equals(userSnapshot.getKey())) {
+                                assigneeName = userSnapshot.getValue().toString();
+                                ((TextView) view.findViewById(R.id.task_list_item)).setText(taskItem.getDescription());
+                                ((TextView) view.findViewById(R.id.assignee_taskList)).setText(assigneeName);
+                                ((TextView) view.findViewById(R.id.due_date_taskList)).setText(taskItem.getDue_date());
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(FirebaseError firebaseError) {
+                        Log.e("Firebase EventListener", "The read failed: " + firebaseError.getMessage());
+                    }
+                });
+            }
+        };
+//        tasksList.setAdapter(adapter);
+        /*adapter = new SimpleCursorAdapter(getContext(),
                 R.layout.fragment_tasks,
                 null,
                 new String[]{
@@ -106,7 +139,7 @@ public class TasksFragment extends ListFragment implements LoaderManager.LoaderC
             }
         });
 
-        getLoaderManager().initLoader(0, null, this);
+        getLoaderManager().initLoader(0, null, this);*/
         setListAdapter(adapter);
     }
 
@@ -150,12 +183,12 @@ public class TasksFragment extends ListFragment implements LoaderManager.LoaderC
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        setEmptyText("No tasks saved yet.\nSwipe left to add a new task.");
+        setEmptyText("Please wait for data to be fetched from the server.\n\nYou can also swipe left to add a new task.");
         ListView list = getListView();
         registerForContextMenu(list);
     }
 
-    @Override
+    /*@Override
     public android.support.v4.content.Loader<Cursor> onCreateLoader(int id, Bundle args) {
         CursorLoader loader = new CursorLoader(getContext(),
                 TasksContract.TaskEntry.CONTENT_URI,
@@ -179,7 +212,7 @@ public class TasksFragment extends ListFragment implements LoaderManager.LoaderC
     @Override
     public void onLoaderReset(android.support.v4.content.Loader<Cursor> loader) {
         adapter.swapCursor(null);
-    }
+    }*/
 
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
@@ -191,4 +224,11 @@ public class TasksFragment extends ListFragment implements LoaderManager.LoaderC
         intent.putExtra("TASK_NAME", description);
         startActivity(intent);
     }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        adapter.cleanup();
+    }
+
 }
