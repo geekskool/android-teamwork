@@ -32,6 +32,7 @@ import com.firebase.ui.FirebaseListAdapter;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.TimeZone;
 
@@ -138,15 +139,12 @@ public class CommentsActivity extends AppCompatActivity /*implements LoaderManag
     public String formatDate(String stringDate) {
         DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd' 'HH:mm:ss");
         sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
-        try {
-            Date date = sdf.parse(stringDate);
-            TimeZone tz = TimeZone.getDefault();
-            sdf.setTimeZone(tz);
-            return sdf.format(date);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-        return stringDate;
+        long milliseconds = Long.parseLong(stringDate);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(milliseconds);
+        TimeZone tz = TimeZone.getDefault();
+        sdf.setTimeZone(tz);
+        return sdf.format(calendar.getTime());
     }
 
 
