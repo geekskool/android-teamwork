@@ -219,7 +219,7 @@ public class AddTaskFragment extends Fragment {
         protected Void doInBackground(Void... params) {
 
             //Update the task details in the Tasks table
-            ContentValues taskDetails = new ContentValues();
+            /*ContentValues taskDetails = new ContentValues();
             taskDetails.put(TasksContract.TaskEntry.COL_DESCRIPTION, mTaskName);
             taskDetails.put(TasksContract.TaskEntry.COL_ASSIGNEE_KEY, mAssigneeContact);
             taskDetails.put(TasksContract.TaskEntry.COL_CREATOR_KEY, "creatorID");
@@ -227,7 +227,7 @@ public class AddTaskFragment extends Fragment {
             taskDetails.put(TasksContract.TaskEntry.COL_COMMENTS, mComments);
 
             getContext().getContentResolver().insert(TasksContract.TaskEntry.CONTENT_URI, taskDetails);
-
+*/
             //upload task data to firebase
             Map<String, String> task = new HashMap<>();
             task.put(TasksContract.TaskEntry.COL_DESCRIPTION, mTaskName);
@@ -239,7 +239,7 @@ public class AddTaskFragment extends Fragment {
             taskRef.setValue(task);
 
             //If the assignee doesn't already exist in the profiles table, update the assignee name into the profiles table
-            Cursor cursor = getContext().getContentResolver().query(
+            /*Cursor cursor = getContext().getContentResolver().query(
                     TasksContract.ProfileEntry.CONTENT_URI,
                     new String[]{TasksContract.ProfileEntry._ID},
                     TasksContract.ProfileEntry.COL_CONTACT + "=?",
@@ -253,7 +253,7 @@ public class AddTaskFragment extends Fragment {
 
                 getContext().getContentResolver().insert(TasksContract.ProfileEntry.CONTENT_URI, contactDetails);
             }
-            cursor.close();
+            cursor.close();*/
 
             //also upload assignee details to firebase. if the contact already exists, it will be
             //overwritten by the setValue(). If the users need to be implemented as objects, use
@@ -267,7 +267,7 @@ public class AddTaskFragment extends Fragment {
 
             //If there is a comment, update the comment and its task key into the messages table
             if (!mComments.equals("")) {
-                Cursor commentCursor = getContext().getContentResolver().query(
+                /*Cursor commentCursor = getContext().getContentResolver().query(
                         TasksContract.TaskEntry.CONTENT_URI,
                         new String[]{TasksContract.TaskEntry._ID},
                         TasksContract.TaskEntry.COL_DESCRIPTION + "=?",
@@ -281,7 +281,7 @@ public class AddTaskFragment extends Fragment {
                     messages.put(TasksContract.MessageEntry.COL_FROM, "creatorID");
                     getContext().getContentResolver().insert(TasksContract.MessageEntry.CONTENT_URI, messages);
                 }
-                commentCursor.close();
+                commentCursor.close();*/
 
                 //also upload the comment to the firebase tasks table
                 Map<String, String> comment = new HashMap<>();

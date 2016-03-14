@@ -34,6 +34,8 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.TimeZone;
 
 public class CommentsActivity extends AppCompatActivity /*implements LoaderManager.LoaderCallbacks<Cursor>*/ {
@@ -42,6 +44,9 @@ public class CommentsActivity extends AppCompatActivity /*implements LoaderManag
     private ImageButton sendBtn;
     private String taskId, taskName;
     FirebaseListAdapter/*CommentsCursorAdapter*/ adapter;
+    Firebase commentsRef;
+
+
     //private GcmUtil gcmUtil;
 
     @Override
@@ -53,10 +58,9 @@ public class CommentsActivity extends AppCompatActivity /*implements LoaderManag
         taskId = getIntent().getStringExtra("TASK_ID");
         taskName = getIntent().getStringExtra("TASK_NAME");
 
-        Firebase commentsRef = new Firebase(taskId + "/comments");
-
         msgEdit = (EditText) findViewById(R.id.msg_edit);
         sendBtn = (ImageButton) findViewById(R.id.send_btn);
+        commentsRef = new Firebase(taskId + "/comments");
 
         /*TasksDbHelper dbHelper = new TasksDbHelper(getApplicationContext());
         SQLiteDatabase readableDatabase = dbHelper.getReadableDatabase();*/
@@ -100,6 +104,7 @@ public class CommentsActivity extends AppCompatActivity /*implements LoaderManag
                 TextView message = (TextView) view.findViewById(R.id.text1);
                 LinearLayout root = (LinearLayout) view;
                 TextView timeStamp = (TextView) view.findViewById(R.id.text2);
+                //TODO replace NULL in this check by the sender ID once login activity is done.
                 if (commentItem.getContact_from() == null) {
                     GradientDrawable sd = (GradientDrawable) box.getBackground().mutate();
                     sd.setColor(Color.parseColor("#FBE9E7"));
@@ -117,7 +122,6 @@ public class CommentsActivity extends AppCompatActivity /*implements LoaderManag
                 timeStamp.setText(formatDate(commentItem.getTimestamp()));
             }
         };
-
 
         ListView list = (ListView) findViewById(R.id.list);
         list.setAdapter(adapter);
@@ -155,12 +159,19 @@ public class CommentsActivity extends AppCompatActivity /*implements LoaderManag
             protected String doInBackground(Void... params) {
                 String msg = "";
                 try {
-                    ContentValues values = new ContentValues(2);
+                    /*ContentValues values = new ContentValues(2);
                     values.put(TasksContract.MessageEntry.COL_MSG, txt);
                     values.put(TasksContract.MessageEntry.COL_TASK_KEY, taskId);
                     Uri rowUri = getContentResolver().insert(TasksContract.MessageEntry.CONTENT_URI, values);
                     Log.v("inserted at:", rowUri.toString());
-                    Log.v("values:", txt + " " + taskId);
+                    Log.v("values:", txt + " " + taskId);*/
+
+                    //TODO also put commenter contact once login activity is done.
+                    Map<String, String> comment = new HashMap<>();
+                    comment.put(TasksContract.MessageEntry.COL_MSG, txt);
+                    comment.put(TasksContract.MessageEntry.COL_FROM, null);
+                    comment.put("timestamp", "" + System.currentTimeMillis());
+                    commentsRef.push().setValue(comment);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -202,4 +213,10 @@ public class CommentsActivity extends AppCompatActivity /*implements LoaderManag
     public void onLoaderReset(Loader<Cursor> loader) {
         adapter.swapCursor(null);
     }*/
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        adapter.cleanup();
+    }
 }
