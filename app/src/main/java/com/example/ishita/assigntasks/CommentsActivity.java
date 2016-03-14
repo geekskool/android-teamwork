@@ -1,8 +1,10 @@
 package com.example.ishita.assigntasks;
 
+import android.annotation.TargetApi;
 import android.app.LoaderManager;
 import android.content.ContentValues;
 import android.content.CursorLoader;
+import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -10,7 +12,9 @@ import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
@@ -218,5 +222,12 @@ public class CommentsActivity extends AppCompatActivity /*implements LoaderManag
     protected void onDestroy() {
         super.onDestroy();
         adapter.cleanup();
+    }
+
+    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+    @Nullable
+    @Override
+    public Intent getSupportParentActivityIntent() {
+        return super.getSupportParentActivityIntent().addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
     }
 }
