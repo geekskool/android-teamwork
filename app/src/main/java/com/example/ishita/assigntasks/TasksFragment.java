@@ -184,15 +184,17 @@ public class TasksFragment extends ListFragment /*implements LoaderManager.Loade
 
     private void delete(View listItem) {
         TextView taskId = (TextView) listItem.findViewById(R.id.task_id);
-        final String[] selectionArg = new String[]{taskId.getText().toString()};
+        final Firebase task = new Firebase(taskId.getText().toString());
+//        final String[] selectionArg = new String[]{taskId.getText().toString()};
         new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
-                getContext().getContentResolver().delete(
+                task.removeValue();
+                /*getContext().getContentResolver().delete(
                         TasksContract.TaskEntry.CONTENT_URI,
                         TasksContract.TaskEntry._ID + "=?",
                         selectionArg
-                );
+                );*/
                 return null;
             }
         }.execute();
