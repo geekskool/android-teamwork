@@ -23,6 +23,10 @@ import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
 import com.example.ishita.assigntasks.helper.PrefManager;
+import com.firebase.client.DataSnapshot;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
+import com.firebase.client.ValueEventListener;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -43,6 +47,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 //    private ImageButton btnEditMobile;
 //    private TextView txtEditMobile;
 //    private LinearLayout layoutEditMobile;
+int flag = 0;
+
 
 
     @Override
@@ -133,9 +139,9 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
      * Validating user details form
      */
     private void validateForm() {
-        String name = inputName.getText().toString().trim();
+        final String name = inputName.getText().toString().trim();
 //        String email = inputEmail.getText().toString().trim();
-        String mobile = inputMobile.getText().toString().trim();
+        final String mobile = inputMobile.getText().toString().trim();
 
         // validating empty name and email
         if (name.length() == 0/* || email.length() == 0*/) {
@@ -154,17 +160,42 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             pref.setMobileNumber(mobile);
 
             //Lines added by me...
-            pref.createLogin(name, mobile);
-            Intent intent = new Intent(LoginActivity.this, AddTask.class);
-            startActivity(intent);
+            Firebase.setAndroidContext(this);
+            Firebase loginRef = new Firebase("https://teamkarma.firebaseio.com/login");
+            loginRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    for (DataSnapshot loginSnapshot : dataSnapshot.getChildren()) {
+                        if (mobile.equals(loginSnapshot.getKey())) {
+                            setFlag(1);
+                            pref.createLogin(name, mobile);
+                            Intent intent = new Intent(LoginActivity.this, AddTask.class);
+                            startActivity(intent);
+                            finish();
+                            return;
+                        }
+                    }
+                    if (flag == 0) {
+                        Toast.makeText(getApplicationContext(), "This mobile number is not authorized.", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onCancelled(FirebaseError firebaseError) {
+
+                }
+            });
             // requesting for sms
 //            requestForSMS(name, email, mobile);
 
         } else {
-            Toast.makeText(getApplicationContext(), "Please enter valid mobile number", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Please enter a valid mobile number.", Toast.LENGTH_SHORT).show();
         }
     }
 
+    public void setFlag(int value) {
+        flag = value;
+    }
     /**
      * Method initiates the SMS request on the server
      *
