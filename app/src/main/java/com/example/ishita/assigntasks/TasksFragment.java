@@ -38,6 +38,9 @@ public class TasksFragment extends ListFragment /*implements LoaderManager.Loade
     // TODO: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
+
+    Firebase tasksRef;
+
     public TasksFragment() {
         // Required empty public constructor
     }
@@ -45,7 +48,6 @@ public class TasksFragment extends ListFragment /*implements LoaderManager.Loade
     /**
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
-     *
      *
      * @return A new instance of fragment TasksFragment.
      */
@@ -65,7 +67,7 @@ public class TasksFragment extends ListFragment /*implements LoaderManager.Loade
         super.onCreate(savedInstanceState);
 
 //        ListView tasksList = getListView();
-        Firebase tasksRef = new Firebase("https://teamkarma.firebaseio.com/tasks");
+        tasksRef = new Firebase("https://teamkarma.firebaseio.com/tasks");
         final Firebase usersRef = new Firebase("https://teamkarma.firebaseio.com/users");
 
         adapter = new FirebaseListAdapter<TaskItem>(getActivity(), TaskItem.class, R.layout.fragment_tasks, tasksRef) {
@@ -73,22 +75,37 @@ public class TasksFragment extends ListFragment /*implements LoaderManager.Loade
 
             @Override
             protected void populateView(final View view, final TaskItem taskItem, int position) {
-                usersRef.addValueEventListener(new ValueEventListener() {
+                tasksRef.addValueEventListener(new ValueEventListener() {
                     @Override
-                    public void onDataChange(DataSnapshot snapshot) {
-                        for (DataSnapshot userSnapshot : snapshot.getChildren()) {
-                            if (taskItem.getAssignee_id().equals(userSnapshot.getKey())) {
-                                assigneeName = userSnapshot.getValue().toString();
-                                ((TextView) view.findViewById(R.id.task_list_item)).setText(taskItem.getDescription());
-                                ((TextView) view.findViewById(R.id.assignee_taskList)).setText(assigneeName);
-                                ((TextView) view.findViewById(R.id.due_date_taskList)).setText(taskItem.getDue_date());
-                            }
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        for (final DataSnapshot taskSnapshot : dataSnapshot.getChildren()) {
+                            usersRef.addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(DataSnapshot snapshot) {
+                                    for (DataSnapshot userSnapshot : snapshot.getChildren()) {
+                                        if (taskItem.getAssignee_id().equals(userSnapshot.getKey())) {
+                                            assigneeName = userSnapshot.getValue().toString();
+                                            ((TextView) view.findViewById(R.id.task_list_item)).setText(taskItem.getDescription());
+                                            ((TextView) view.findViewById(R.id.assignee_taskList)).setText(assigneeName);
+                                            ((TextView) view.findViewById(R.id.due_date_taskList)).setText(taskItem.getDue_date());
+                                            if (taskItem.getDescription().equals(taskSnapshot.child("description").getValue())) {
+                                                ((TextView) view.findViewById(R.id.task_id)).setText(taskSnapshot.getRef().toString());
+                                            }
+                                        }
+                                    }
+                                }
+
+                                @Override
+                                public void onCancelled(FirebaseError firebaseError) {
+                                    Log.e("Firebase EventListener", "The read failed: " + firebaseError.getMessage());
+                                }
+                            });
                         }
                     }
 
                     @Override
                     public void onCancelled(FirebaseError firebaseError) {
-                        Log.e("Firebase EventListener", "The read failed: " + firebaseError.getMessage());
+
                     }
                 });
             }
@@ -168,7 +185,7 @@ public class TasksFragment extends ListFragment /*implements LoaderManager.Loade
     private void delete(View listItem) {
         TextView taskId = (TextView) listItem.findViewById(R.id.task_id);
         final String[] selectionArg = new String[]{taskId.getText().toString()};
-        new AsyncTask<Void, Void, Void>(){
+        new AsyncTask<Void, Void, Void>() {
             @Override
             protected Void doInBackground(Void... params) {
                 getContext().getContentResolver().delete(
@@ -180,6 +197,7 @@ public class TasksFragment extends ListFragment /*implements LoaderManager.Loade
             }
         }.execute();
     }
+
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
