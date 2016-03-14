@@ -6,29 +6,41 @@ import android.content.CursorLoader;
 import android.content.Loader;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.ishita.assigntasks.data.CommentItem;
 import com.example.ishita.assigntasks.data.TasksContract;
 import com.example.ishita.assigntasks.data.TasksDbHelper;
 import com.firebase.client.Firebase;
+import com.firebase.ui.FirebaseListAdapter;
 
-public class CommentsActivity extends AppCompatActivity implements LoaderManager.LoaderCallbacks<Cursor> {
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.TimeZone;
+
+public class CommentsActivity extends AppCompatActivity /*implements LoaderManager.LoaderCallbacks<Cursor>*/ {
 
     private EditText msgEdit;
     private ImageButton sendBtn;
     private String taskId, taskName;
-    CommentsCursorAdapter adapter;
+    FirebaseListAdapter/*CommentsCursorAdapter*/ adapter;
     //private GcmUtil gcmUtil;
 
     @Override
@@ -39,12 +51,14 @@ public class CommentsActivity extends AppCompatActivity implements LoaderManager
 
         taskId = getIntent().getStringExtra("TASK_ID");
         taskName = getIntent().getStringExtra("TASK_NAME");
+
+        Firebase commentsRef = new Firebase(taskId + "/comments");
+
         msgEdit = (EditText) findViewById(R.id.msg_edit);
         sendBtn = (ImageButton) findViewById(R.id.send_btn);
 
-        Firebase rootref = new Firebase("https://teamkarma.firebaseio.com/tasks");
-        TasksDbHelper dbHelper = new TasksDbHelper(getApplicationContext());
-        SQLiteDatabase readableDatabase = dbHelper.getReadableDatabase();
+        /*TasksDbHelper dbHelper = new TasksDbHelper(getApplicationContext());
+        SQLiteDatabase readableDatabase = dbHelper.getReadableDatabase();*/
 
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         actionBar.setHomeButtonEnabled(true);
@@ -52,7 +66,7 @@ public class CommentsActivity extends AppCompatActivity implements LoaderManager
         actionBar.setTitle(taskName);
 
         //Select tasks._id, name, due_date from tasks, profile where tasks._id=taskId and profile.contact=task.assignee_contact
-        Cursor taskCursor = readableDatabase.rawQuery(
+        /*Cursor taskCursor = readableDatabase.rawQuery(
                 "SELECT " + TasksContract.TaskEntry.TABLE_NAME + "." + TasksContract.TaskEntry._ID + ", " +
                         TasksContract.ProfileEntry.COL_NAME + ", " +
                         TasksContract.TaskEntry.COL_DUE_DATE +
@@ -72,11 +86,37 @@ public class CommentsActivity extends AppCompatActivity implements LoaderManager
         } else {
             TextView taskDetails = (TextView) findViewById(R.id.task_details);
             taskDetails.setText(R.string.no_task_details);
-        }
+        }*/
 
 
-        adapter = new CommentsCursorAdapter(this, null, 0);
-        getLoaderManager().initLoader(0, null, this);
+        /*adapter = new CommentsCursorAdapter(this, null, 0);
+        getLoaderManager().initLoader(0, null, this);*/
+
+        adapter = new FirebaseListAdapter<CommentItem>(this, CommentItem.class, R.layout.comments_list_item, commentsRef) {
+            @Override
+            protected void populateView(View view, CommentItem commentItem, int position) {
+                LinearLayout box = (LinearLayout) view.findViewById(R.id.box);
+                TextView message = (TextView) view.findViewById(R.id.text1);
+                LinearLayout root = (LinearLayout) view;
+                TextView timeStamp = (TextView) view.findViewById(R.id.text2);
+                if (commentItem.getContact_from() == null) {
+                    GradientDrawable sd = (GradientDrawable) box.getBackground().mutate();
+                    sd.setColor(Color.parseColor("#FBE9E7"));
+                    sd.invalidateSelf();
+                    root.setGravity(Gravity.END);
+                    root.setPadding(50, 10, 10, 10);
+                } else {
+                    GradientDrawable sd = (GradientDrawable) box.getBackground().mutate();
+                    sd.setColor(Color.parseColor("#fffeee"));
+                    sd.invalidateSelf();
+                    root.setGravity(Gravity.START);
+                    root.setPadding(10, 10, 50, 10);
+                }
+                message.setText(commentItem.getMsg());
+                timeStamp.setText(formatDate(commentItem.getTimestamp()));
+            }
+        };
+
 
         ListView list = (ListView) findViewById(R.id.list);
         list.setAdapter(adapter);
@@ -92,8 +132,23 @@ public class CommentsActivity extends AppCompatActivity implements LoaderManager
                 }
             }
         });
-        taskCursor.close();
+//        taskCursor.close();
     }
+
+    public String formatDate(String stringDate) {
+        DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd' 'HH:mm:ss");
+        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+        try {
+            Date date = sdf.parse(stringDate);
+            TimeZone tz = TimeZone.getDefault();
+            sdf.setTimeZone(tz);
+            return sdf.format(date);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return stringDate;
+    }
+
 
 
     private void send(final String txt) {
@@ -121,10 +176,10 @@ public class CommentsActivity extends AppCompatActivity implements LoaderManager
                 }
             }
         }.execute(null, null, null);
-        getLoaderManager().restartLoader(0, null, this);
+//        getLoaderManager().restartLoader(0, null, this);
     }
 
-    @Override
+    /*@Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         return new CursorLoader(
                 getApplicationContext(),
@@ -139,8 +194,8 @@ public class CommentsActivity extends AppCompatActivity implements LoaderManager
                 TasksContract.MessageEntry.COL_AT + " ASC"
         );
     }
-
-    @Override
+*/
+    /*@Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         adapter.swapCursor(data);
     }
@@ -148,5 +203,5 @@ public class CommentsActivity extends AppCompatActivity implements LoaderManager
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         adapter.swapCursor(null);
-    }
+    }*/
 }
