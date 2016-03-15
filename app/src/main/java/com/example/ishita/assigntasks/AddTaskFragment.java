@@ -20,6 +20,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.ishita.assigntasks.data.TasksContract;
+import com.example.ishita.assigntasks.helper.PrefManager;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
@@ -53,6 +54,8 @@ public class AddTaskFragment extends Fragment {
     public String mTaskName = "";
     public String mDueDate = "";
     public String mComments = null;
+
+    PrefManager prefManager;
 
     public AddTaskFragment() {
     }
@@ -106,6 +109,12 @@ public class AddTaskFragment extends Fragment {
         args.putInt(ARG_SECTION_NUMBER, sectionNumber);
         fragment.setArguments(args);
         return fragment;
+    }
+
+    @Override
+    public void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        prefManager = new PrefManager(getContext());
     }
 
     @Override
@@ -204,6 +213,8 @@ public class AddTaskFragment extends Fragment {
                         mAssigneeName = cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME)).trim();
                         //TODO ask Santosh if only the last 10 digits of the phone number should be used for safe side
                         mAssigneeContact = cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.NUMBER)).replaceAll("\\s+", "");
+                        if (mAssigneeContact.length() > 10)
+                            mAssigneeContact = mAssigneeContact.substring(mAssigneeContact.length() - 10);
                         assignee.setText(mAssigneeName);
                         /*Toast.makeText(getActivity(), mAssigneeName + " has number " + mAssigneeContact, Toast.LENGTH_LONG).show();*/
                     }
@@ -232,7 +243,7 @@ public class AddTaskFragment extends Fragment {
             Map<String, String> task = new HashMap<>();
             task.put(TasksContract.TaskEntry.COL_DESCRIPTION, mTaskName);
             task.put(TasksContract.TaskEntry.COL_ASSIGNEE_KEY, mAssigneeContact);
-            task.put(TasksContract.TaskEntry.COL_CREATOR_KEY, "creatorID");
+            task.put(TasksContract.TaskEntry.COL_CREATOR_KEY, prefManager.getMobileNumber());
             task.put(TasksContract.TaskEntry.COL_DUE_DATE, mDueDate);
 
             Firebase taskRef = rootrefTasks.push();
@@ -286,7 +297,7 @@ public class AddTaskFragment extends Fragment {
                 //also upload the comment to the firebase tasks table
                 Map<String, String> comment = new HashMap<>();
                 comment.put(TasksContract.MessageEntry.COL_MSG, mComments);
-                comment.put(TasksContract.MessageEntry.COL_FROM, "creatorID");
+                comment.put(TasksContract.MessageEntry.COL_FROM, prefManager.getMobileNumber());
                 comment.put("timestamp", "" + System.currentTimeMillis());
                 Firebase commentRef = taskRef.child("comments");
                 commentRef.push().setValue(comment);

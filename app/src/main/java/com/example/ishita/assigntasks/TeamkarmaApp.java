@@ -14,4 +14,6 @@ public class TeamkarmaApp extends Application {
         super.onCreate();
         Firebase.setAndroidContext(this);
     }
+
+
 }
