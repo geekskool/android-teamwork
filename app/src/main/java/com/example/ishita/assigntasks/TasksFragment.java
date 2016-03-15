@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.example.ishita.assigntasks.data.TaskItem;
 import com.example.ishita.assigntasks.data.TasksContract;
+import com.example.ishita.assigntasks.helper.PrefManager;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
@@ -61,11 +62,13 @@ public class TasksFragment extends ListFragment /*implements LoaderManager.Loade
     }
 
     private /*SimpleCursorAdapter*/ FirebaseListAdapter adapter;
+    int flag = 0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        final PrefManager prefManager = new PrefManager(getContext());
 //        ListView tasksList = getListView();
         tasksRef = new Firebase("https://teamkarma.firebaseio.com/tasks");
         final Firebase usersRef = new Firebase("https://teamkarma.firebaseio.com/users");
@@ -83,15 +86,21 @@ public class TasksFragment extends ListFragment /*implements LoaderManager.Loade
                                 @Override
                                 public void onDataChange(DataSnapshot snapshot) {
                                     for (DataSnapshot userSnapshot : snapshot.getChildren()) {
-                                        if (taskItem.getAssignee_id().equals(userSnapshot.getKey())) {
-                                            assigneeName = userSnapshot.getValue().toString();
-                                            ((TextView) view.findViewById(R.id.task_list_item)).setText(taskItem.getDescription());
-                                            ((TextView) view.findViewById(R.id.assignee_taskList)).setText(assigneeName);
-                                            ((TextView) view.findViewById(R.id.due_date_taskList)).setText(taskItem.getDue_date());
-                                            if (taskItem.getDescription().equals(taskSnapshot.child("description").getValue())) {
-                                                ((TextView) view.findViewById(R.id.task_id)).setText(taskSnapshot.getRef().toString());
+                                        if (taskItem.getAssignee_id().equals(prefManager.getMobileNumber()) || taskItem.getCreator_id().equals(prefManager.getMobileNumber())) {
+                                            if (taskItem.getAssignee_id().equals(userSnapshot.getKey())) {
+                                                assigneeName = userSnapshot.getValue().toString();
+                                                ((TextView) view.findViewById(R.id.task_list_item)).setText(taskItem.getDescription());
+                                                ((TextView) view.findViewById(R.id.assignee_taskList)).setText(assigneeName);
+                                                ((TextView) view.findViewById(R.id.due_date_taskList)).setText(taskItem.getDue_date());
+                                                if (taskItem.getDescription().equals(taskSnapshot.child("description").getValue())) {
+                                                    ((TextView) view.findViewById(R.id.task_id)).setText(taskSnapshot.getRef().toString());
+                                                }
                                             }
+                                        } else {
+                                            view.setVisibility(View.GONE);
+                                            flag++;
                                         }
+
                                     }
                                 }
 
@@ -110,7 +119,7 @@ public class TasksFragment extends ListFragment /*implements LoaderManager.Loade
                 });
             }
         };
-//        tasksList.setAdapter(adapter);
+        //        tasksList.setAdapter(adapter);
         /*adapter = new SimpleCursorAdapter(getContext(),
                 R.layout.fragment_tasks,
                 null,
@@ -206,6 +215,7 @@ public class TasksFragment extends ListFragment /*implements LoaderManager.Loade
         setEmptyText("Please wait for data to be fetched from the server.\n\nYou can also swipe left to add a new task.");
         ListView list = getListView();
         registerForContextMenu(list);
+        list.setDividerHeight(0);
     }
 
     /*@Override

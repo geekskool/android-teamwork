@@ -56,6 +56,8 @@ int flag = 0;
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
+        Firebase.setAndroidContext(this);
+
 //        viewPager = (ViewPager) findViewById(R.id.viewPagerVertical);
         inputName = (EditText) findViewById(R.id.inputName);
 //        inputEmail = (EditText) findViewById(R.id.inputEmail);
@@ -160,8 +162,7 @@ int flag = 0;
             pref.setMobileNumber(mobile);
 
             //Lines added by me...
-            Firebase.setAndroidContext(this);
-            Firebase loginRef = new Firebase("https://teamkarma.firebaseio.com/login");
+            Firebase loginRef = PrefManager.LOGIN_REF;
             loginRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {

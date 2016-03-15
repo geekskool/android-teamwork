@@ -30,6 +30,7 @@ import android.widget.Toast;
 import com.example.ishita.assigntasks.data.CommentItem;
 import com.example.ishita.assigntasks.data.TasksContract;
 import com.example.ishita.assigntasks.data.TasksDbHelper;
+import com.example.ishita.assigntasks.helper.PrefManager;
 import com.firebase.client.Firebase;
 import com.firebase.ui.FirebaseListAdapter;
 
@@ -49,7 +50,7 @@ public class CommentsActivity extends AppCompatActivity /*implements LoaderManag
     private String taskId, taskName;
     FirebaseListAdapter/*CommentsCursorAdapter*/ adapter;
     Firebase commentsRef;
-
+    PrefManager prefManager;
 
     //private GcmUtil gcmUtil;
 
@@ -58,6 +59,8 @@ public class CommentsActivity extends AppCompatActivity /*implements LoaderManag
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comments);
         Firebase.setAndroidContext(this);
+
+        prefManager = new PrefManager(getApplicationContext());
 
         taskId = getIntent().getStringExtra("TASK_ID");
         taskName = getIntent().getStringExtra("TASK_NAME");
@@ -108,8 +111,7 @@ public class CommentsActivity extends AppCompatActivity /*implements LoaderManag
                 TextView message = (TextView) view.findViewById(R.id.text1);
                 LinearLayout root = (LinearLayout) view;
                 TextView timeStamp = (TextView) view.findViewById(R.id.text2);
-                //TODO replace NULL in this check by the sender ID once login activity is done.
-                if (commentItem.getContact_from() == null) {
+                if (prefManager.getMobileNumber().equals(commentItem.getContact_from())) {
                     GradientDrawable sd = (GradientDrawable) box.getBackground().mutate();
                     sd.setColor(Color.parseColor("#FBE9E7"));
                     sd.invalidateSelf();
@@ -173,7 +175,7 @@ public class CommentsActivity extends AppCompatActivity /*implements LoaderManag
                     //TODO also put commenter contact once login activity is done.
                     Map<String, String> comment = new HashMap<>();
                     comment.put(TasksContract.MessageEntry.COL_MSG, txt);
-                    comment.put(TasksContract.MessageEntry.COL_FROM, null);
+                    comment.put(TasksContract.MessageEntry.COL_FROM, prefManager.getMobileNumber());
                     comment.put("timestamp", "" + System.currentTimeMillis());
                     commentsRef.push().setValue(comment);
                 } catch (Exception e) {
@@ -221,9 +223,11 @@ public class CommentsActivity extends AppCompatActivity /*implements LoaderManag
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        adapter.cleanup();
+        if (adapter != null)
+            adapter.cleanup();
     }
 
+    //to keep the running version of main activity alive and stop re-fetching of data when up button is pressed
     @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
     @Nullable
     @Override

@@ -3,6 +3,8 @@ package com.example.ishita.assigntasks.helper;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.firebase.client.Firebase;
+
 import java.util.HashMap;
 
 /**
@@ -11,6 +13,12 @@ import java.util.HashMap;
 public class PrefManager {
     // Shared Preferences
     SharedPreferences pref;
+
+    //Firebase references
+    public static final Firebase ROOT_REF = new Firebase("https://teamkarma.firebaseio.com");
+    public static final Firebase TASKS_REF = new Firebase("https://teamkarma.firebaseio.com/tasks");
+    public static final Firebase ASSIGNEE_REF = new Firebase("https://teamkarma.firebaseio.com/users");
+    public static final Firebase LOGIN_REF = new Firebase("https://teamkarma.firebaseio.com/login");
 
     // Editor for Shared preferences
     SharedPreferences.Editor editor;
