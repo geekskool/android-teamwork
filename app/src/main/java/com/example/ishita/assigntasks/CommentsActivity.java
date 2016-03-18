@@ -47,7 +47,7 @@ public class CommentsActivity extends AppCompatActivity /*implements LoaderManag
 
     private EditText msgEdit;
     private ImageButton sendBtn;
-    private String taskId, taskName;
+    private String taskId, taskName, userMobile;
     FirebaseListAdapter/*CommentsCursorAdapter*/ adapter;
     Firebase commentsRef;
     PrefManager prefManager;
@@ -61,6 +61,7 @@ public class CommentsActivity extends AppCompatActivity /*implements LoaderManag
         Firebase.setAndroidContext(this);
 
         prefManager = new PrefManager(getApplicationContext());
+        userMobile = prefManager.getMobileNumber();
 
         taskId = getIntent().getStringExtra("TASK_ID");
         taskName = getIntent().getStringExtra("TASK_NAME");
@@ -111,7 +112,7 @@ public class CommentsActivity extends AppCompatActivity /*implements LoaderManag
                 TextView message = (TextView) view.findViewById(R.id.text1);
                 LinearLayout root = (LinearLayout) view;
                 TextView timeStamp = (TextView) view.findViewById(R.id.text2);
-                if (prefManager.getMobileNumber().equals(commentItem.getContact_from())) {
+                if (userMobile.equals(commentItem.getContact_from())) {
                     GradientDrawable sd = (GradientDrawable) box.getBackground().mutate();
                     sd.setColor(Color.parseColor("#FBE9E7"));
                     sd.invalidateSelf();
@@ -175,7 +176,7 @@ public class CommentsActivity extends AppCompatActivity /*implements LoaderManag
                     //TODO also put commenter contact once login activity is done.
                     Map<String, String> comment = new HashMap<>();
                     comment.put(TasksContract.MessageEntry.COL_MSG, txt);
-                    comment.put(TasksContract.MessageEntry.COL_FROM, prefManager.getMobileNumber());
+                    comment.put(TasksContract.MessageEntry.COL_FROM, userMobile);
                     comment.put("timestamp", "" + System.currentTimeMillis());
                     commentsRef.push().setValue(comment);
                 } catch (Exception e) {
@@ -220,18 +221,18 @@ public class CommentsActivity extends AppCompatActivity /*implements LoaderManag
         adapter.swapCursor(null);
     }*/
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (adapter != null)
-            adapter.cleanup();
-    }
+//    @Override
+//    protected void onDestroy() {
+//        super.onDestroy();
+//        if (adapter != null)
+//            adapter.cleanup();
+//    }
 
     //to keep the running version of main activity alive and stop re-fetching of data when up button is pressed
-    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
-    @Nullable
-    @Override
-    public Intent getSupportParentActivityIntent() {
-        return super.getSupportParentActivityIntent().addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-    }
+//    @TargetApi(Build.VERSION_CODES.JELLY_BEAN)
+//    @Nullable
+//    @Override
+//    public Intent getSupportParentActivityIntent() {
+//        return super.getSupportParentActivityIntent().addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//    }
 }

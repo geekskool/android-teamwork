@@ -322,23 +322,16 @@ public class AddTaskFragment extends Fragment {
             Firebase creatorTaskRef = null;
             //if the assignee is not the creator, add another field, assignee_ref, to store the key where the
             //task is assigned to the assignee, into the task details. Then push the task details to the
-            //creator's task list as well.
+            //creator's task list as well. Add the creator's task ref to the assignee's task as well.
             if (!mAssigneeContact.equals(userMobile)) {
                 task.put("assignee_ref", assigneeTaskRef.toString().substring(assigneeTaskRef.toString().length() - 20));
                 creatorTaskRef = rootrefUsers.child(userMobile).child("user_tasks").push();
                 creatorTaskRef.setValue(task);
+                Map<String, Object> creatorRef = new HashMap<>();
+                creatorRef.put("assignee_ref", creatorTaskRef.toString().substring(creatorTaskRef.toString().length() - 20));
+                assigneeTaskRef.updateChildren(creatorRef);
             }
 
-            /*to retrieve whether a task was created by someone:
-            * check whether the assignee key is the mobile number or the creator key is the mobile
-            * number. if the mobile number is the assignee key:
-            *           store the task key and creator key and delete the task. Then find the
-            *           creator with the creator key and find the task in the creator's list
-            *           using the assignee ref. Delete the task whose assignee ref matches the task
-            *           key stored earlier
-            * if the mobile number is the creator key:
-            *           store the assignee ref and the assignee key and delete the task. Then go to
-            *           login/assigneekey/usertasks/assigneeref and removeValue()*/
             //If there is a comment, update the comment and its task key into the messages table
             if (!mComments.equals("")) {
                 /*Cursor commentCursor = getContext().getContentResolver().query(
