@@ -178,6 +178,8 @@ int flag = 0;
                     }
                     if (flag == 0) {
                         Toast.makeText(getApplicationContext(), "This mobile number is not authorized.", Toast.LENGTH_SHORT).show();
+                        inputMobile.setText("");
+                        inputMobile.requestFocus();
                     }
                 }
 

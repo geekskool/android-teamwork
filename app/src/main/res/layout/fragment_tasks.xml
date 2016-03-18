@@ -15,6 +15,12 @@
         android:layout_height="wrap_content"
         android:visibility="gone" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/creator_id"
+        android:visibility="gone" />
+
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -54,5 +60,17 @@
         android:layout_gravity="bottom"
         android:padding="5dp"
         android:textAppearance="?android:textAppearanceSmall" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/assignee_contact"
+        android:visibility="gone" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/assignee_ref"
+        android:visibility="gone" />
 
 </LinearLayout>
