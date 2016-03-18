@@ -20,6 +20,7 @@ import com.example.ishita.assigntasks.helper.PrefManager;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
+import com.firebase.client.Query;
 import com.firebase.client.ValueEventListener;
 import com.firebase.ui.FirebaseListAdapter;
 
@@ -41,6 +42,7 @@ public class TasksFragment extends ListFragment /*implements LoaderManager.Loade
     private String mParam2;
 
     Firebase tasksRef;
+    String userMobile;
 
     public TasksFragment() {
         // Required empty public constructor
@@ -64,14 +66,17 @@ public class TasksFragment extends ListFragment /*implements LoaderManager.Loade
     private /*SimpleCursorAdapter*/ FirebaseListAdapter adapter;
     int flag = 0;
 
+    String creatorId;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         final PrefManager prefManager = new PrefManager(getContext());
+        userMobile = prefManager.getMobileNumber();
 //        ListView tasksList = getListView();
-        tasksRef = new Firebase("https://teamkarma.firebaseio.com/tasks");
-        final Firebase usersRef = new Firebase("https://teamkarma.firebaseio.com/users");
+        tasksRef = new Firebase("https://teamkarma.firebaseio.com/login/" + userMobile + "/user_tasks");
+        final Firebase usersRef = new Firebase("https://teamkarma.firebaseio.com/login");
 
         adapter = new FirebaseListAdapter<TaskItem>(getActivity(), TaskItem.class, R.layout.fragment_tasks, tasksRef) {
             String assigneeName;
@@ -86,19 +91,17 @@ public class TasksFragment extends ListFragment /*implements LoaderManager.Loade
                                 @Override
                                 public void onDataChange(DataSnapshot snapshot) {
                                     for (DataSnapshot userSnapshot : snapshot.getChildren()) {
-                                        if (taskItem.getAssignee_id().equals(prefManager.getMobileNumber()) || taskItem.getCreator_id().equals(prefManager.getMobileNumber())) {
-                                            if (taskItem.getAssignee_id().equals(userSnapshot.getKey())) {
-                                                assigneeName = userSnapshot.getValue().toString();
-                                                ((TextView) view.findViewById(R.id.task_list_item)).setText(taskItem.getDescription());
-                                                ((TextView) view.findViewById(R.id.assignee_taskList)).setText(assigneeName);
-                                                ((TextView) view.findViewById(R.id.due_date_taskList)).setText(taskItem.getDue_date());
-                                                if (taskItem.getDescription().equals(taskSnapshot.child("description").getValue())) {
-                                                    ((TextView) view.findViewById(R.id.task_id)).setText(taskSnapshot.getRef().toString());
-                                                }
+                                        if (taskItem.getAssignee_id().equals(userSnapshot.getKey())) {
+                                            assigneeName = userSnapshot.child("name").getValue().toString();
+                                            ((TextView) view.findViewById(R.id.creator_id)).setText(taskItem.getCreator_id());
+                                            ((TextView) view.findViewById(R.id.task_list_item)).setText(taskItem.getDescription());
+                                            ((TextView) view.findViewById(R.id.assignee_taskList)).setText(assigneeName);
+                                            ((TextView) view.findViewById(R.id.due_date_taskList)).setText(taskItem.getDue_date());
+                                            ((TextView) view.findViewById(R.id.assignee_contact)).setText(taskItem.getAssignee_id());
+                                            ((TextView) view.findViewById(R.id.assignee_ref)).setText(taskItem.getAssignee_ref());
+                                            if (taskItem.getDescription().equals(taskSnapshot.child("description").getValue())) {
+                                                ((TextView) view.findViewById(R.id.task_id)).setText(taskSnapshot.getRef().toString());
                                             }
-                                        } else {
-                                            view.setVisibility(View.GONE);
-                                            flag++;
                                         }
 
                                     }
@@ -192,21 +195,50 @@ public class TasksFragment extends ListFragment /*implements LoaderManager.Loade
 
 
     private void delete(View listItem) {
+
+            /*check whether the assignee key is the mobile number or the creator key is the mobile
+            * number. if the mobile number is the assignee key:
+            *           store the task key and creator key and delete the task. Then find the
+            *           creator with the creator key and find the task in the creator's list
+            *           using the assignee ref. Delete the task whose assignee ref matches the task
+            *           key stored earlier
+            * if the mobile number is the creator key:
+            *           store the assignee ref and the assignee key and delete the task. Then go to
+            *           login/assigneekey/usertasks/assigneeref and removeValue()*/
+
         TextView taskId = (TextView) listItem.findViewById(R.id.task_id);
+        TextView creatorId = (TextView) listItem.findViewById(R.id.creator_id);
+        TextView assigneeId = (TextView) listItem.findViewById(R.id.assignee_contact);
         final Firebase task = new Firebase(taskId.getText().toString());
-//        final String[] selectionArg = new String[]{taskId.getText().toString()};
-        new AsyncTask<Void, Void, Void>() {
-            @Override
-            protected Void doInBackground(Void... params) {
-                task.removeValue();
-                /*getContext().getContentResolver().delete(
-                        TasksContract.TaskEntry.CONTENT_URI,
-                        TasksContract.TaskEntry._ID + "=?",
-                        selectionArg
-                );*/
-                return null;
-            }
-        }.execute();
+        final String taskKey = task.toString().substring(task.toString().length() - 20);
+        final String creatorKey = creatorId.getText().toString();
+        String assigneeKey = assigneeId.getText().toString();
+        String assigneeRef = ((TextView) listItem.findViewById(R.id.assignee_ref)).getText().toString();
+        Log.v("Strings extracted", "taskKey: " + taskKey + ", creatorKey: " + creatorKey + ", assigneeKey: " + assigneeKey + ", assigneeRef: " + assigneeRef);
+        final Firebase usersRef = PrefManager.LOGIN_REF;
+        if (!creatorKey.equals(assigneeKey) && creatorKey.equals(userMobile)) {
+            usersRef.child(assigneeKey).child("user_tasks").child(assigneeRef).removeValue();
+            task.removeValue();
+        }
+        if (assigneeKey.equals(userMobile)) {
+            usersRef.child(creatorKey)
+                    .child("user_tasks")
+                    .orderByChild("assignee_ref")
+                    .equalTo(assigneeRef)
+                    .addListenerForSingleValueEvent(new ValueEventListener() {
+                        public void onDataChange(DataSnapshot dataSnapshot) {
+                            if (dataSnapshot.hasChildren()) {
+                                DataSnapshot firstChild = dataSnapshot.getChildren().iterator().next();
+                                firstChild.getRef().removeValue();
+                            }
+                        }
+
+                        public void onCancelled(FirebaseError firebaseError) {
+                        }
+                    });
+            task.removeValue();
+
+        }
     }
 
     @Override
@@ -215,7 +247,7 @@ public class TasksFragment extends ListFragment /*implements LoaderManager.Loade
         setEmptyText("Please wait for data to be fetched from the server.\n\nYou can also swipe left to add a new task.");
         ListView list = getListView();
         registerForContextMenu(list);
-        list.setDividerHeight(0);
+//        list.setDividerHeight(0);
     }
 
     /*@Override

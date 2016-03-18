@@ -46,8 +46,8 @@ public class AddTaskFragment extends Fragment {
 
     private static final String ARG_SECTION_NUMBER = "section_number";
 
-    public static final Firebase rootrefUsers = new Firebase("https://teamkarma.firebaseio.com/users");
-    public static final Firebase rootrefTasks = new Firebase("https://teamkarma.firebaseio.com/tasks");
+    public static Firebase rootrefUsers;
+    public static Firebase rootrefTasks;
 
     public String mAssigneeName = "";
     public String mAssigneeContact = "";
@@ -56,6 +56,12 @@ public class AddTaskFragment extends Fragment {
     public String mComments = null;
 
     PrefManager prefManager;
+
+    int flag = 0;
+
+    public void setFlag(int flag) {
+        this.flag = flag;
+    }
 
     public AddTaskFragment() {
     }
@@ -122,6 +128,9 @@ public class AddTaskFragment extends Fragment {
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_add_task, container, false);
 
+        rootrefUsers = new Firebase("https://teamkarma.firebaseio.com/login");
+        rootrefTasks = new Firebase("https://teamkarma.firebaseio.com/tasks");
+
         //TODO ask Santosh what to do about this block
 //        TelephonyManager tMgr = (TelephonyManager) getContext().getSystemService(Context.TELEPHONY_SERVICE);
 //        String phoneNumber = tMgr.getLine1Number(); //returns null
@@ -178,6 +187,13 @@ public class AddTaskFragment extends Fragment {
             mComments = comments.getText().toString().trim();
             if (!mTaskName.equals("") && !mDueDate.equals("") && !mAssigneeName.equals("")) {
                 Log.v("saveTask()", "mTaskName = " + mTaskName);
+                if (flag == 0) {
+                    Toast.makeText(getContext(), "Please assign the task to a registered user.", Toast.LENGTH_SHORT).show();
+                    Log.v("assignee", mAssigneeContact);
+                    assignee.setText("");
+                    assignee.requestFocus();
+                    return;
+                }
                 UpdateTask updateDB = new UpdateTask();
                 updateDB.execute();
                 Toast.makeText(getContext(), "Task saved.", Toast.LENGTH_SHORT).show();
@@ -222,12 +238,37 @@ public class AddTaskFragment extends Fragment {
                 }
                 break;
         }
+        rootrefUsers.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                for (DataSnapshot loginSnapshot : dataSnapshot.getChildren()) {
+                    if (mAssigneeContact.equals(loginSnapshot.getKey())) {
+                        setFlag(1);
+                        Log.v("Flag", "" + flag);
+                        return;
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
 
     }
 
     public class UpdateTask extends AsyncTask<Void, Void, Void> {
 
+
         protected Void doInBackground(Void... params) {
+
+
+//            Log.v("Flag", "" + flag);
+//            if (flag == 0) {
+////                mAssigneeContact = null;
+//                return null;
+//            }
 
             //Update the task details in the Tasks table
             /*ContentValues taskDetails = new ContentValues();
@@ -246,8 +287,8 @@ public class AddTaskFragment extends Fragment {
             task.put(TasksContract.TaskEntry.COL_CREATOR_KEY, prefManager.getMobileNumber());
             task.put(TasksContract.TaskEntry.COL_DUE_DATE, mDueDate);
 
-            Firebase taskRef = rootrefTasks.push();
-            taskRef.setValue(task);
+//            Firebase taskRef = rootrefTasks.push();
+//            taskRef.setValue(task);
 
             //If the assignee doesn't already exist in the profiles table, update the assignee name into the profiles table
             /*Cursor cursor = getContext().getContentResolver().query(
@@ -274,8 +315,30 @@ public class AddTaskFragment extends Fragment {
             Map<String, Object> user = new HashMap<String, Object>();
             user.put(mAssigneeContact, newFeature);
             rootrefUsers.updateChildren(user);*/
-            rootrefUsers.child(mAssigneeContact).setValue(mAssigneeName);
+            String userMobile = prefManager.getMobileNumber();
+            //push the task details on to the assignee's task list as a new task
+            Firebase assigneeTaskRef = rootrefUsers.child(mAssigneeContact).child("user_tasks").push();
+            assigneeTaskRef.setValue(task);
+            Firebase creatorTaskRef = null;
+            //if the assignee is not the creator, add another field, assignee_ref, to store the key where the
+            //task is assigned to the assignee, into the task details. Then push the task details to the
+            //creator's task list as well.
+            if (!mAssigneeContact.equals(userMobile)) {
+                task.put("assignee_ref", assigneeTaskRef.toString().substring(assigneeTaskRef.toString().length() - 20));
+                creatorTaskRef = rootrefUsers.child(userMobile).child("user_tasks").push();
+                creatorTaskRef.setValue(task);
+            }
 
+            /*to retrieve whether a task was created by someone:
+            * check whether the assignee key is the mobile number or the creator key is the mobile
+            * number. if the mobile number is the assignee key:
+            *           store the task key and creator key and delete the task. Then find the
+            *           creator with the creator key and find the task in the creator's list
+            *           using the assignee ref. Delete the task whose assignee ref matches the task
+            *           key stored earlier
+            * if the mobile number is the creator key:
+            *           store the assignee ref and the assignee key and delete the task. Then go to
+            *           login/assigneekey/usertasks/assigneeref and removeValue()*/
             //If there is a comment, update the comment and its task key into the messages table
             if (!mComments.equals("")) {
                 /*Cursor commentCursor = getContext().getContentResolver().query(
@@ -297,10 +360,14 @@ public class AddTaskFragment extends Fragment {
                 //also upload the comment to the firebase tasks table
                 Map<String, String> comment = new HashMap<>();
                 comment.put(TasksContract.MessageEntry.COL_MSG, mComments);
-                comment.put(TasksContract.MessageEntry.COL_FROM, prefManager.getMobileNumber());
+                comment.put(TasksContract.MessageEntry.COL_FROM, userMobile);
                 comment.put("timestamp", "" + System.currentTimeMillis());
-                Firebase commentRef = taskRef.child("comments");
+                Firebase commentRef = assigneeTaskRef.child("comments");
                 commentRef.push().setValue(comment);
+                if (creatorTaskRef != null) {
+                    commentRef = creatorTaskRef.child("comments");
+                    commentRef.push().setValue(comment);
+                }
             }
             mComments = null;
             mTaskName = null;

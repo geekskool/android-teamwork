@@ -31,7 +31,8 @@
         <activity
             android:name="com.example.ishita.assigntasks.AddTask"
             android:label="@string/title_activity_addtask"
-            android:theme="@style/AppTheme.NoActionBar" >
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustResize" >
         </activity>
 
         <receiver
@@ -69,7 +70,8 @@
         <activity
             android:name="com.example.ishita.assigntasks.LoginActivity"
             android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar" >
+            android:theme="@style/AppTheme.NoActionBar"
+            android:windowSoftInputMode="adjustResize|stateHidden" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

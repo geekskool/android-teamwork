@@ -14,16 +14,18 @@ public class TaskItem {
     String creator_id;
     String description;
     String due_date;
+    String assignee_ref;
 
     public TaskItem() {
     }
 
-    public TaskItem(String assignee_id, /*Object comments, */String creator_id, String description, String due_date) {
+    public TaskItem(String assignee_id, /*Object comments, */String creator_id, String description, String due_date, String assignee_ref) {
         this.assignee_id = assignee_id;
 //        this.comments = comments;
         this.description = description;
         this.creator_id = creator_id;
         this.due_date = due_date;
+        this.assignee_ref = assignee_ref;
     }
 
     public String getAssignee_id() {
@@ -40,5 +42,9 @@ public class TaskItem {
 
     public String getDue_date() {
         return due_date;
+    }
+
+    public String getAssignee_ref() {
+        return assignee_ref;
     }
 }
