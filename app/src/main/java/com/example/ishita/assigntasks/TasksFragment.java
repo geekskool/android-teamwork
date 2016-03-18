@@ -1,6 +1,7 @@
 package com.example.ishita.assigntasks;
 
 import android.content.Intent;
+import android.database.DataSetObserver;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -65,8 +66,6 @@ public class TasksFragment extends ListFragment /*implements LoaderManager.Loade
 
     private /*SimpleCursorAdapter*/ FirebaseListAdapter adapter;
     int flag = 0;
-
-    String creatorId;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -170,6 +169,19 @@ public class TasksFragment extends ListFragment /*implements LoaderManager.Loade
 
         getLoaderManager().initLoader(0, null, this);*/
         setListAdapter(adapter);
+        tasksRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (!dataSnapshot.hasChildren()) {
+                    new NoTasksDialog().show(getActivity().getFragmentManager(), null);
+                }
+            }
+
+            @Override
+            public void onCancelled(FirebaseError firebaseError) {
+
+            }
+        });
     }
 
     @Override
