@@ -226,28 +226,13 @@ public class TasksFragment extends ListFragment /*implements LoaderManager.Loade
         final String creatorKey = creatorId.getText().toString();
         String assigneeKey = assigneeId.getText().toString();
         String assigneeRef = ((TextView) listItem.findViewById(R.id.assignee_ref)).getText().toString();
-        Log.v("Strings extracted", "taskKey: " + taskKey + ", creatorKey: " + creatorKey + ", assigneeKey: " + assigneeKey + ", assigneeRef: " + assigneeRef);
         final Firebase usersRef = PrefManager.LOGIN_REF;
-        if (!creatorKey.equals(assigneeKey) && creatorKey.equals(userMobile)) {
+        if (creatorKey.equals(userMobile)) {
             usersRef.child(assigneeKey).child("user_tasks").child(assigneeRef).removeValue();
             task.removeValue();
         }
-        if (assigneeKey.equals(userMobile)) {
-            usersRef.child(creatorKey)
-                    .child("user_tasks")
-                    .orderByChild("assignee_ref")
-                    .equalTo(assigneeRef)
-                    .addListenerForSingleValueEvent(new ValueEventListener() {
-                        public void onDataChange(DataSnapshot dataSnapshot) {
-                            if (dataSnapshot.hasChildren()) {
-                                DataSnapshot firstChild = dataSnapshot.getChildren().iterator().next();
-                                firstChild.getRef().removeValue();
-                            }
-                        }
-
-                        public void onCancelled(FirebaseError firebaseError) {
-                        }
-                    });
+        if (!creatorKey.equals(assigneeKey) && assigneeKey.equals(userMobile)) {
+            usersRef.child(creatorKey).child("user_tasks").child(assigneeRef).removeValue();
             task.removeValue();
 
         }
@@ -292,10 +277,28 @@ public class TasksFragment extends ListFragment /*implements LoaderManager.Loade
     public void onListItemClick(ListView l, View v, int position, long id) {
         TextView taskName = (TextView) v.findViewById(R.id.task_list_item);
         TextView taskID = (TextView) v.findViewById(R.id.task_id);
+        String taskId;
         String description = taskName.getText().toString();
+        /*if the user is the creator,
+        *   pass the assignee ref as well as tasks ref
+        * if user is the assignee,
+        *   find the creator with the creator key and find the task in the creator's list
+        *   using the assignee ref and pass this task ref along with our original task ref*/
+        String creatorKey = ((TextView) v.findViewById(R.id.creator_id)).getText().toString();
+        String assigneeRef = ((TextView) v.findViewById(R.id.assignee_ref)).getText().toString();
+        String assigneeKey = ((TextView) v.findViewById(R.id.assignee_contact)).getText().toString();
+
+        if (assigneeKey.equals(userMobile))
+            taskId = taskID.getText().toString();
+        else
+            taskId = PrefManager.LOGIN_REF
+                    .child(assigneeKey).child("user_tasks")
+                    .child(assigneeRef).toString();
+
         Intent intent = new Intent(getActivity(), CommentsActivity.class);
-        intent.putExtra("TASK_ID", "" + taskID.getText().toString());
+        intent.putExtra("TASK_ID", "" + taskId);
         intent.putExtra("TASK_NAME", description);
+
         startActivity(intent);
     }
 
