@@ -8,6 +8,10 @@
         "source": "/home/ishita/AndroidStudioProjects/AssignTasks/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.2.1/res/drawable-hdpi-v4/abc_ic_star_black_36dp.png"
     },
     {
+        "merged": "/home/ishita/AndroidStudioProjects/AssignTasks/app/build/intermediates/res/merged/debug/drawable-hdpi-v4/edit.png",
+        "source": "/home/ishita/AndroidStudioProjects/AssignTasks/app/build/generated/res/pngs/debug/drawable-hdpi/edit.png"
+    },
+    {
         "merged": "/home/ishita/AndroidStudioProjects/AssignTasks/app/build/intermediates/res/merged/debug/drawable-hdpi-v4/abc_menu_hardkey_panel_mtrl_mult.9.png",
         "source": "/home/ishita/AndroidStudioProjects/AssignTasks/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.2.1/res/drawable-hdpi-v4/abc_menu_hardkey_panel_mtrl_mult.9.png"
     },

@@ -80,6 +80,10 @@
         "source": "/home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/res/drawable/ic_add_white_48dp.png"
     },
     {
+        "merged": "/home/ishita/AndroidStudioProjects/AssignTasks/app/build/intermediates/res/merged/debug/drawable/blank_profile.png",
+        "source": "/home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/res/drawable/blank_profile.png"
+    },
+    {
         "merged": "/home/ishita/AndroidStudioProjects/AssignTasks/app/build/intermediates/res/merged/debug/drawable/common_plus_signin_btn_icon_light.xml",
         "source": "/home/ishita/AndroidStudioProjects/AssignTasks/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/drawable/common_plus_signin_btn_icon_light.xml"
     },

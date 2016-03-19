@@ -302,6 +302,8 @@
     <string name="abc_toolbar_collapse_description">Collapse</string>
     <string name="action_delete">Delete</string>
     <string name="action_edit">Edit</string>
+    <string name="action_edit_profile">Edit your profile</string>
+    <string name="action_profile_pic">Tap this button to choose an image from gallery or take a new photo.</string>
     <string name="action_settings">Settings</string>
     <string name="action_sign_in">Sign in or register</string>
     <string name="action_sign_in_short">Sign in</string>
@@ -360,6 +362,7 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
+    <string name="profile_picture">Please upload your profile picture here.</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_name">Name</string>
     <string name="prompt_password">Password (optional)</string>
@@ -373,6 +376,7 @@
     <string name="task_prompt">Enter Task Description</string>
     <string name="title_activity_addtask">Tasks</string>
     <string name="title_activity_comments">CommentsActivity</string>
+    <string name="title_activity_edit_profile">EditProfile</string>
     <style name="AlertDialog.AppCompat" parent="Base.AlertDialog.AppCompat"/>
     <style name="AlertDialog.AppCompat.Light" parent="Base.AlertDialog.AppCompat.Light"/>
     <style name="Animation.AppCompat.Dialog" parent="Base.Animation.AppCompat.Dialog"/>
