@@ -40,4 +40,8 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="no_task_for_you">No tasks assigned to you yet. Swipe left to create a new task</string>
     <string name="dismiss">Dismiss</string>
+    <string name="action_edit_profile">Edit your profile</string>
+    <string name="title_activity_edit_profile">EditProfile</string>
+    <string name="profile_picture">Please upload your profile picture here.</string>
+    <string name="action_profile_pic">Tap this button to choose an image from gallery or take a new photo.</string>
 </resources>

@@ -64,6 +64,10 @@
         "source": "/home/ishita/AndroidStudioProjects/AssignTasks/app/build/intermediates/exploded-aar/com.google.android.gms/play-services-base/8.4.0/res/drawable-xxhdpi/common_plus_signin_btn_icon_dark_disabled.9.png"
     },
     {
+        "merged": "/home/ishita/AndroidStudioProjects/AssignTasks/app/build/intermediates/res/merged/debug/drawable-xxhdpi-v4/edit.png",
+        "source": "/home/ishita/AndroidStudioProjects/AssignTasks/app/build/generated/res/pngs/debug/drawable-xxhdpi/edit.png"
+    },
+    {
         "merged": "/home/ishita/AndroidStudioProjects/AssignTasks/app/build/intermediates/res/merged/debug/drawable-xxhdpi-v4/abc_ic_clear_mtrl_alpha.png",
         "source": "/home/ishita/AndroidStudioProjects/AssignTasks/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.2.1/res/drawable-xxhdpi-v4/abc_ic_clear_mtrl_alpha.png"
     },

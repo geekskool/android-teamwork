@@ -1,5 +1,6 @@
 package com.example.ishita.assigntasks;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -144,7 +145,9 @@ public class AddTask extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.action_edit_profile) {
+            Intent intent = new Intent(this, EditProfile.class);
+            startActivity(intent);
             return true;
         }
 

@@ -64,8 +64,8 @@ public class PrefManager {
         return pref.getString(KEY_MOBILE_NUMBER, null);
     }
 
-    public void createLogin(String name, /*String email, */String mobile) {
-        editor.putString(KEY_NAME, name);
+    public void createLogin(/*String name, String email, */String mobile) {
+//        editor.putString(KEY_NAME, name);
 //        editor.putString(KEY_EMAIL, email);
         editor.putString(KEY_MOBILE, mobile);
         editor.putBoolean(KEY_IS_LOGGED_IN, true);

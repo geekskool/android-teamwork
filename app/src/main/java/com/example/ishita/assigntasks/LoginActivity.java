@@ -59,7 +59,7 @@ int flag = 0;
         Firebase.setAndroidContext(this);
 
 //        viewPager = (ViewPager) findViewById(R.id.viewPagerVertical);
-        inputName = (EditText) findViewById(R.id.inputName);
+//        inputName = (EditText) findViewById(R.id.inputName);
 //        inputEmail = (EditText) findViewById(R.id.inputEmail);
         inputMobile = (EditText) findViewById(R.id.inputMobile);
 //        inputOtp = (EditText) findViewById(R.id.inputOtp);
@@ -141,15 +141,15 @@ int flag = 0;
      * Validating user details form
      */
     private void validateForm() {
-        final String name = inputName.getText().toString().trim();
+//        final String name = inputName.getText().toString().trim();
 //        String email = inputEmail.getText().toString().trim();
         final String mobile = inputMobile.getText().toString().trim();
 
         // validating empty name and email
-        if (name.length() == 0/* || email.length() == 0*/) {
+        /*if (name.length() == 0*//* || email.length() == 0*//*) {
             Toast.makeText(getApplicationContext(), "Please enter your name.", Toast.LENGTH_SHORT).show();
             return;
-        }
+        }*/
 
         // validating mobile number
         // it should be of 10 digits length
@@ -169,7 +169,7 @@ int flag = 0;
                     for (DataSnapshot loginSnapshot : dataSnapshot.getChildren()) {
                         if (mobile.equals(loginSnapshot.getKey())) {
                             setFlag(1);
-                            pref.createLogin(name, mobile);
+                            pref.createLogin(/*name,*/ mobile);
                             Intent intent = new Intent(LoginActivity.this, AddTask.class);
                             startActivity(intent);
                             finish();

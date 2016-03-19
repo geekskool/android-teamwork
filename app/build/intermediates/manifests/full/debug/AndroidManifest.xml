@@ -32,8 +32,7 @@
             android:name="com.example.ishita.assigntasks.AddTask"
             android:label="@string/title_activity_addtask"
             android:theme="@style/AppTheme.NoActionBar"
-            android:windowSoftInputMode="adjustResize" >
-        </activity>
+            android:windowSoftInputMode="adjustResize" />
 
         <receiver
             android:name="com.google.android.gms.gcm.GcmReceiver"
@@ -77,6 +76,15 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name="com.example.ishita.assigntasks.EditProfile"
+            android:label="@string/title_activity_edit_profile"
+            android:parentActivityName="com.example.ishita.assigntasks.AddTask"
+            android:theme="@style/AppTheme.NoActionBar" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.example.ishita.assigntasks.AddTask" />
         </activity>
 
         <provider

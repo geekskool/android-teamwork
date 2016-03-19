@@ -19,6 +19,16 @@
         android:src="@mipmap/ic_launcher" />
 
     <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:text="@string/app_name"
+        android:textColor="@android:color/white"
+        android:textAllCaps="true"
+        android:textAppearance="?android:textAppearanceLarge"
+        android:layout_margin="10dp" />
+
+    <TextView
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="25dp"
@@ -32,9 +42,10 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:layout_gravity="center_horizontal">
 
-        <EditText
+        <!--<EditText
             android:id="@+id/inputName"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
@@ -45,7 +56,7 @@
             android:padding="5dp"
             android:singleLine="true"
             android:textColor="@color/colorPrimary"
-            android:textSize="18sp" />
+            android:textSize="18sp" />-->
 
         <EditText
             android:id="@+id/inputMobile"
@@ -68,7 +79,7 @@
             android:layout_gravity="center_horizontal"
             android:layout_marginTop="25dp"
             android:background="@color/colorPrimaryDark"
-            android:text="@string/action_sign_in"
+            android:text="@string/action_sign_in_short"
             android:textSize="14sp" />
     </LinearLayout>
 
