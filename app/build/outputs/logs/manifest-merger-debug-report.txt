@@ -60,7 +60,7 @@ ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidMa
 	android:name
 		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:17:22-68
 uses-permission#android.permission.READ_EXTERNAL_STORAGE
-ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:18:5-79
+ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:18:5-80
 	android:name
 		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:18:22-77
 uses-feature#android.hardware.camera2
@@ -114,7 +114,7 @@ MERGED from [com.android.support:support-v4:23.2.1] /home/ishita/AndroidStudioPr
 	android:theme
 		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:27:9-40
 activity#com.example.ishita.assigntasks.AddTask
-ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:29:9-33:69
+ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:29:9-33:70
 	android:label
 		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:31:13-59
 	android:windowSoftInputMode
