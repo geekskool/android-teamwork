@@ -356,8 +356,8 @@ public class AddTaskFragment extends Fragment {
                 comment.put(TasksContract.MessageEntry.COL_FROM, userMobile);
                 comment.put("timestamp", "" + System.currentTimeMillis());
                 Firebase commentRef = assigneeTaskRef.child("comments");
-                /*commentRef.push().setValue(comment);
-                if (creatorTaskRef != null) {
+                commentRef.push().setValue(comment);
+                /*if (creatorTaskRef != null) {
                     commentRef = creatorTaskRef.child("comments");
                     commentRef.push().setValue(comment);
                 }*/
