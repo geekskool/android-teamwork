@@ -263,6 +263,7 @@ public class AddTaskFragment extends Fragment {
 
         protected Void doInBackground(Void... params) {
 
+            String userMobile = prefManager.getMobileNumber();
 
 //            Log.v("Flag", "" + flag);
 //            if (flag == 0) {
@@ -284,7 +285,7 @@ public class AddTaskFragment extends Fragment {
             Map<String, String> task = new HashMap<>();
             task.put(TasksContract.TaskEntry.COL_DESCRIPTION, mTaskName);
             task.put(TasksContract.TaskEntry.COL_ASSIGNEE_KEY, mAssigneeContact);
-            task.put(TasksContract.TaskEntry.COL_CREATOR_KEY, prefManager.getMobileNumber());
+            task.put(TasksContract.TaskEntry.COL_CREATOR_KEY, userMobile);
             task.put(TasksContract.TaskEntry.COL_DUE_DATE, mDueDate);
 
 //            Firebase taskRef = rootrefTasks.push();
@@ -315,7 +316,6 @@ public class AddTaskFragment extends Fragment {
             Map<String, Object> user = new HashMap<String, Object>();
             user.put(mAssigneeContact, newFeature);
             rootrefUsers.updateChildren(user);*/
-            String userMobile = prefManager.getMobileNumber();
             //push the task details on to the assignee's task list as a new task
             Firebase assigneeTaskRef = rootrefUsers.child(mAssigneeContact).child("user_tasks").push();
             assigneeTaskRef.setValue(task);

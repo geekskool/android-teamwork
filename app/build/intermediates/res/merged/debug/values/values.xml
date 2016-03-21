@@ -307,6 +307,7 @@
     <string name="action_settings">Settings</string>
     <string name="action_sign_in">Sign in or register</string>
     <string name="action_sign_in_short">Sign in</string>
+    <string name="add_photo_dialog_title">Add Photo</string>
     <string name="app_name">Teamkarma</string>
     <string name="appbar_scrolling_view_behavior" translatable="false">android.support.design.widget.AppBarLayout$ScrollingViewBehavior</string>
     <string name="assignee_prompt">Enter Assignee Name</string>
@@ -362,7 +363,7 @@
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
-    <string name="profile_picture">Please upload your profile picture here.</string>
+    <string name="profile_picture">This space shows your profile picture.</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_name">Name</string>
     <string name="prompt_password">Password (optional)</string>
