@@ -7,42 +7,49 @@
     android:padding="@dimen/fab_margin">
 
     <FrameLayout
-        android:layout_width="wrap_content"
+        android:id="@+id/profile_photo_frame"
+        android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1">
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@drawable/blank_profile"
+            android:id="@+id/profile_photo"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:contentDescription="@string/profile_picture"
-            android:scaleType="centerCrop" />
+            android:scaleType="centerCrop"
+            android:src="@drawable/blank_profile" />
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:src="@drawable/scrim" />
 
         <ImageButton
+            android:id="@+id/upload_profile_photo"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom|end"
+            android:background="@android:color/transparent"
             android:contentDescription="@string/action_profile_pic"
             android:src="@drawable/edit"
-            android:background="@android:color/transparent" />
+            android:onClick="editPhoto" />
     </FrameLayout>
 
-    <LinearLayout
+
+    <EditText
+        android:id="@+id/inputName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/fab_margin">
-
-        <EditText
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:hint="@string/prompt_name"
-            android:layout_weight="1"
-            android:maxLength="25" />
-    </LinearLayout>
+        android:layout_marginTop="@dimen/fab_margin"
+        android:hint="@string/prompt_name"
+        android:maxLength="25" />
 
     <Button
+        android:id="@+id/update_profile"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:text="@string/common_google_play_services_update_button" />
+        android:text="@string/common_google_play_services_update_button"
+        android:onClick="updateProfile" />
 </LinearLayout>

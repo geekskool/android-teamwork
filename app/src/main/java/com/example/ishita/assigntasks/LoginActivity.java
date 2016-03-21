@@ -169,7 +169,7 @@ int flag = 0;
                     for (DataSnapshot loginSnapshot : dataSnapshot.getChildren()) {
                         if (mobile.equals(loginSnapshot.getKey())) {
                             setFlag(1);
-                            pref.createLogin(/*name,*/ mobile);
+                            pref.createLogin(mobile);
                             Intent intent = new Intent(LoginActivity.this, AddTask.class);
                             startActivity(intent);
                             finish();

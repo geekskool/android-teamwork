@@ -42,6 +42,7 @@
     <string name="dismiss">Dismiss</string>
     <string name="action_edit_profile">Edit your profile</string>
     <string name="title_activity_edit_profile">EditProfile</string>
-    <string name="profile_picture">Please upload your profile picture here.</string>
+    <string name="profile_picture">This space shows your profile picture.</string>
     <string name="action_profile_pic">Tap this button to choose an image from gallery or take a new photo.</string>
+    <string name="add_photo_dialog_title">Add Photo</string>
 </resources>
