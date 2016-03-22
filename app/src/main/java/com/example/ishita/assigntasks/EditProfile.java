@@ -44,6 +44,7 @@ public class EditProfile extends AppCompatActivity {
     TextView inputName;
     PrefManager prefManager;
     HashMap<String, String> userDetails;
+    Firebase loginRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +58,7 @@ public class EditProfile extends AppCompatActivity {
         inputName = (TextView) findViewById(R.id.inputName);
         prefManager = new PrefManager(getApplicationContext());
         userDetails = prefManager.getUserDetails();
+        loginRef = new Firebase(PrefManager.LOGIN_REF);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
@@ -76,7 +78,7 @@ public class EditProfile extends AppCompatActivity {
     public void updateProfile(View updateButton) {
         String name = inputName.getText().toString();
         if (!name.equals(""))
-            PrefManager.LOGIN_REF.child(userDetails.get("mobile")).child("name").setValue(name);
+            loginRef.child(userDetails.get("mobile")).child("name").setValue(name);
 
         if (hasPhoto(profilePhoto)) {
             Bitmap bmp = ((BitmapDrawable) profilePhoto.getDrawable()).getBitmap();
@@ -85,10 +87,10 @@ public class EditProfile extends AppCompatActivity {
             byte[] byteArray = bYtE.toByteArray();
             String imageFile = Base64.encodeToString(byteArray, Base64.DEFAULT);
             Log.v("imageFile", imageFile);
-            PrefManager.LOGIN_REF.child(userDetails.get("mobile")).child("picture").setValue(imageFile);
+            loginRef.child(userDetails.get("mobile")).child("picture").setValue(imageFile);
             bmp.recycle();
         } else {
-            PrefManager.LOGIN_REF.child(userDetails.get("mobile")).child("picture").removeValue();
+            loginRef.child(userDetails.get("mobile")).child("picture").removeValue();
         }
     }
 

@@ -48,7 +48,6 @@ public class AddTaskFragment extends Fragment {
     private static final String ARG_SECTION_NUMBER = "section_number";
 
     public static Firebase rootrefUsers;
-    public static Firebase rootrefTasks;
 
     public String mAssigneeName = "";
     public String mAssigneeContact = "";
@@ -129,14 +128,7 @@ public class AddTaskFragment extends Fragment {
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_add_task, container, false);
 
-        rootrefUsers = new Firebase("https://teamkarma.firebaseio.com/login");
-        rootrefTasks = new Firebase("https://teamkarma.firebaseio.com/tasks");
-
-        //TODO ask Santosh what to do about this block
-//        TelephonyManager tMgr = (TelephonyManager) getContext().getSystemService(Context.TELEPHONY_SERVICE);
-//        String phoneNumber = tMgr.getLine1Number(); //returns null
-//        String mSimNumber = tMgr.getSimSerialNumber(); //returns the sim serial number (unique)
-//        Log.v("phone number", "" + mSimNumber);
+        rootrefUsers = new Firebase(PrefManager.LOGIN_REF);
 
         dueDate = (EditText) rootView.findViewById(R.id.due_date);
         dueDate.setOnClickListener(new View.OnClickListener() {

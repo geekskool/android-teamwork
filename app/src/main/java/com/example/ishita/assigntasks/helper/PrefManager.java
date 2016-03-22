@@ -20,10 +20,7 @@ public class PrefManager {
     SharedPreferences pref;
 
     //Firebase references
-    public static final Firebase ROOT_REF = new Firebase("https://teamkarma.firebaseio.com");
-    public static final Firebase TASKS_REF = new Firebase("https://teamkarma.firebaseio.com/tasks");
-    public static final Firebase ASSIGNEE_REF = new Firebase("https://teamkarma.firebaseio.com/users");
-    public static final Firebase LOGIN_REF = new Firebase("https://teamkarma.firebaseio.com/login");
+    public static final String LOGIN_REF = "https://teamkarma.firebaseio.com/login";
 
     // Editor for Shared preferences
     SharedPreferences.Editor editor;
@@ -81,7 +78,7 @@ public class PrefManager {
 
     public void createLogin(String mobile) {
 
-        LOGIN_REF.child(mobile).addValueEventListener(new ValueEventListener() {
+        new Firebase(LOGIN_REF).child(mobile).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.hasChild("name")) {

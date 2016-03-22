@@ -91,6 +91,8 @@
                 android:value="com.example.ishita.assigntasks.AddTask" />
         </activity>
 
+        <service android:name="com.example.ishita.assigntasks.helper.NotificationListener" />
+
         <provider
             android:name="com.google.android.gms.measurement.AppMeasurementContentProvider"
             android:authorities="com.example.ishita.assigntasks.google_measurement_service"

@@ -74,8 +74,8 @@ public class TasksFragment extends ListFragment /*implements LoaderManager.Loade
         final PrefManager prefManager = new PrefManager(getContext());
         userMobile = prefManager.getMobileNumber();
 //        ListView tasksList = getListView();
-        tasksRef = new Firebase("https://teamkarma.firebaseio.com/login/" + userMobile + "/user_tasks");
-        final Firebase usersRef = new Firebase("https://teamkarma.firebaseio.com/login");
+        final Firebase usersRef = new Firebase(PrefManager.LOGIN_REF);
+        tasksRef = usersRef.child(userMobile).child("user_tasks");
 
         adapter = new FirebaseListAdapter<TaskItem>(getActivity(), TaskItem.class, R.layout.fragment_tasks, tasksRef) {
             String assigneeName;
@@ -226,7 +226,7 @@ public class TasksFragment extends ListFragment /*implements LoaderManager.Loade
         final String creatorKey = creatorId.getText().toString();
         String assigneeKey = assigneeId.getText().toString();
         String assigneeRef = ((TextView) listItem.findViewById(R.id.assignee_ref)).getText().toString();
-        final Firebase usersRef = PrefManager.LOGIN_REF;
+        final Firebase usersRef = new Firebase(PrefManager.LOGIN_REF);
         if (creatorKey.equals(userMobile)) {
             if (!assigneeRef.isEmpty())
                 usersRef.child(assigneeKey).child("user_tasks").child(assigneeRef).removeValue();
@@ -292,7 +292,7 @@ public class TasksFragment extends ListFragment /*implements LoaderManager.Loade
         if (assigneeKey.equals(userMobile))
             taskId = taskID.getText().toString();
         else
-            taskId = PrefManager.LOGIN_REF
+            taskId = new Firebase(PrefManager.LOGIN_REF)
                     .child(assigneeKey).child("user_tasks")
                     .child(assigneeRef).toString();
 
