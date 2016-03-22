@@ -2399,19 +2399,20 @@ containing a value of this type.
         public static final int common_plus_signin_btn_text_light_pressed=0x7f020076;
         public static final int design_fab_background=0x7f020077;
         public static final int design_snackbar_background=0x7f020078;
-        public static final int edit=0x7f020079;
-        public static final int facebook_button=0x7f02007a;
-        public static final int google_button=0x7f02007b;
-        public static final int ic_add_white_48dp=0x7f02007c;
+        public static final int facebook_button=0x7f020079;
+        public static final int google_button=0x7f02007a;
+        public static final int ic_add_white_48dp=0x7f02007b;
+        public static final int ic_edit=0x7f02007c;
         public static final int ic_facebook=0x7f02007d;
         public static final int ic_google=0x7f02007e;
         public static final int ic_menu_sending=0x7f02007f;
-        public static final int ic_twitter=0x7f020080;
-        public static final int notification_template_icon_bg=0x7f020085;
-        public static final int or_line=0x7f020081;
-        public static final int password_button=0x7f020082;
-        public static final int scrim=0x7f020083;
-        public static final int twitter_button=0x7f020084;
+        public static final int ic_notification=0x7f020080;
+        public static final int ic_twitter=0x7f020081;
+        public static final int notification_template_icon_bg=0x7f020086;
+        public static final int or_line=0x7f020082;
+        public static final int password_button=0x7f020083;
+        public static final int scrim=0x7f020084;
+        public static final int twitter_button=0x7f020085;
     }
     public static final class id {
         public static final int action0=0x7f0c00aa;

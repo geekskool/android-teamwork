@@ -173,11 +173,7 @@ public class CommentsActivity extends AppCompatActivity /*implements LoaderManag
                     Log.v("inserted at:", rowUri.toString());
                     Log.v("values:", txt + " " + taskId);*/
 
-                    //TODO also put commenter contact once login activity is done.
-                    Map<String, String> comment = new HashMap<>();
-                    comment.put(TasksContract.MessageEntry.COL_MSG, txt);
-                    comment.put(TasksContract.MessageEntry.COL_FROM, userMobile);
-                    comment.put("timestamp", "" + System.currentTimeMillis());
+                    CommentItem comment = new CommentItem(userMobile, txt, "" + System.currentTimeMillis());
                     commentsRef.push().setValue(comment);
                 } catch (Exception e) {
                     e.printStackTrace();

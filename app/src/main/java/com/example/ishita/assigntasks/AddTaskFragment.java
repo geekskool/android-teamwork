@@ -19,6 +19,7 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.ishita.assigntasks.data.CommentItem;
 import com.example.ishita.assigntasks.data.TasksContract;
 import com.example.ishita.assigntasks.helper.PrefManager;
 import com.firebase.client.DataSnapshot;
@@ -351,10 +352,7 @@ public class AddTaskFragment extends Fragment {
                 commentCursor.close();*/
 
                 //also upload the comment to the firebase tasks table
-                Map<String, String> comment = new HashMap<>();
-                comment.put(TasksContract.MessageEntry.COL_MSG, mComments);
-                comment.put(TasksContract.MessageEntry.COL_FROM, userMobile);
-                comment.put("timestamp", "" + System.currentTimeMillis());
+                CommentItem comment = new CommentItem(userMobile, mComments, "" + System.currentTimeMillis());
                 Firebase commentRef = assigneeTaskRef.child("comments");
                 commentRef.push().setValue(comment);
                 /*if (creatorTaskRef != null) {
