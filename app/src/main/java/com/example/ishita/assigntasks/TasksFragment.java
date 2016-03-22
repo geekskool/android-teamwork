@@ -222,13 +222,14 @@ public class TasksFragment extends ListFragment /*implements LoaderManager.Loade
         TextView creatorId = (TextView) listItem.findViewById(R.id.creator_id);
         TextView assigneeId = (TextView) listItem.findViewById(R.id.assignee_contact);
         final Firebase task = new Firebase(taskId.getText().toString());
-        final String taskKey = task.toString().substring(task.toString().length() - 20);
+//        final String taskKey = task.toString().substring(task.toString().length() - 20);
         final String creatorKey = creatorId.getText().toString();
         String assigneeKey = assigneeId.getText().toString();
         String assigneeRef = ((TextView) listItem.findViewById(R.id.assignee_ref)).getText().toString();
         final Firebase usersRef = PrefManager.LOGIN_REF;
         if (creatorKey.equals(userMobile)) {
-            usersRef.child(assigneeKey).child("user_tasks").child(assigneeRef).removeValue();
+            if (!assigneeRef.isEmpty())
+                usersRef.child(assigneeKey).child("user_tasks").child(assigneeRef).removeValue();
             task.removeValue();
         }
         if (!creatorKey.equals(assigneeKey) && assigneeKey.equals(userMobile)) {
