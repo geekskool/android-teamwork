@@ -29,7 +29,7 @@
         android:layout_margin="10dp" />
 
     <TextView
-        android:layout_width="fill_parent"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="25dp"
         android:gravity="center_horizontal"
@@ -81,7 +81,16 @@
             android:background="@color/colorPrimaryDark"
             android:text="@string/action_sign_in_short"
             android:textSize="14sp" />
-    </LinearLayout>
 
+        <ProgressBar
+            android:id="@+id/progressBar"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="center|bottom"
+            android:layout_margin="50dp"
+            android:indeterminateTint="@android:color/white"
+            android:indeterminateTintMode="src_atop"
+            android:visibility="gone" />
+    </LinearLayout>
 
 </LinearLayout>

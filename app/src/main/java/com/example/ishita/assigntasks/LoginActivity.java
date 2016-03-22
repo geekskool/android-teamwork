@@ -42,7 +42,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 //    private ViewPagerAdapter adapter;
     private Button btnRequestSms, btnVerifyOtp;
     private EditText inputName, inputEmail, inputMobile, inputOtp;
-    //    private ProgressBar progressBar;
+    private ProgressBar progressBar;
     private PrefManager pref;
 //    private ImageButton btnEditMobile;
 //    private TextView txtEditMobile;
@@ -65,7 +65,7 @@ int flag = 0;
 //        inputOtp = (EditText) findViewById(R.id.inputOtp);
         btnRequestSms = (Button) findViewById(R.id.btn_request_sms);
 //        btnVerifyOtp = (Button) findViewById(R.id.btn_verify_otp);
-//        progressBar = (ProgressBar) findViewById(R.id.progressBar);
+        progressBar = (ProgressBar) findViewById(R.id.progressBar);
 //        btnEditMobile = (ImageButton) findViewById(R.id.btn_edit_mobile);
 //        txtEditMobile = (TextView) findViewById(R.id.txt_edit_mobile);
 //        layoutEditMobile = (LinearLayout) findViewById(R.id.layout_edit_mobile);
@@ -156,7 +156,7 @@ int flag = 0;
         if (isValidPhoneNumber(mobile)) {
 
             // request for sms
-//            progressBar.setVisibility(View.VISIBLE);
+            progressBar.setVisibility(View.VISIBLE);
 
             // saving the mobile number in shared preferences
             pref.setMobileNumber(mobile);
