@@ -206,7 +206,7 @@ ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidMa
 	android:name
 		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:79:13-40
 service#com.example.ishita.assigntasks.helper.NotificationListener
-ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:88:9-63
+ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:88:9-64
 	android:name
 		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:88:18-61
 uses-sdk
