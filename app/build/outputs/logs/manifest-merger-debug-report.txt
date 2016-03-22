@@ -1,6 +1,6 @@
 -- Merging decision tree log ---
 manifest
-ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:2:1-89:12
+ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:2:1-92:12
 	package
 		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:4:5-45
 		INJECTED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml
@@ -68,7 +68,7 @@ ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidMa
 	android:name
 		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:20:19-58
 application
-ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:22:5-87:19
+ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:22:5-90:19
 MERGED from [com.android.support:appcompat-v7:23.2.1] /home/ishita/AndroidStudioProjects/AssignTasks/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.2.1/AndroidManifest.xml:25:5-20
 MERGED from [com.android.support:support-v4:23.2.1] /home/ishita/AndroidStudioProjects/AssignTasks/app/build/intermediates/exploded-aar/com.android.support/support-v4/23.2.1/AndroidManifest.xml:22:5-20
 MERGED from [com.android.support:animated-vector-drawable:23.2.1] /home/ishita/AndroidStudioProjects/AssignTasks/app/build/intermediates/exploded-aar/com.android.support/animated-vector-drawable/23.2.1/AndroidManifest.xml:7:5-20
@@ -205,6 +205,10 @@ ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidMa
 		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:82:13-56
 	android:name
 		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:79:13-40
+service#com.example.ishita.assigntasks.helper.NotificationListener
+ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:88:9-63
+	android:name
+		ADDED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml:88:18-61
 uses-sdk
 INJECTED from /home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/AndroidManifest.xml reason: use-sdk injection requested
 MERGED from [com.android.support:appcompat-v7:23.2.1] /home/ishita/AndroidStudioProjects/AssignTasks/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/23.2.1/AndroidManifest.xml:21:5-23:78

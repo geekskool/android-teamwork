@@ -12,6 +12,7 @@ import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 
 import com.example.ishita.assigntasks.R;
+import com.example.ishita.assigntasks.data.TaskItem;
 import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -34,39 +35,46 @@ public class NotificationListener extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         //Opening sharedpreferences
-        PrefManager sharedPreferences = new PrefManager(getApplicationContext());
+        Log.v(NotificationListener.class.getSimpleName(), "inside onStartCommand");
+        PrefManager sharedPreferences = new PrefManager(this);
         userMobile = sharedPreferences.getMobileNumber();
 
         //Getting the firebase id from sharedpreferences
 //        String id = sharedPreferences.getString(Constants.UNIQUE_ID, null);
 
+        //Set the firebase android context
+        Firebase.setAndroidContext(getApplicationContext());
+
         //Creating a firebase object
-        final Firebase tasksRef = new Firebase(PrefManager.LOGIN_REF.child(userMobile).child("user_tasks").toString());
+        final Firebase tasksRef = new Firebase(PrefManager.LOGIN_REF).child(userMobile).child("user_tasks");
 
         //Adding a child event listener to firebase
         //this will help us to  track the value changes on firebase
-        tasksRef.addValueEventListener(new ValueEventListener() {
-
-            //This method is called whenever we change the value in firebase
+        tasksRef.addChildEventListener(new ChildEventListener() {
             @Override
-            public void onDataChange(DataSnapshot snapshot) {
-                //Getting the value from firebase
-                //We stored none as a initial value
-                String msg = snapshot.child("msg").getValue().toString();
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                TaskItem taskItem = dataSnapshot.getValue(TaskItem.class);
+                Log.v("Tasks", "description: " + taskItem.getDescription() + "\nassignee: " + taskItem.getAssignee_id() + "\ndue date: " + taskItem.getDue_date());
+            }
 
-                //So if the value is none we will not create any notification
-                if (msg.equals("none"))
-                    return;
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
 
-                //If the value is anything other than none that means a notification has arrived
-                //calling the method to show notification
-                //String msg is containing the msg that has to be shown with the notification
-                showNotification(msg);
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
             }
 
             @Override
             public void onCancelled(FirebaseError firebaseError) {
-                Log.e("The read failed: ", firebaseError.getMessage());
+
             }
         });
 

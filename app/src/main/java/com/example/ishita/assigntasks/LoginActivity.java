@@ -24,6 +24,7 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
+import com.example.ishita.assigntasks.helper.NotificationListener;
 import com.example.ishita.assigntasks.helper.PrefManager;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -85,6 +86,8 @@ int flag = 0;
         // Checking for user session
         // if user is already logged in, take him to main activity
         if (pref.isLoggedIn()) {
+            startService(new Intent(this, NotificationListener.class));
+            Log.v(LoginActivity.class.getSimpleName(), "just called startService");
             Intent intent = new Intent(LoginActivity.this, AddTask.class);
 //            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(intent);
@@ -169,7 +172,7 @@ int flag = 0;
             pref.setMobileNumber(mobile);
 
             //Lines added by me...
-            Firebase loginRef = PrefManager.LOGIN_REF;
+            Firebase loginRef = new Firebase(PrefManager.LOGIN_REF);
             loginRef.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
@@ -177,6 +180,7 @@ int flag = 0;
                         if (mobile.equals(loginSnapshot.getKey())) {
                             setFlag(1);
                             pref.createLogin(mobile);
+                            startService(new Intent(getApplication(), NotificationListener.class));
                             Intent intent = new Intent(LoginActivity.this, AddTask.class);
                             startActivity(intent);
                             finish();
@@ -184,7 +188,7 @@ int flag = 0;
                         }
                     }
                     if (flag == 0) {
-                        Toast.makeText(getApplicationContext(), "This mobile number is not authorized.", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "The mobile number you entered could not be recognized.\nPlease try again.", Toast.LENGTH_SHORT).show();
                         inputMobile.setText("");
                         inputMobile.requestFocus();
                         progressBar.setVisibility(View.GONE);

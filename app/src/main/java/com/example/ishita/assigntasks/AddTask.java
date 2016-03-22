@@ -18,7 +18,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.example.ishita.assigntasks.helper.NotificationListener;
 import com.firebase.client.Firebase;
 import com.google.android.gms.appindexing.Action;
 import com.google.android.gms.appindexing.AppIndex;
@@ -60,8 +59,6 @@ public class AddTask extends AppCompatActivity {
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        startService(new Intent(this, NotificationListener.class));
 
         //fill the fragments list with the fragment classes
         fragments.add(AddTaskFragment.class.getName());
