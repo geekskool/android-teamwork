@@ -45,7 +45,6 @@
             android:layout_toLeftOf="@id/due_date_taskList"
             android:layout_toStartOf="@id/due_date_taskList"
             android:padding="5dp"
-            android:text="Task"
             android:textAppearance="?android:textAppearanceMedium"
             android:textColor="@color/colorAccent"
             android:textStyle="bold" />
@@ -58,6 +57,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
+        android:text="@string/loading_task_details"
         android:padding="5dp"
         android:textAppearance="?android:textAppearanceSmall" />
 

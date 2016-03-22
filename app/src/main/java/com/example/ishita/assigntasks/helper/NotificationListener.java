@@ -10,7 +10,9 @@ import android.net.Uri;
 import android.os.IBinder;
 import android.support.v7.app.NotificationCompat;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.example.ishita.assigntasks.AddTask;
 import com.example.ishita.assigntasks.R;
 import com.example.ishita.assigntasks.data.TaskItem;
 import com.firebase.client.ChildEventListener;
@@ -55,6 +57,9 @@ public class NotificationListener extends Service {
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 TaskItem taskItem = dataSnapshot.getValue(TaskItem.class);
                 Log.v("Tasks", "description: " + taskItem.getDescription() + "\nassignee: " + taskItem.getAssignee_id() + "\ndue date: " + taskItem.getDue_date());
+                if (taskItem.getAssignee_id().equals(userMobile) && !taskItem.getCreator_id().equals(userMobile)) {
+                    showNotification(taskItem.getDescription());
+                }
             }
 
             @Override
@@ -64,7 +69,10 @@ public class NotificationListener extends Service {
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-
+                TaskItem taskItem = dataSnapshot.getValue(TaskItem.class);
+                if (taskItem.getAssignee_id().equals(userMobile) && !taskItem.getCreator_id().equals(userMobile)) {
+                    Log.v(NotificationListener.class.getSimpleName(), "Task item " + taskItem.getDescription() + " has been deleted.");
+                }
             }
 
             @Override
@@ -74,7 +82,7 @@ public class NotificationListener extends Service {
 
             @Override
             public void onCancelled(FirebaseError firebaseError) {
-
+                Log.e("The read failed: ", firebaseError.getMessage());
             }
         });
 
@@ -82,16 +90,16 @@ public class NotificationListener extends Service {
     }
 
 
-    private void showNotification(String msg) {
+    private void showNotification(String taskName) {
         //Creating a notification
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
-        builder.setSmallIcon(R.mipmap.ic_launcher);
-        Intent intent = new Intent(Intent.ACTION_VIEW, Uri.parse("https://www.simplifiedcoding.net"));
+        builder.setSmallIcon(R.drawable.ic_notification);
+        Intent intent = new Intent(this, AddTask.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
         builder.setContentIntent(pendingIntent);
         builder.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher));
-        builder.setContentTitle("Firebase Push Notification");
-        builder.setContentText(msg);
+        builder.setContentTitle("TeamKarma");
+        builder.setContentText("You have a new task: " + taskName);
         NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
         notificationManager.notify(1, builder.build());
     }
