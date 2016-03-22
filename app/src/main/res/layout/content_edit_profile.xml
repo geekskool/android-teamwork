@@ -32,7 +32,7 @@
             android:layout_gravity="bottom|end"
             android:background="@android:color/transparent"
             android:contentDescription="@string/action_profile_pic"
-            android:src="@drawable/edit"
+            android:src="@drawable/ic_edit"
             android:onClick="editPhoto" />
     </FrameLayout>
 
