@@ -1,5 +1,6 @@
 package com.example.ishita.assigntasks;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -10,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -122,6 +124,11 @@ int flag = 0;
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btn_request_sms:
+                InputMethodManager inputManager = (InputMethodManager)
+                        getSystemService(Context.INPUT_METHOD_SERVICE);
+
+                inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
+                        InputMethodManager.HIDE_NOT_ALWAYS);
                 validateForm();
                 break;
 
@@ -180,6 +187,7 @@ int flag = 0;
                         Toast.makeText(getApplicationContext(), "This mobile number is not authorized.", Toast.LENGTH_SHORT).show();
                         inputMobile.setText("");
                         inputMobile.requestFocus();
+                        progressBar.setVisibility(View.GONE);
                     }
                 }
 
