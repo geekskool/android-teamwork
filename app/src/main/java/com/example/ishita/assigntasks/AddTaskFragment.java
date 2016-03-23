@@ -313,7 +313,7 @@ public class AddTaskFragment extends Fragment {
             //push the task details on to the assignee's task list as a new task
             Firebase assigneeTaskRef = rootrefUsers.child(mAssigneeContact).child("user_tasks").push();
             assigneeTaskRef.setValue(task);
-            Firebase creatorTaskRef = null;
+            Firebase creatorTaskRef;
             //if the assignee is not the creator, add another field, assignee_ref, to store the key where the
             //task is assigned to the assignee, into the task details. Then push the task details to the
             //creator's task list as well. Add the creator's task ref to the assignee's task as well.
