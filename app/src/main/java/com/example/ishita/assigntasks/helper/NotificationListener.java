@@ -1,16 +1,15 @@
 package com.example.ishita.assigntasks.helper;
 
+import android.animation.AnimatorSet;
+import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
 import android.os.IBinder;
 import android.support.v7.app.NotificationCompat;
 import android.util.Log;
-import android.widget.Toast;
 
 import com.example.ishita.assigntasks.AddTask;
 import com.example.ishita.assigntasks.R;
@@ -19,7 +18,8 @@ import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
-import com.firebase.client.ValueEventListener;
+
+import java.util.List;
 
 /**
  * Created by ishita on 22/3/16.
@@ -41,12 +41,6 @@ public class NotificationListener extends Service {
         PrefManager sharedPreferences = new PrefManager(this);
         userMobile = sharedPreferences.getMobileNumber();
 
-        //Getting the firebase id from sharedpreferences
-//        String id = sharedPreferences.getString(Constants.UNIQUE_ID, null);
-
-        //Set the firebase android context
-        Firebase.setAndroidContext(getApplicationContext());
-
         //Creating a firebase object
         final Firebase tasksRef = new Firebase(PrefManager.LOGIN_REF).child(userMobile).child("user_tasks");
 
@@ -56,9 +50,9 @@ public class NotificationListener extends Service {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 TaskItem taskItem = dataSnapshot.getValue(TaskItem.class);
-                Log.v("Tasks", "description: " + taskItem.getDescription() + "\nassignee: " + taskItem.getAssignee_id() + "\ndue date: " + taskItem.getDue_date());
-                if (taskItem.getAssignee_id().equals(userMobile) && !taskItem.getCreator_id().equals(userMobile)) {
+                if (taskItem.getAssignee_id().equals(userMobile) && dataSnapshot.hasChild("notify")) {
                     showNotification(taskItem.getDescription());
+                    dataSnapshot.getRef().child("notify").removeValue();
                 }
             }
 
@@ -89,6 +83,17 @@ public class NotificationListener extends Service {
         return START_STICKY;
     }
 
+    /*private void addTaskKey(String taskKey) {
+        PrefManager.taskKeys.add(taskKey);
+        Log.v("addTaskKey", taskKey);
+        printKeys();
+    }
+
+    private void printKeys() {
+        for (String taskKey : PrefManager.taskKeys) {
+            Log.v("taskKey", taskKey);
+        }
+    }*/
 
     private void showNotification(String taskName) {
         //Creating a notification
@@ -100,7 +105,11 @@ public class NotificationListener extends Service {
         builder.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher));
         builder.setContentTitle("TeamKarma");
         builder.setContentText("You have a new task: " + taskName);
+        builder.setPriority(Notification.PRIORITY_HIGH);
+        builder.setAutoCancel(true);
+        Notification notification = builder.build();
+        notification.defaults |= Notification.DEFAULT_ALL;
         NotificationManager notificationManager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-        notificationManager.notify(1, builder.build());
+        notificationManager.notify(1, notification);
     }
 }

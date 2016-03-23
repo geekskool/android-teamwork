@@ -3707,14 +3707,7 @@
                     "endOffset": 47397
                 },
                 "from": {
-                    "file": "/home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/res/values/strings.xml",
-                    "position": {
-                        "startLine": 47,
-                        "startColumn": 4,
-                        "startOffset": 2727,
-                        "endColumn": 72,
-                        "endOffset": 2795
-                    }
+                    "file": "/home/ishita/AndroidStudioProjects/AssignTasks/app/src/main/res/values/strings.xml"
                 }
             },
             {

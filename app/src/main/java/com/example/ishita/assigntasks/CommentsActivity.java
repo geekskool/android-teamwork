@@ -58,7 +58,6 @@ public class CommentsActivity extends AppCompatActivity /*implements LoaderManag
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comments);
-        Firebase.setAndroidContext(this);
 
         prefManager = new PrefManager(getApplicationContext());
         userMobile = prefManager.getMobileNumber();
