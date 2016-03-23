@@ -93,13 +93,14 @@ public class AddTaskFragment extends Fragment {
 
         //comparing the date picked with today's date
         Date now = new Date(System.currentTimeMillis());
-        String datePicked = sdf.format(myCalendar.getTime());
-        int result = datePicked.compareTo(sdf.format(now));
+        Date datePicked = myCalendar.getTime();
+        int result = datePicked.compareTo(now);
+
 
         //setting due date after validation
         if (result >= 0) {
             EditText dueDate = (EditText) rootView.findViewById(R.id.due_date);
-            dueDate.setText(datePicked);
+            dueDate.setText(sdf.format(datePicked));
         } else {
             Toast.makeText(getContext(), R.string.due_date_validation, Toast.LENGTH_SHORT).show();
         }
@@ -316,6 +317,8 @@ public class AddTaskFragment extends Fragment {
             //if the assignee is not the creator, add another field, assignee_ref, to store the key where the
             //task is assigned to the assignee, into the task details. Then push the task details to the
             //creator's task list as well. Add the creator's task ref to the assignee's task as well.
+            //Also, add a "notify" field to the assignee's task details so that the assignee can be notified
+            //that he/she has a new task. This field will be deleted upon notifying the assignee.
             if (!mAssigneeContact.equals(userMobile)) {
                 task.put("assignee_ref", assigneeTaskRef.toString().substring(assigneeTaskRef.toString().length() - 20));
                 creatorTaskRef = rootrefUsers.child(userMobile).child("user_tasks").push();
@@ -323,6 +326,7 @@ public class AddTaskFragment extends Fragment {
                 Map<String, Object> creatorRef = new HashMap<>();
                 creatorRef.put("assignee_ref", creatorTaskRef.toString().substring(creatorTaskRef.toString().length() - 20));
                 assigneeTaskRef.updateChildren(creatorRef);
+                assigneeTaskRef.child("notify").setValue("true");
             }
 
             //If there is a comment, update the comment and its task key into the messages table
