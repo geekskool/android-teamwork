@@ -1,6 +1,5 @@
 package com.example.ishita.assigntasks.helper;
 
-import android.animation.AnimatorSet;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -19,14 +18,14 @@ import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
 
-import java.util.List;
-
 /**
  * Created by ishita on 22/3/16.
  */
 public class NotificationListener extends Service {
 
     String userMobile;
+    static final String ADD = "add";
+    static final String DELETE = "delete";
 
     @Override
     public IBinder onBind(Intent intent) {
@@ -36,6 +35,10 @@ public class NotificationListener extends Service {
     //When the service is started
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+
+        //TODO: figure out how to notify when new message arrives on firebase. Activity visibility
+        //has been taken care of.
+
         //Opening sharedpreferences
         Log.v(NotificationListener.class.getSimpleName(), "inside onStartCommand");
         PrefManager sharedPreferences = new PrefManager(this);
@@ -51,7 +54,7 @@ public class NotificationListener extends Service {
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 TaskItem taskItem = dataSnapshot.getValue(TaskItem.class);
                 if (taskItem.getAssignee_id().equals(userMobile) && dataSnapshot.hasChild("notify")) {
-                    showNotification(taskItem.getDescription());
+                    showNotification(taskItem.getDescription(), ADD);
                     dataSnapshot.getRef().child("notify").removeValue();
                 }
             }
@@ -64,8 +67,9 @@ public class NotificationListener extends Service {
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
                 TaskItem taskItem = dataSnapshot.getValue(TaskItem.class);
-                if (taskItem.getAssignee_id().equals(userMobile) && !taskItem.getCreator_id().equals(userMobile)) {
-                    Log.v(NotificationListener.class.getSimpleName(), "Task item " + taskItem.getDescription() + " has been deleted.");
+                if (taskItem.getAssignee_id().equals(userMobile) || taskItem.getCreator_id().equals(userMobile)) {
+                    Log.v("task removed", taskItem.getDescription());
+                    showNotification(taskItem.getDescription(), DELETE);
                 }
             }
 
@@ -95,7 +99,7 @@ public class NotificationListener extends Service {
         }
     }*/
 
-    private void showNotification(String taskName) {
+    private void showNotification(String taskName, String category) {
         //Creating a notification
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
         builder.setSmallIcon(R.drawable.ic_notification);
@@ -104,7 +108,11 @@ public class NotificationListener extends Service {
         builder.setContentIntent(pendingIntent);
         builder.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher));
         builder.setContentTitle("TeamKarma");
-        builder.setContentText("You have a new task: " + taskName);
+        if (category.equals(ADD))
+            builder.setContentText("You have a new task: " + taskName);
+        else if (category.equals(DELETE)) {
+            builder.setContentText("Your task \"" + taskName + "\" was removed.");
+        }
         builder.setPriority(Notification.PRIORITY_HIGH);
         builder.setAutoCancel(true);
         Notification notification = builder.build();
