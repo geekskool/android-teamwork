@@ -221,7 +221,6 @@ public class AddTaskFragment extends Fragment {
 
                     if (cursor.moveToFirst()) {
                         mAssigneeName = cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME)).trim();
-                        //TODO ask Santosh if only the last 10 digits of the phone number should be used for safe side
                         mAssigneeContact = cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.NUMBER)).replaceAll("\\s+", "");
                         if (mAssigneeContact.length() > 10)
                             mAssigneeContact = mAssigneeContact.substring(mAssigneeContact.length() - 10);

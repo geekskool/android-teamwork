@@ -16,7 +16,6 @@
     <string name="no_task_details">Task details not updated yet.</string>
     <string name="swipe_right_to_save">You can also swipe right to save this task</string>
     <string name="due_date_validation">Due date cannot be earlier than today.</string>
-    <!--<string name="title_activity_login">Sign in</string>-->
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
@@ -36,7 +35,6 @@
     <string name="title_activity_addtask">Tasks</string>
     <string name="empty_task_comment_error">No task to comment on.</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="no_task_for_you">No tasks assigned to you yet. Swipe left to create a new task</string>
     <string name="dismiss">Dismiss</string>

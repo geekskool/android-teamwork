@@ -1,5 +1,6 @@
 package com.example.ishita.assigntasks;
 
+import android.app.Application;
 import android.content.Context;
 import android.database.Cursor;
 import android.graphics.Color;
@@ -16,6 +17,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.ishita.assigntasks.data.TasksContract;
+import com.example.ishita.assigntasks.helper.PrefManager;
 
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -28,6 +30,8 @@ import java.util.TimeZone;
  * Created by ishita on 5/2/16.
  */
 public class CommentsCursorAdapter extends CursorAdapter {
+
+    PrefManager prefManager;
     public CommentsCursorAdapter(Context context, Cursor c, int flags) {
         super(context, c, flags);
     }
@@ -63,8 +67,8 @@ public class CommentsCursorAdapter extends CursorAdapter {
     public void bindView(View view, Context context, Cursor cursor) {
         ViewHolder viewHolder = (ViewHolder) view.getTag();
         LinearLayout root = (LinearLayout) view;
-        //TODO replace NULL in this check by the sender ID once login activity is done.
-        if (cursor.getString(cursor.getColumnIndex(TasksContract.MessageEntry.COL_FROM)) == null) {
+        prefManager = new PrefManager(context);
+        if (cursor.getString(cursor.getColumnIndex(TasksContract.MessageEntry.COL_FROM)).equals(prefManager.getMobileNumber())) {
             GradientDrawable sd = (GradientDrawable) viewHolder.box.getBackground().mutate();
             sd.setColor(Color.parseColor("#FBE9E7"));
             sd.invalidateSelf();
@@ -81,7 +85,7 @@ public class CommentsCursorAdapter extends CursorAdapter {
         viewHolder.timeStamp.setText(formatDate(cursor.getString(cursor.getColumnIndex(TasksContract.MessageEntry.COL_AT))));
     }
 
-    public String formatDate(String stringDate) {
+    private String formatDate(String stringDate) {
         DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd' 'HH:mm:ss");
         sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
         try {

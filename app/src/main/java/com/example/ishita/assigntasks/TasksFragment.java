@@ -34,11 +34,11 @@ import com.firebase.ui.FirebaseListAdapter;
  * create an instance of this fragment.
  */
 public class TasksFragment extends ListFragment /*implements LoaderManager.LoaderCallbacks<Cursor> */ {
-    // TODO: Rename parameter arguments, choose names that match
+    // Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_SECTION_NUMBER = "section_number";
 
-    // TODO: Rename and change types of parameters
+    // Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
@@ -55,7 +55,7 @@ public class TasksFragment extends ListFragment /*implements LoaderManager.Loade
      *
      * @return A new instance of fragment TasksFragment.
      */
-    // TODO: Rename and change types and number of parameters
+    // Rename and change types and number of parameters
     public static TasksFragment newInstance(int sectionNumber) {
         TasksFragment fragment = new TasksFragment();
         Bundle args = new Bundle();
