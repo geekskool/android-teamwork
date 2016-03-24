@@ -203,7 +203,6 @@ public class CommentsFragment extends Fragment /*implements LoaderManager.Loader
                 TextView message = (TextView) view.findViewById(R.id.text1);
                 LinearLayout root = (LinearLayout) view;
                 TextView timeStamp = (TextView) view.findViewById(R.id.text2);
-                //TODO replace NULL in this check by the sender ID once login activity is done.
                 if (prefManager.getMobileNumber().equals(commentItem.getContact_from())) {
                     GradientDrawable sd = (GradientDrawable) box.getBackground().mutate();
                     sd.setColor(Color.parseColor("#FBE9E7"));
@@ -272,7 +271,6 @@ public class CommentsFragment extends Fragment /*implements LoaderManager.Loader
                             Log.v("inserted at:", rowUri.toString());
                             Log.v("values:", txt + " " + taskId);*/
 
-                    //TODO also put commenter contact once login activity is done.
                     Map<String, String> comment = new HashMap<>();
                     comment.put(TasksContract.MessageEntry.COL_MSG, txt);
                     comment.put(TasksContract.MessageEntry.COL_FROM, prefManager.getMobileNumber());
