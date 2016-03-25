@@ -1,8 +1,11 @@
 package com.example.ishita.assigntasks.data;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 /**
  * Created by ishita on 11/3/16.
  */
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class CommentItem {
     String contact_from;
     String msg;
