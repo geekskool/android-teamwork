@@ -3,7 +3,7 @@ package com.example.ishita.assigntasks.data;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 /**
- * Created by ishita on 11/3/16.
+ * This class stores each comment item fetched from firebase.
  */
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class CommentItem {
