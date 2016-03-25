@@ -173,7 +173,9 @@ public class CommentsActivity extends AppCompatActivity /*implements LoaderManag
                     Log.v("values:", txt + " " + taskId);*/
 
                     CommentItem comment = new CommentItem(userMobile, txt, "" + System.currentTimeMillis());
-                    commentsRef.push().setValue(comment);
+                    Firebase newCommentRef = commentsRef.push();
+                    newCommentRef.setValue(comment);
+                    newCommentRef.child("notify").setValue("true");
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
