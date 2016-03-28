@@ -312,18 +312,18 @@ public class AddTaskFragment extends Fragment {
             //push the task details on to the assignee's task list as a new task
             Firebase assigneeTaskRef = rootrefUsers.child(mAssigneeContact).child("user_tasks").push();
             assigneeTaskRef.setValue(task);
-            Firebase creatorTaskRef;
+            Firebase creatorTaskRef = null;
             //if the assignee is not the creator, add another field, assignee_ref, to store the key where the
             //task is assigned to the assignee, into the task details. Then push the task details to the
             //creator's task list as well. Add the creator's task ref to the assignee's task as well.
             //Also, add a "notify" field to the assignee's task details so that the assignee can be notified
             //that he/she has a new task. This field will be deleted upon notifying the assignee.
             if (!mAssigneeContact.equals(userMobile)) {
-                task.put("assignee_ref", assigneeTaskRef.toString().substring(assigneeTaskRef.toString().length() - 20));
+                task.put("assignee_ref", assigneeTaskRef.toString());
                 creatorTaskRef = rootrefUsers.child(userMobile).child("user_tasks").push();
                 creatorTaskRef.setValue(task);
                 Map<String, Object> creatorRef = new HashMap<>();
-                creatorRef.put("assignee_ref", creatorTaskRef.toString().substring(creatorTaskRef.toString().length() - 20));
+                creatorRef.put("assignee_ref", creatorTaskRef.toString());
                 assigneeTaskRef.updateChildren(creatorRef);
                 assigneeTaskRef.child("notify").setValue("true");
             }
@@ -350,10 +350,10 @@ public class AddTaskFragment extends Fragment {
                 CommentItem comment = new CommentItem(userMobile, mComments, "" + System.currentTimeMillis());
                 Firebase commentRef = assigneeTaskRef.child("comments");
                 commentRef.push().setValue(comment);
-                /*if (creatorTaskRef != null) {
+                if (creatorTaskRef != null) {
                     commentRef = creatorTaskRef.child("comments");
                     commentRef.push().setValue(comment);
-                }*/
+                }
             }
             mComments = null;
             mTaskName = null;

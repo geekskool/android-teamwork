@@ -205,7 +205,11 @@ public class TasksFragment extends ListFragment /*implements LoaderManager.Loade
         }
     }
 
-
+    /**
+     * Method to delete the task selected by user
+     *
+     * @param listItem the item that has been long-clicked by user
+     */
     private void delete(View listItem) {
 
             /*check whether the assignee key is the mobile number or the creator key is the mobile
@@ -226,14 +230,14 @@ public class TasksFragment extends ListFragment /*implements LoaderManager.Loade
         final String creatorKey = creatorId.getText().toString();
         String assigneeKey = assigneeId.getText().toString();
         String assigneeRef = ((TextView) listItem.findViewById(R.id.assignee_ref)).getText().toString();
-        final Firebase usersRef = new Firebase(PrefManager.LOGIN_REF);
+        Firebase assigneeTaskKey = new Firebase(assigneeRef);
         if (creatorKey.equals(userMobile)) {
             if (!assigneeRef.isEmpty())
-                usersRef.child(assigneeKey).child("user_tasks").child(assigneeRef).removeValue();
+                assigneeTaskKey.removeValue();
             task.removeValue();
         }
         if (!creatorKey.equals(assigneeKey) && assigneeKey.equals(userMobile)) {
-            usersRef.child(creatorKey).child("user_tasks").child(assigneeRef).removeValue();
+            assigneeTaskKey.removeValue();
             task.removeValue();
 
         }
@@ -278,27 +282,26 @@ public class TasksFragment extends ListFragment /*implements LoaderManager.Loade
     public void onListItemClick(ListView l, View v, int position, long id) {
         TextView taskName = (TextView) v.findViewById(R.id.task_list_item);
         TextView taskID = (TextView) v.findViewById(R.id.task_id);
-        String taskId;
+        String taskId = taskID.getText().toString();
         String description = taskName.getText().toString();
         /*if the user is the creator,
         *   pass the assignee ref as well as tasks ref
         * if user is the assignee,
         *   find the creator with the creator key and find the task in the creator's list
         *   using the assignee ref and pass this task ref along with our original task ref*/
-        String creatorKey = ((TextView) v.findViewById(R.id.creator_id)).getText().toString();
+//        String creatorKey = ((TextView) v.findViewById(R.id.creator_id)).getText().toString();
         String assigneeRef = ((TextView) v.findViewById(R.id.assignee_ref)).getText().toString();
-        String assigneeKey = ((TextView) v.findViewById(R.id.assignee_contact)).getText().toString();
+//        String assigneeKey = ((TextView) v.findViewById(R.id.assignee_contact)).getText().toString();
 
-        if (assigneeKey.equals(userMobile))
-            taskId = taskID.getText().toString();
+        /*if (assigneeKey.equals(userMobile))
+            taskId ;
         else
-            taskId = new Firebase(PrefManager.LOGIN_REF)
-                    .child(assigneeKey).child("user_tasks")
-                    .child(assigneeRef).toString();
+            taskId = assigneeRef;*/
 
         Intent intent = new Intent(getActivity(), CommentsActivity.class);
         intent.putExtra("TASK_ID", "" + taskId);
         intent.putExtra("TASK_NAME", description);
+        intent.putExtra("ASSIGNEE_REF", assigneeRef);
 
         startActivity(intent);
     }

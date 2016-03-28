@@ -357,8 +357,12 @@
     <string name="gcm_defaultSenderId" translatable="false">352679909753</string>
     <string name="google_app_id" translatable="false">1:352679909753:android:22be08c668663d31</string>
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="lbl_enter_otp">Enter OTP</string>
+    <string name="lbl_submit">Submit</string>
     <string name="loading_task_details">Loading task details...</string>
     <string name="msg_enter_mobile">Enter your mobile number to get started.</string>
+    <string name="msg_manual_otp">(Enter the OTP below in case if we fail to detect the SMS automatically)</string>
+    <string name="msg_wait_for_otp">Please wait while we verify your mobile number.</string>
     <string name="no_task_details">Task details not updated yet.</string>
     <string name="no_task_for_you">No tasks assigned to you yet. Swipe left to create a new task</string>
     <string name="permission_rationale">"Contacts permissions are needed for providing email

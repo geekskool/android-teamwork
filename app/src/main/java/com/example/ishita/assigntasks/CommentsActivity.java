@@ -47,9 +47,9 @@ public class CommentsActivity extends AppCompatActivity /*implements LoaderManag
 
     private EditText msgEdit;
     private ImageButton sendBtn;
-    private String taskId, taskName, userMobile;
+    private String taskId, taskName, assigneeRef, userMobile;
     FirebaseListAdapter/*CommentsCursorAdapter*/ adapter;
-    Firebase commentsRef;
+    Firebase commentsRef, assigneeCommentsRef;
     PrefManager prefManager;
 
     //private GcmUtil gcmUtil;
@@ -64,10 +64,12 @@ public class CommentsActivity extends AppCompatActivity /*implements LoaderManag
 
         taskId = getIntent().getStringExtra("TASK_ID");
         taskName = getIntent().getStringExtra("TASK_NAME");
+        assigneeRef = getIntent().getStringExtra("ASSIGNEE_REF");
 
         msgEdit = (EditText) findViewById(R.id.msg_edit);
         sendBtn = (ImageButton) findViewById(R.id.send_btn);
         commentsRef = new Firebase(taskId + "/comments");
+        assigneeCommentsRef = new Firebase(assigneeRef + "/comments");
 
         /*TasksDbHelper dbHelper = new TasksDbHelper(getApplicationContext());
         SQLiteDatabase readableDatabase = dbHelper.getReadableDatabase();*/
@@ -176,6 +178,9 @@ public class CommentsActivity extends AppCompatActivity /*implements LoaderManag
                     Firebase newCommentRef = commentsRef.push();
                     newCommentRef.setValue(comment);
                     newCommentRef.child("notify").setValue("true");
+                    Firebase assigneeNewComment = assigneeCommentsRef.push();
+                    assigneeNewComment.setValue(comment);
+                    assigneeNewComment.child("notify").setValue("true");
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
