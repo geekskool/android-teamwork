@@ -42,7 +42,7 @@ public class SmsReceiver extends BroadcastReceiver {
                     // verification code from sms
                     String verificationCode = getVerificationCode(message);
 
-                    Log.e(TAG, "OTP received: " + verificationCode);
+                    Log.i(TAG, "OTP received: " + verificationCode);
 
                     Intent httpIntent = new Intent(context, HttpService.class);
                     httpIntent.putExtra("otp", verificationCode);
