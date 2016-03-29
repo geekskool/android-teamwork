@@ -32,7 +32,7 @@ public class SmsReceiver extends BroadcastReceiver {
                     String senderAddress = currentMessage.getDisplayOriginatingAddress();
                     String message = currentMessage.getDisplayMessageBody();
 
-                    Log.e(TAG, "Received SMS: " + message + ", Sender: " + senderAddress);
+                    Log.i(TAG, "Received SMS: " + message + ", Sender: " + senderAddress);
 
                     // if the SMS is not from our gateway, ignore the message
                     if (!senderAddress.toLowerCase().contains(Config.SMS_ORIGIN.toLowerCase())) {
