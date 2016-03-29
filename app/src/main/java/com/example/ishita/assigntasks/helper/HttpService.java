@@ -49,6 +49,7 @@ public class HttpService extends IntentService {
             Log.e(TAG, "Error converting OTP string to JSON: " + e.toString());
         }
 
+        Log.v(TAG, "otp" + otpObject.toString());
         JsonObjectRequest otpRequest = new JsonObjectRequest(Request.Method.POST,
                 Config.URL_VERIFY_OTP,
                 otpObject,
@@ -59,19 +60,15 @@ public class HttpService extends IntentService {
 
                         try {
                             // Parsing json object response
-                            // response will be a json object
                             boolean error = responseObj.getBoolean("error");
                             String message = responseObj.getString("message");
 
                             if (!error) {
-                                // parsing the user profile information
-                                JSONObject profileObj = responseObj.getJSONObject("profile");
-
-                                String mobile = profileObj.getString("mobile");
-
+                                //creating the login using the mobile number set in preferences
                                 PrefManager pref = new PrefManager(getApplicationContext());
-                                pref.createLogin(mobile);
+                                pref.createLogin(pref.getMobileNumber());
 
+                                //opening up the tasks screen for user to view/add tasks
                                 Intent intent = new Intent(HttpService.this, AddTask.class);
                                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                 startActivity(intent);
