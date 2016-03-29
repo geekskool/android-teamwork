@@ -23,6 +23,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.ishita.assigntasks.helper.PrefManager;
 import com.firebase.client.Firebase;
@@ -92,6 +93,7 @@ public class EditProfile extends AppCompatActivity {
         } else {
             loginRef.child(userDetails.get("mobile")).child("picture").removeValue();
         }
+        Toast.makeText(getApplicationContext(), "Profile updated.", Toast.LENGTH_SHORT).show();
     }
 
     /**
