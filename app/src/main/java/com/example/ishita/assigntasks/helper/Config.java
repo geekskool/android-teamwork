@@ -1,7 +1,7 @@
 package com.example.ishita.assigntasks.helper;
 
 /**
- * Created by ishita on 25/3/16.
+ * This class contains very important app configuration information.
  */
 public class Config {
     //TODO fill all the relevant info when server work is done.
