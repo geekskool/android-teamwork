@@ -28,6 +28,7 @@ import android.widget.Toast;
 import com.example.ishita.assigntasks.data.CommentItem;
 import com.example.ishita.assigntasks.data.TasksContract;
 import com.example.ishita.assigntasks.data.TasksDbHelper;
+import com.example.ishita.assigntasks.helper.Config;
 import com.example.ishita.assigntasks.helper.PrefManager;
 import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
@@ -46,21 +47,19 @@ import java.util.TimeZone;
 
 
 /**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * {@link CommentsFragment/*.OnFragmentInteractionListener
- *//*} interface
- * to handle interaction events.
+ * This fragment shows the last task created by or for the user logged in.
+ * Change this to show team members in the user's team when teams are implemented.
  * Use the {@link CommentsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
 public class CommentsFragment extends Fragment /*implements LoaderManager.LoaderCallbacks<Cursor>*/ {
-    // TODO: Rename parameter arguments, choose names that match
+    // Default params for factory method.
+    // Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
+    // Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
@@ -108,7 +107,7 @@ public class CommentsFragment extends Fragment /*implements LoaderManager.Loader
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
-        final Firebase tasksRef = new Firebase("https://teamkarma.firebaseio.com/tasks");
+        final Firebase tasksRef = new Firebase(Config.LOGIN_REF).child(prefManager.getMobileNumber()).child("user_tasks");
         Query queryRef = tasksRef.orderByKey().limitToLast(1);
         queryRef.addChildEventListener(new ChildEventListener() {
             @Override
