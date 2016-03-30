@@ -2,7 +2,6 @@ package com.example.ishita.assigntasks;
 
 import android.app.Activity;
 import android.app.DatePickerDialog;
-import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.net.Uri;
@@ -21,16 +20,17 @@ import android.widget.Toast;
 
 import com.example.ishita.assigntasks.data.CommentItem;
 import com.example.ishita.assigntasks.data.TasksContract;
+import com.example.ishita.assigntasks.helper.Config;
 import com.example.ishita.assigntasks.helper.PrefManager;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
-import com.firebase.client.Query;
 import com.firebase.client.ValueEventListener;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
@@ -91,10 +91,15 @@ public class AddTaskFragment extends Fragment {
         String displayFormat = "MMM dd, yyyy";
         SimpleDateFormat sdf = new SimpleDateFormat(displayFormat, Locale.US);
 
+        //setting today's date to 00 Hours
+        Calendar c = new GregorianCalendar();
+        c.set(Calendar.HOUR_OF_DAY, 0); //anything 0 - 23
+        c.set(Calendar.MINUTE, 0); // 0 - 60
+        c.set(Calendar.SECOND, 0);
+        Date today = c.getTime();
         //comparing the date picked with today's date
-        Date now = new Date(System.currentTimeMillis());
         Date datePicked = myCalendar.getTime();
-        int result = datePicked.compareTo(now);
+        int result = datePicked.compareTo(today);
 
 
         //setting due date after validation
@@ -129,7 +134,7 @@ public class AddTaskFragment extends Fragment {
                              Bundle savedInstanceState) {
         rootView = inflater.inflate(R.layout.fragment_add_task, container, false);
 
-        rootrefUsers = new Firebase(PrefManager.LOGIN_REF);
+        rootrefUsers = new Firebase(Config.LOGIN_REF);
 
         dueDate = (EditText) rootView.findViewById(R.id.due_date);
         dueDate.setOnClickListener(new View.OnClickListener() {
