@@ -11,6 +11,7 @@ import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 
 import com.example.ishita.assigntasks.AddTask;
+import com.example.ishita.assigntasks.CommentsActivity;
 import com.example.ishita.assigntasks.R;
 import com.example.ishita.assigntasks.TeamkarmaApp;
 import com.example.ishita.assigntasks.data.CommentItem;
@@ -19,10 +20,9 @@ import com.firebase.client.ChildEventListener;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
-import com.firebase.client.ValueEventListener;
 
 /**
- * Created by ishita on 22/3/16.
+ * This service sends notifications about new tasks/comments for the user
  */
 public class NotificationListener extends Service {
 
@@ -39,60 +39,12 @@ public class NotificationListener extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 
-        //TODO: figure out how to notify task creator when new message arrives on firebase.
-
         //Opening sharedpreferences
-        Log.v(NotificationListener.class.getSimpleName(), "inside onStartCommand");
         PrefManager sharedPreferences = new PrefManager(this);
         userMobile = sharedPreferences.getMobileNumber();
 
         //Creating a firebase object
-        final Firebase tasksRef = new Firebase(PrefManager.LOGIN_REF).child(userMobile).child("user_tasks");
-
-        /*tasksRef.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                Log.v("taskRef data change", dataSnapshot.getKey());
-                TaskItem taskItem = dataSnapshot.getValue(TaskItem.class);
-                Log.v("taskName", taskItem.getDescription());
-                // if the user was the creator of this task but it was not self assigned:
-                if (userMobile.equals(taskItem.getCreator_id()) && !userMobile.equals(taskItem.getAssignee_id())) {
-                    *//*take the assignee_ref and find the task using that and attach a child event
-                    * listener to that task. On child changed of that task, call onCommentAdded.*//*
-                    Firebase assigneeTaskRef = new Firebase(PrefManager.LOGIN_REF)
-                            .child(taskItem.getAssignee_id())
-                            .child("user_tasks");
-                    assigneeTaskRef.addChildEventListener(new ChildEventListener() {
-                        @Override
-                        public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                        }
-
-                        @Override
-                        public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                            Log.v("assignee data change", dataSnapshot.getKey());
-                            onCommentAdded(dataSnapshot);
-                        }
-
-                        @Override
-                        public void onChildRemoved(DataSnapshot dataSnapshot) {
-                        }
-
-                        @Override
-                        public void onChildMoved(DataSnapshot dataSnapshot, String s) {
-                        }
-
-                        @Override
-                        public void onCancelled(FirebaseError firebaseError) {
-                        }
-                    });
-                }
-            }
-
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
-
-            }
-        });*/
+        final Firebase tasksRef = new Firebase(Config.LOGIN_REF).child(userMobile).child("user_tasks");
 
         //Adding a child event listener to firebase
         //this will help us to  track the value changes on firebase
@@ -122,7 +74,6 @@ public class NotificationListener extends Service {
                 TaskItem taskItem = dataSnapshot.getValue(TaskItem.class);
                 //Send a deletion notification to anyone who could access the task
                 if (taskItem.getAssignee_id().equals(userMobile) || taskItem.getCreator_id().equals(userMobile)) {
-                    Log.v("task removed", taskItem.getDescription());
                     showNotification(taskItem.getDescription(), DELETE);
                 }
             }
@@ -141,6 +92,11 @@ public class NotificationListener extends Service {
         return START_STICKY;
     }
 
+    /**
+     * To send notification on a new comment
+     *
+     * @param dataSnapshot the node on which the comment was added
+     */
     private void onCommentAdded(DataSnapshot dataSnapshot) {
 
         final TaskItem taskItem = dataSnapshot.getValue(TaskItem.class);
@@ -181,11 +137,21 @@ public class NotificationListener extends Service {
         });
     }
 
+    /**
+     * To display a notification to the user
+     * TODO: use inboxStyle notifications
+     * @param taskName The task which was added/deleted or to which a comment was added
+     * @param category whether a task was added/deleted or there was a comment
+     */
     private void showNotification(String taskName, String category) {
         //Creating a notification
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
         builder.setSmallIcon(R.drawable.ic_notification);
-        Intent intent = new Intent(this, AddTask.class);
+        Intent intent;
+        if (category.equals(ADD) || category.equals(DELETE))
+            intent = new Intent(this, AddTask.class);
+        else
+            intent = new Intent(this, CommentsActivity.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
         builder.setContentIntent(pendingIntent);
         builder.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher));
