@@ -11,6 +11,9 @@ import com.android.volley.RequestQueue;
 import com.android.volley.toolbox.Volley;
 import com.firebase.client.Firebase;
 
+import java.net.CookieHandler;
+import java.net.CookieManager;
+
 /**
  * This is the global Application class for each instance of TeamKarma. Used to initialize and store
  * global data for the app.
@@ -38,15 +41,36 @@ public class TeamkarmaApp extends Application implements Application.ActivityLif
     @Override
     public void onCreate() {
         super.onCreate();
+
+        //This is a singleton class that will be initialized only once per user
         mInstance = this;
+
+        //Setting the firebase context so that the DB can be accessed from anywhere within the app
         Firebase.setAndroidContext(this);
+
+        //This enables us to check the lifecycle states of any activity within the app
         registerActivityLifecycleCallbacks(this);
+
+        //The server sets a session to check if the client sending the request for the OTP
+        //is the same as the client sending back the OTP code. CookieManager automatically
+        //handles cookies for this purpose. Hence setting the cookie handler.
+        CookieManager cookieManager = new CookieManager();
+        CookieHandler.setDefault(cookieManager);
     }
 
+    /**
+     * To check whether CommentsActivity is in the foreground or not
+     *
+     * @return the current value of isCommentsActivityVisible
+     */
     public static boolean isCommentsActivityVisible() {
         return isCommentsActivityVisible;
     }
 
+    /**
+     * Initializing the request queue
+     * @return if the request queue is null, create a new request queue, else return the existing one
+     */
     public RequestQueue getRequestQueue() {
         if (mRequestQueue == null) {
             mRequestQueue = Volley.newRequestQueue(getApplicationContext());
@@ -71,6 +95,12 @@ public class TeamkarmaApp extends Application implements Application.ActivityLif
             mRequestQueue.cancelAll(tag);
         }
     }
+
+    /**
+     * Lifecycle callback methods to set the value of isCommentsActivityVisible
+     * @param activity The activity that triggered this method
+     * @param savedInstanceState
+     */
 
     @Override
     public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
