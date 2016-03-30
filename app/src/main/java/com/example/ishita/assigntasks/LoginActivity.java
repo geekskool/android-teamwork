@@ -22,8 +22,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
+import com.android.volley.DefaultRetryPolicy;
+import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
+import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.StringRequest;
@@ -57,11 +60,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
     private ProgressBar progressBar;
     private PrefManager pref;
     private ImageButton btnEditMobile;
-    //    private ProgressBar smsProgressBar;
     private TextView txtEditMobile;
     private LinearLayout layoutEditMobile;
-//int flag = 0;
-
 
 
     @Override
@@ -71,15 +71,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         Firebase.setAndroidContext(this);
 
+        //initializing all the views in the layout
         viewPager = (ViewPager) findViewById(R.id.viewPagerVertical);
-//        inputName = (EditText) findViewById(R.id.inputName);
-//        inputEmail = (EditText) findViewById(R.id.inputEmail);
         inputMobile = (EditText) findViewById(R.id.inputMobile);
         inputOtp = (EditText) findViewById(R.id.inputOtp);
         btnRequestSms = (Button) findViewById(R.id.btn_request_sms);
         btnVerifyOtp = (Button) findViewById(R.id.btn_verify_otp);
         progressBar = (ProgressBar) findViewById(R.id.progressBar);
-//        smsProgressBar = (ProgressBar) findViewById(R.id.smsProgressBar);
         btnEditMobile = (ImageButton) findViewById(R.id.btn_edit_mobile);
         txtEditMobile = (TextView) findViewById(R.id.txt_edit_mobile);
         layoutEditMobile = (LinearLayout) findViewById(R.id.layout_edit_mobile);
@@ -94,18 +92,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
         pref = new PrefManager(this);
 
-        // Checking for user session
-        // if user is already logged in, take him to main activity
-        if (pref.isLoggedIn()) {
-            startService(new Intent(this, NotificationListener.class));
-            Log.v(LoginActivity.class.getSimpleName(), "just called startService");
-            Intent intent = new Intent(LoginActivity.this, AddTask.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
-            startActivity(intent);
-
-            finish();
-        }
-
+        //Setting the layout so that the login activity has two screens:
+        //"Enter mobile number" and "Enter OTP"
         adapter = new ViewPagerAdapter();
         viewPager.setAdapter(adapter);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -130,10 +118,30 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         if (pref.isWaitingForSms()) {
             viewPager.setCurrentItem(1);
             layoutEditMobile.setVisibility(View.VISIBLE);
-            Log.v(TAG, "current item set to one");
         }
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        // Checking for user session
+        // if user is already logged in, take him to main activity
+        if (pref.isLoggedIn()) {
+            startService(new Intent(this, NotificationListener.class));
+            Intent intent = new Intent(LoginActivity.this, AddTask.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(intent);
+
+            finish();
+        }
+
+    }
+
+    /**
+     * OnClick handler for the three buttons in the layout
+     *
+     * @param view the button that was clicked
+     */
     @Override
     public void onClick(View view) {
         InputMethodManager inputManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -141,7 +149,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         switch (view.getId()) {
             case R.id.btn_request_sms:
                 inputManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(),
-                        InputMethodManager.HIDE_NOT_ALWAYS);
+                        InputMethodManager.HIDE_NOT_ALWAYS); //hiding soft keyboard when button is pressed
                 validateForm();
                 break;
 
@@ -153,14 +161,13 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
 
             case R.id.btn_edit_mobile:
                 viewPager.setCurrentItem(0);
-                layoutEditMobile.setVisibility(View.GONE);
                 pref.setIsWaitingForSms(false);
                 break;
         }
     }
 
     /**
-     * Validating user details form
+     * Validating mobile number and requesting for OTP sms
      */
     private void validateForm() {
         final String mobile = inputMobile.getText().toString().trim();
@@ -175,35 +182,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             // saving the mobile number in shared preferences
             pref.setMobileNumber(mobile);
 
-            //Firebase authorization (without authentication)
-            /*Firebase loginRef = new Firebase(PrefManager.LOGIN_REF);
-            loginRef.addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(DataSnapshot dataSnapshot) {
-                    for (DataSnapshot loginSnapshot : dataSnapshot.getChildren()) {
-                        if (mobile.equals(loginSnapshot.getKey())) {
-                            setFlag(1);
-                            pref.createLogin(mobile);
-                            startService(new Intent(getApplication(), NotificationListener.class));
-                            Intent intent = new Intent(LoginActivity.this, AddTask.class);
-                            startActivity(intent);
-                            finish();
-                            return;
-                        }
-                    }
-                    if (flag == 0) {
-                        Toast.makeText(getApplicationContext(), "The mobile number you entered could not be recognized.\nPlease try again.", Toast.LENGTH_SHORT).show();
-                        inputMobile.setText("");
-                        inputMobile.requestFocus();
-                        progressBar.setVisibility(View.GONE);
-                    }
-                }
-
-                @Override
-                public void onCancelled(FirebaseError firebaseError) {
-
-                }
-            });*/
             // requesting for sms
             requestForSMS(mobile);
 
@@ -212,9 +190,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
     }
 
-    /*public void setFlag(int value) {
-        flag = value;
-    }*/
     /**
      * Method initiates the SMS request on the server
      *
@@ -226,7 +201,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         // which the OTP is to be sent.
         JSONObject jsonBody = null;
         try {
-            jsonBody = new JSONObject("{\"mobile\":\"" + mobile + "\"}");
+            // adding "91" to user mobile since it's required by the server
+            jsonBody = new JSONObject("{\"mobile\":\"" + "91" + mobile + "\"}");
         } catch (JSONException e) {
             Log.e(TAG, "Error parsing mobile number to JSON" + e.toString());
         }
@@ -237,8 +213,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                 new Response.Listener<JSONObject>() {
                     @Override
                     public void onResponse(JSONObject responseObj) {
-                        Log.v(TAG, responseObj.toString());
-
                         try {
                             // Parsing json object response
                             // response will be a json object
@@ -256,25 +230,19 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                 txtEditMobile.setText(pref.getMobileNumber());
                                 layoutEditMobile.setVisibility(View.VISIBLE);
 
-                                Log.v(TAG, "response received without error");
-
                                 Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
 
                             } else {
-                                Toast.makeText(getApplicationContext(),
-                                        "Error: " + message,
-                                        Toast.LENGTH_LONG).show();
-                                Log.v(TAG, "response received with error");
+                                //displaying error message to user
+                                Toast.makeText(getApplicationContext(), "Error: " + message, Toast.LENGTH_LONG).show();
                             }
 
                             // hiding the progress bar
                             progressBar.setVisibility(View.GONE);
 
                         } catch (JSONException e) {
-                            Toast.makeText(getApplicationContext(),
-                                    "Error: " + e.getMessage(),
-                                    Toast.LENGTH_LONG).show();
-                            Log.v(TAG, "JSON exception" + e.toString());
+                            Toast.makeText(getApplicationContext(), "Error: " + e.getMessage(), Toast.LENGTH_LONG).show();
+                            Log.e(TAG, "JSON exception" + e.toString());
 
                             progressBar.setVisibility(View.GONE);
                         }
@@ -285,17 +253,10 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             @Override
             public void onErrorResponse(VolleyError error) {
                 Log.e(TAG, "Error: " + error.getMessage());
-                Toast.makeText(getApplicationContext(),
-                        error.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Error! " + error.getMessage(), Toast.LENGTH_SHORT).show();
                 progressBar.setVisibility(View.GONE);
             }
-        }) /*{
-            @Override
-            public byte[] getBody() {
-                return super.getBody();
-            }
-        }*/;
-
+        });
 
         // Adding request to request queue
         TeamkarmaApp.getInstance().addToRequestQueue(jsonObjectRequest);
@@ -305,6 +266,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
      * sending the OTP to server and activating the user
      */
     private void verifyOtp() {
+        progressBar.setVisibility(View.VISIBLE);
         String otp = inputOtp.getText().toString().trim();
 
         if (!otp.isEmpty()) {
@@ -328,7 +290,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         return mobile.matches(regEx);
     }
 
-
+    //PagerAdapter subclass to populate the two screens in LoginActivity
     class ViewPagerAdapter extends PagerAdapter {
 
         @Override
@@ -342,7 +304,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         }
 
         public Object instantiateItem(ViewGroup collection, int position) {
-
             int resId = 0;
             switch (position) {
                 case 0:
