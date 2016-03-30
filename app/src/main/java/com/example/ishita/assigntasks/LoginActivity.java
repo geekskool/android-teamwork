@@ -3,12 +3,9 @@ package com.example.ishita.assigntasks;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,33 +18,18 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.DefaultRetryPolicy;
-import com.android.volley.NetworkResponse;
 import com.android.volley.Request;
 import com.android.volley.Response;
-import com.android.volley.RetryPolicy;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.example.ishita.assigntasks.helper.Config;
 import com.example.ishita.assigntasks.helper.HttpService;
 import com.example.ishita.assigntasks.helper.NotificationListener;
 import com.example.ishita.assigntasks.helper.PrefManager;
-import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
-import com.firebase.client.FirebaseError;
-import com.firebase.client.ValueEventListener;
 
 import org.json.JSONException;
 import org.json.JSONObject;
-
-import java.io.IOException;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -282,8 +264,8 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
      * Regex to validate the mobile number
      * mobile number should be of 10 digits length
      *
-     * @param mobile
-     * @return
+     * @param mobile the number that the user entered in the form
+     * @return whether it is a valid mobile number
      */
     private static boolean isValidPhoneNumber(String mobile) {
         String regEx = "^[0-9]{10}$";
