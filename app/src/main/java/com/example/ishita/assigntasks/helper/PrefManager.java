@@ -2,8 +2,6 @@ package com.example.ishita.assigntasks.helper;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.util.Log;
 
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -13,14 +11,11 @@ import com.firebase.client.ValueEventListener;
 import java.util.HashMap;
 
 /**
- * Created by ishita on 4/3/16.
+ * This class is to set the SharedPreferences for the app
  */
 public class PrefManager {
     // Shared Preferences
     SharedPreferences pref;
-
-    //Firebase references
-    public static final String LOGIN_REF = "https://teamkarma.firebaseio.com/login";
 
     // Editor for Shared preferences
     SharedPreferences.Editor editor;
@@ -41,6 +36,7 @@ public class PrefManager {
     private static final String KEY_PICTURE = "picture";
     private static final String KEY_MOBILE = "mobile";
 
+    //initializing sharedPreferences and Firebase
     public PrefManager(Context context) {
         this._context = context;
         pref = _context.getSharedPreferences(PREF_NAME, PRIVATE_MODE);
@@ -76,9 +72,10 @@ public class PrefManager {
         return pref.getString(KEY_MOBILE, null);
     }
 
+    //Logging in user and setting the name and profile picture if they exist in firebase
     public void createLogin(String mobile) {
 
-        new Firebase(LOGIN_REF).child(mobile).addValueEventListener(new ValueEventListener() {
+        new Firebase(Config.LOGIN_REF).child(mobile).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot.hasChild("name")) {
@@ -94,8 +91,6 @@ public class PrefManager {
 
             }
         });
-//        editor.putString(KEY_NAME, name);
-//        editor.putString(KEY_PICTURE, picture);
         editor.putBoolean(KEY_IS_LOGGED_IN, true);
         editor.commit();
     }
