@@ -11,6 +11,9 @@ import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.example.ishita.assigntasks.AddTask;
 import com.example.ishita.assigntasks.TeamkarmaApp;
+import com.firebase.client.AuthData;
+import com.firebase.client.Firebase;
+import com.firebase.client.FirebaseError;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -21,6 +24,7 @@ import org.json.JSONObject;
  * before receiving the SMS.
  */
 public class HttpService extends IntentService {
+    //For logging purposes
     private static String TAG = HttpService.class.getSimpleName();
 
     public HttpService() {
@@ -42,6 +46,7 @@ public class HttpService extends IntentService {
      */
     private void verifyOtp(final String otp) {
 
+        //converting OTP to JSON
         JSONObject otpObject = null;
         try {
             otpObject = new JSONObject("{\"otp\":\"" + otp + "\"}");
@@ -61,19 +66,34 @@ public class HttpService extends IntentService {
                         try {
                             // Parsing json object response
                             boolean error = responseObj.getBoolean("error");
-                            String message = responseObj.getString("message");
+                            final String message = responseObj.getString("message");
 
                             if (!error) {
-                                //creating the login using the mobile number set in preferences
-                                PrefManager pref = new PrefManager(getApplicationContext());
-                                pref.createLogin(pref.getMobileNumber());
+                                //if an error was received, no point trying to authenticate
+                                //else send the received token to Firebase
+                                String token = responseObj.getString("token");
+                                Firebase ref = new Firebase(Config.ROOT_REF);
+                                ref.authWithCustomToken(token, new Firebase.AuthResultHandler() {
+                                    @Override
+                                    public void onAuthenticationError(FirebaseError error) {
+                                        Toast.makeText(getApplicationContext(), "Login Failed!\n" + error.getMessage(), Toast.LENGTH_SHORT).show();
+                                    }
 
-                                //opening up the tasks screen for user to view/add tasks
-                                Intent intent = new Intent(HttpService.this, AddTask.class);
-                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                startActivity(intent);
+                                    @Override
+                                    public void onAuthenticated(AuthData authData) {
+                                        //creating the login using the mobile number set in preferences
+                                        PrefManager pref = new PrefManager(getApplicationContext());
+                                        pref.createLogin(pref.getMobileNumber());
 
-                                Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+                                        //opening up the tasks screen for user to view/add tasks
+                                        Intent intent = new Intent(HttpService.this, AddTask.class);
+                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                                        startActivity(intent);
+
+                                        Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
+
+                                    }
+                                });
 
                             } else {
                                 Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
