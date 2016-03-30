@@ -1,6 +1,7 @@
 package com.example.ishita.assigntasks;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -25,6 +26,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.ishita.assigntasks.helper.Config;
 import com.example.ishita.assigntasks.helper.PrefManager;
 import com.firebase.client.Firebase;
 
@@ -36,6 +38,9 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.HashMap;
 
+/**
+ * This activity is used to update user profile information to Firebase.
+ */
 public class EditProfile extends AppCompatActivity {
 
     public static final int SELECT_FILE = 2;
@@ -59,10 +64,11 @@ public class EditProfile extends AppCompatActivity {
         inputName = (TextView) findViewById(R.id.inputName);
         prefManager = new PrefManager(getApplicationContext());
         userDetails = prefManager.getUserDetails();
-        loginRef = new Firebase(PrefManager.LOGIN_REF);
+        loginRef = new Firebase(Config.LOGIN_REF);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
+        //setting profile details if details are there on Firebase
         inputName.setText(userDetails.get("name") == null ? "" : userDetails.get("name"));
         if (userDetails.get("picture") != null) {
             String picture64 = userDetails.get("picture");
@@ -71,16 +77,29 @@ public class EditProfile extends AppCompatActivity {
         }
     }
 
+    /**
+     * This method converts the base64 encoded string back to the image bitmap
+     *
+     * @param encodedImage the encoded string to be converted to bitmap
+     * @return the bitmap created from the string
+     */
     private Bitmap decodeBase64(String encodedImage) {
         byte[] decodedBytes = Base64.decode(encodedImage, 0);
         return BitmapFactory.decodeByteArray(decodedBytes, 0, decodedBytes.length);
     }
 
+    /**
+     * OnClick handler for the "update profile" button
+     * @param updateButton the button that was clicked to trigger this method
+     */
     public void updateProfile(View updateButton) {
         String name = inputName.getText().toString();
+
+        // If name field is not blank, set the user's name in firebase.
         if (!name.equals(""))
             loginRef.child(userDetails.get("mobile")).child("name").setValue(name);
 
+        // If user has updated the profile photo, upload that to firebase.
         if (hasPhoto(profilePhoto)) {
             Bitmap bmp = ((BitmapDrawable) profilePhoto.getDrawable()).getBitmap();
             ByteArrayOutputStream bYtE = new ByteArrayOutputStream();
@@ -91,8 +110,11 @@ public class EditProfile extends AppCompatActivity {
             loginRef.child(userDetails.get("mobile")).child("picture").setValue(imageFile);
             bmp.recycle();
         } else {
+            // If user has removed the profile photo or left it blank, remove the profile photo,
+            // if any, from firebase.
             loginRef.child(userDetails.get("mobile")).child("picture").removeValue();
         }
+        //display success message to user
         Toast.makeText(getApplicationContext(), "Profile updated.", Toast.LENGTH_SHORT).show();
     }
 
@@ -127,16 +149,29 @@ public class EditProfile extends AppCompatActivity {
         return result;
     }
 
+    /**
+     * OnClick handler for "edit photo" button
+     * @param editPhotoButton the button that was clicked to trigger this method
+     */
     public void editPhoto(View editPhotoButton) {
-        final CharSequence[] items = {"Take Photo", "Choose from Library", new StringBuilder()};
-        if (hasPhoto(profilePhoto)) {
-            items[2] = "Remove Photo";
-        }
+
+        //The list of edit photo options
+        final CharSequence[] items = {"Take Photo", "Choose from Library", "Remove Photo"};
+
+        //creating the alert dialog to show when the edit photo button is clicked
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle(R.string.add_photo_dialog_title);
         builder.setItems(
-                (items[2] == "Remove Photo" ? items : Arrays.copyOfRange(items, 0, 2)),
+                //if the profile photo is set, show the option to remove the photo
+                //else show only the first two options.
+                (hasPhoto(profilePhoto) ? items : Arrays.copyOfRange(items, 0, 2)),
                 new DialogInterface.OnClickListener() {
+
+                    /**
+                     * OnClick handler for each of the menu items
+                     * @param dialog the menu from which the user selected an item
+                     * @param item the menu item that the user clicked on
+                     */
                     @Override
                     public void onClick(DialogInterface dialog, int item) {
                         if (items[item].equals("Take Photo")) {
@@ -151,41 +186,63 @@ public class EditProfile extends AppCompatActivity {
                                     Intent.createChooser(intent, "Select File"),
                                     SELECT_FILE);
                         } else if (items[item].equals("Remove Photo")) {
+                            //checking for OS version to call the version-appropriate setImageDrawable()
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                                 profilePhoto.setImageDrawable(getDrawable(R.drawable.blank_profile));
                             } else {
                                 profilePhoto.setImageDrawable(ContextCompat.getDrawable(getApplicationContext(), R.drawable.blank_profile));
                             }
-                            dialog.dismiss();
+                            dialog.dismiss(); //dismiss the dialog when an option is selected
                         }
                     }
                 });
-        builder.show();
+        builder.show(); //finally, show this dialog upon button click
     }
 
+    /**
+     * The function that is called when the user returns to EditProfile after having selected a
+     * file or taken a photo from the camera app.
+     * @param requestCode To determine if the user has returned from the camera app or selected a file
+     * @param resultCode success or error
+     * @param data data received from the activity
+     */
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+
+        /**if a bitmap was not fetched successfully, there's no point in attempting to
+         * parse the data.
+         */
         if (resultCode == RESULT_OK) {
             if (requestCode == REQUEST_CAMERA) {
+                //if the user took a photo using the camera, save that file to external storage and
+                //set that image to the profilePhoto ImageView
                 Bitmap thumbnail = (Bitmap) data.getExtras().get("data");
                 ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-                thumbnail.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
-                File destination = new File(Environment.getExternalStorageDirectory(),
-                        System.currentTimeMillis() + ".jpg");
-                FileOutputStream fo;
-                try {
-                    destination.createNewFile();
-                    fo = new FileOutputStream(destination);
-                    fo.write(bytes.toByteArray());
-                    fo.close();
-                } catch (FileNotFoundException e) {
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    e.printStackTrace();
+                if (thumbnail != null) {
+                    thumbnail.compress(Bitmap.CompressFormat.JPEG, 90, bytes);
+                    File destination = new File(Environment.getExternalStorageDirectory(),
+                            System.currentTimeMillis() + ".jpg");
+                    FileOutputStream fo;
+                    try {
+                        destination.createNewFile();
+                        fo = new FileOutputStream(destination);
+                        fo.write(bytes.toByteArray());
+                        fo.close();
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                    profilePhoto.setImageBitmap(thumbnail);
+                } else {
+                    Toast.makeText(getApplicationContext(), "Error: Image not captured!", Toast.LENGTH_SHORT).show();
                 }
-                profilePhoto.setImageBitmap(thumbnail);
+
             } else if (requestCode == SELECT_FILE) {
+                /**
+                 *
+                 */
                 Uri selectedImageUri = data.getData();
                 String[] projection = {MediaStore.MediaColumns.DATA};
                 CursorLoader cursorLoader = new CursorLoader(this, selectedImageUri, projection, null, null,
