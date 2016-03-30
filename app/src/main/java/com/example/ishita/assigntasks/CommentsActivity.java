@@ -69,7 +69,6 @@ public class CommentsActivity extends AppCompatActivity /*implements LoaderManag
         msgEdit = (EditText) findViewById(R.id.msg_edit);
         sendBtn = (ImageButton) findViewById(R.id.send_btn);
         commentsRef = new Firebase(taskId + "/comments");
-        assigneeCommentsRef = new Firebase(assigneeRef + "/comments");
 
         /*TasksDbHelper dbHelper = new TasksDbHelper(getApplicationContext());
         SQLiteDatabase readableDatabase = dbHelper.getReadableDatabase();*/
@@ -178,9 +177,12 @@ public class CommentsActivity extends AppCompatActivity /*implements LoaderManag
                     Firebase newCommentRef = commentsRef.push();
                     newCommentRef.setValue(comment);
                     newCommentRef.child("notify").setValue("true");
-                    Firebase assigneeNewComment = assigneeCommentsRef.push();
-                    assigneeNewComment.setValue(comment);
-                    assigneeNewComment.child("notify").setValue("true");
+                    if (assigneeRef != null) {
+                        assigneeCommentsRef = new Firebase(assigneeRef + "/comments");
+                        Firebase assigneeNewComment = assigneeCommentsRef.push();
+                        assigneeNewComment.setValue(comment);
+                        assigneeNewComment.child("notify").setValue("true");
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
