@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.example.ishita.assigntasks.data.TaskItem;
 import com.example.ishita.assigntasks.data.TasksContract;
+import com.example.ishita.assigntasks.helper.Config;
 import com.example.ishita.assigntasks.helper.PrefManager;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
@@ -27,18 +28,18 @@ import com.firebase.ui.FirebaseListAdapter;
 
 
 /**
- * A simple {@link Fragment} subclass.
- * Activities that contain this fragment must implement the
- * to handle interaction events.
+ * This Fragment shows the list of tasks that have been assigned to or by the user.
+ * If there are no tasks for the user, the fragment pops up a dialog stating that there are
+ * no tasks for the user yet.
  * Use the {@link TasksFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TasksFragment extends ListFragment /*implements LoaderManager.LoaderCallbacks<Cursor> */ {
-    // Rename parameter arguments, choose names that match
+public class TasksFragment extends ListFragment {
+    // Auto-generated: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_SECTION_NUMBER = "section_number";
 
-    // Rename and change types of parameters
+    // Auto-generated: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
@@ -64,19 +65,20 @@ public class TasksFragment extends ListFragment /*implements LoaderManager.Loade
         return fragment;
     }
 
-    private /*SimpleCursorAdapter*/ FirebaseListAdapter adapter;
-    int flag = 0;
+    private FirebaseListAdapter adapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        //fetching the user's mobile number from the shared preferences
         final PrefManager prefManager = new PrefManager(getContext());
         userMobile = prefManager.getMobileNumber();
-//        ListView tasksList = getListView();
-        final Firebase usersRef = new Firebase(PrefManager.LOGIN_REF);
+        //creating the firebase tasks reference for the logged in user
+        final Firebase usersRef = new Firebase(Config.LOGIN_REF);
         tasksRef = usersRef.child(userMobile).child("user_tasks");
 
+        //creating the firebase list adapter to populate the list view
         adapter = new FirebaseListAdapter<TaskItem>(getActivity(), TaskItem.class, R.layout.fragment_tasks, tasksRef) {
             String assigneeName;
 
@@ -121,54 +123,11 @@ public class TasksFragment extends ListFragment /*implements LoaderManager.Loade
                 });
             }
         };
-        //        tasksList.setAdapter(adapter);
-        /*adapter = new SimpleCursorAdapter(getContext(),
-                R.layout.fragment_tasks,
-                null,
-                new String[]{
-                        TasksContract.TaskEntry._ID,
-                        TasksContract.TaskEntry.COL_DESCRIPTION,
-                        TasksContract.TaskEntry.COL_ASSIGNEE_KEY,
-                        TasksContract.TaskEntry.COL_DUE_DATE
-                },
-                new int[]{
-                        R.id.task_id,
-                        R.id.task_list_item,
-                        R.id.assignee_taskList,
-                        R.id.due_date_taskList
-                },
-                0);
-        adapter.setViewBinder(new SimpleCursorAdapter.ViewBinder() {
 
-            @Override
-            public boolean setViewValue(View view, Cursor cursor, int columnIndex) {
-                switch (view.getId()) {
-                    case R.id.assignee_taskList:
-                        String assigneeContact = cursor.getString(columnIndex);
-//                        Log.v("case:msgCount:getInt", "" + count);
-//                        Log.v("getViewId", "" + view.getId());
-//                        if (count > 0) {
-                        Cursor tempCursor = getActivity().getContentResolver().query(
-                                TasksContract.ProfileEntry.CONTENT_URI,
-                                new String[]{TasksContract.ProfileEntry.COL_NAME},
-                                TasksContract.ProfileEntry.COL_CONTACT + "=?",
-                                new String[]{assigneeContact},
-                                null
-                        );
-                        if (tempCursor.moveToFirst()) {
-                            ((TextView) view).setText(tempCursor.getString(tempCursor.getColumnIndex(TasksContract.ProfileEntry.COL_NAME)));
-                        }
-                        tempCursor.close();
-//                        ((TextView) view).setText(String.format("%d new message%s", count, count == 1 ? "" : "s"));
-//                        }
-                        return true;
-                }
-                return false;
-            }
-        });
-
-        getLoaderManager().initLoader(0, null, this);*/
+        //attach the adapter to the list view
         setListAdapter(adapter);
+
+        //in case there are no tasks for this user, show the no tasks dialog
         tasksRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
@@ -184,6 +143,7 @@ public class TasksFragment extends ListFragment /*implements LoaderManager.Loade
         });
     }
 
+    //inflate the context menu to give the user an option to delete the task
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v, ContextMenu.ContextMenuInfo menuInfo) {
         super.onCreateContextMenu(menu, v, menuInfo);
@@ -191,6 +151,7 @@ public class TasksFragment extends ListFragment /*implements LoaderManager.Loade
         inflater.inflate(R.menu.tasks_context_menu, menu);
     }
 
+    //onClick handler for the context menu
     @Override
     public boolean onContextItemSelected(MenuItem item) {
         AdapterView.AdapterContextMenuInfo info = (AdapterView.AdapterContextMenuInfo) item.getMenuInfo();
@@ -226,7 +187,6 @@ public class TasksFragment extends ListFragment /*implements LoaderManager.Loade
         TextView creatorId = (TextView) listItem.findViewById(R.id.creator_id);
         TextView assigneeId = (TextView) listItem.findViewById(R.id.assignee_contact);
         final Firebase task = new Firebase(taskId.getText().toString());
-//        final String taskKey = task.toString().substring(task.toString().length() - 20);
         final String creatorKey = creatorId.getText().toString();
         String assigneeKey = assigneeId.getText().toString();
         String assigneeRef = ((TextView) listItem.findViewById(R.id.assignee_ref)).getText().toString();
@@ -243,41 +203,23 @@ public class TasksFragment extends ListFragment /*implements LoaderManager.Loade
         }
     }
 
+    //setting "Please wait" text so that the user knows he/she has to wait till the data is fetched.
     @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         setEmptyText("Please wait for data to be fetched from the server.\n\nYou can also swipe left to add a new task.");
         ListView list = getListView();
         registerForContextMenu(list);
-//        list.setDividerHeight(0);
     }
 
-    /*@Override
-    public android.support.v4.content.Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        CursorLoader loader = new CursorLoader(getContext(),
-                TasksContract.TaskEntry.CONTENT_URI,
-                new String[]{
-                        TasksContract.TaskEntry._ID,
-                        TasksContract.TaskEntry.COL_DESCRIPTION,
-                        TasksContract.TaskEntry.COL_ASSIGNEE_KEY,
-                        TasksContract.TaskEntry.COL_DUE_DATE
-                },
-                null,
-                null,
-                TasksContract.TaskEntry._ID + " DESC");
-        return loader;
-    }
-
-    @Override
-    public void onLoadFinished(android.support.v4.content.Loader<Cursor> loader, Cursor data) {
-        adapter.swapCursor(data);
-    }
-
-    @Override
-    public void onLoaderReset(android.support.v4.content.Loader<Cursor> loader) {
-        adapter.swapCursor(null);
-    }*/
-
+    /**
+     * Opening the CommentsActivity depending upon which task the user selected.
+     *
+     * @param l        the container list view containing the item clicked
+     * @param v        the item that was clicked
+     * @param position the integer position at which the item is
+     * @param id       view id
+     */
     @Override
     public void onListItemClick(ListView l, View v, int position, long id) {
         TextView taskName = (TextView) v.findViewById(R.id.task_list_item);
@@ -289,14 +231,7 @@ public class TasksFragment extends ListFragment /*implements LoaderManager.Loade
         * if user is the assignee,
         *   find the creator with the creator key and find the task in the creator's list
         *   using the assignee ref and pass this task ref along with our original task ref*/
-//        String creatorKey = ((TextView) v.findViewById(R.id.creator_id)).getText().toString();
         String assigneeRef = ((TextView) v.findViewById(R.id.assignee_ref)).getText().toString();
-//        String assigneeKey = ((TextView) v.findViewById(R.id.assignee_contact)).getText().toString();
-
-        /*if (assigneeKey.equals(userMobile))
-            taskId ;
-        else
-            taskId = assigneeRef;*/
 
         Intent intent = new Intent(getActivity(), CommentsActivity.class);
         intent.putExtra("TASK_ID", "" + taskId);
@@ -306,6 +241,7 @@ public class TasksFragment extends ListFragment /*implements LoaderManager.Loade
         startActivity(intent);
     }
 
+    //have to shut down the firebase adapter when this fragment is killed
     @Override
     public void onDestroy() {
         super.onDestroy();
