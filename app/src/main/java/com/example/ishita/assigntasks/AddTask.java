@@ -17,6 +17,7 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.InputMethodManager;
 
 import com.firebase.client.Firebase;
 import com.google.android.gms.appindexing.Action;
@@ -27,17 +28,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
+/**
+ * This is the main activity of the app. It has three sections: Add a new task, List of tasks,
+ * Comments to the last added task
+ */
 public class AddTask extends AppCompatActivity {
-
-    /**
-     * The {@link PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link FragmentStatePagerAdapter}.
-     */
-    private static SectionsPagerAdapter mSectionsPagerAdapter;
 
     /**
      * The {@link ViewPager} that will host the section contents.
@@ -68,13 +63,24 @@ public class AddTask extends AppCompatActivity {
         mViewPager = (ViewPager) findViewById(R.id.container);
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
-        mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
+        /*
+      The {@link PagerAdapter} that will provide
+      fragments for each of the sections. We use a
+      {@link FragmentPagerAdapter} derivative, which will keep every
+      loaded fragment in memory. If this becomes too memory intensive, it
+      may be best to switch to a
+      {@link FragmentStatePagerAdapter}.
+     */
+        SectionsPagerAdapter mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
         mViewPager.setAdapter(mSectionsPagerAdapter);
+        //Setting the initially visible fragment to the list of tasks
         mViewPager.setCurrentItem(1);
 
         final CommentsFragment commentsFragment = (CommentsFragment) mSectionsPagerAdapter.getItem(2);
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
+            @SuppressWarnings("ConstantConditions")
+            //Adding names to the action bar for each of the fragments
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
                 android.support.v7.app.ActionBar actionBar = getSupportActionBar();
                 FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -100,27 +106,17 @@ public class AddTask extends AppCompatActivity {
                 }
             }
 
+            //hiding the soft input if the Tasks List is the fragment visible
             @Override
             public void onPageSelected(int position) {
                 if (fragments.get(position).equals(TasksFragment.class.getName())) {
-
+                    ((InputMethodManager) getSystemService(INPUT_METHOD_SERVICE))
+                            .hideSoftInputFromWindow(mViewPager.getWindowToken(), 0);
                 }
             }
 
             @Override
             public void onPageScrollStateChanged(int state) {
-                /*if (mViewPager.getCurrentItem() == 0) {
-                    if (state == ViewPager.SCROLL_STATE_DRAGGING) {
-                        if (addTaskFrag != null) {
-                            if (!addTaskFrag.taskDescription.getText().equals("") &&
-                                    !addTaskFrag.dueDate.getText().equals("") &&
-                                    !addTaskFrag.assignee.getText().equals("")) {
-                                addTaskFrag.saveTaskBtn.performClick();
-                                Log.v("AddTask", "saveTaskBtn clicked");
-                            }
-                        }
-                    }
-                }*/
             }
         });
         // ATTENTION: This was auto-generated to implement the App Indexing API.
