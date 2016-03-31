@@ -60,7 +60,6 @@ public class TeamkarmaApp extends Application implements Application.ActivityLif
 
     /**
      * To check whether CommentsActivity is in the foreground or not
-     *
      * @return the current value of isCommentsActivityVisible
      */
     public static boolean isCommentsActivityVisible() {

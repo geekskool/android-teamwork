@@ -63,12 +63,6 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <provider
-            android:name="com.example.ishita.assigntasks.data.TasksProvider"
-            android:authorities="com.example.ishita.assigntasks"
-            android:enabled="true"
-            android:exported="false" />
-
         <activity
             android:name="com.example.ishita.assigntasks.CommentsActivity"
             android:label="@string/title_activity_comments"

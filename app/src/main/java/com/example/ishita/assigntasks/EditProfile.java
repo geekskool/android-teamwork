@@ -69,9 +69,9 @@ public class EditProfile extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //setting profile details if details are there on Firebase
-        inputName.setText(userDetails.get("name") == null ? "" : userDetails.get("name"));
-        if (userDetails.get("picture") != null) {
-            String picture64 = userDetails.get("picture");
+        inputName.setText(userDetails.get(Config.KEY_NAME) == null ? "" : userDetails.get(Config.KEY_NAME));
+        if (userDetails.get(Config.KEY_PICTURE) != null) {
+            String picture64 = userDetails.get(Config.KEY_PICTURE);
             Bitmap bmp = decodeBase64(picture64);
             profilePhoto.setImageBitmap(bmp);
         }
@@ -97,7 +97,7 @@ public class EditProfile extends AppCompatActivity {
 
         // If name field is not blank, set the user's name in firebase.
         if (!name.equals(""))
-            loginRef.child(userDetails.get("mobile")).child("name").setValue(name);
+            loginRef.child(userDetails.get("mobile")).child(Config.KEY_NAME).setValue(name);
 
         // If user has updated the profile photo, upload that to firebase.
         if (hasPhoto(profilePhoto)) {
@@ -107,12 +107,12 @@ public class EditProfile extends AppCompatActivity {
             byte[] byteArray = bYtE.toByteArray();
             String imageFile = Base64.encodeToString(byteArray, Base64.DEFAULT);
             Log.v("imageFile", imageFile);
-            loginRef.child(userDetails.get("mobile")).child("picture").setValue(imageFile);
+            loginRef.child(userDetails.get("mobile")).child(Config.KEY_PICTURE).setValue(imageFile);
             bmp.recycle();
         } else {
             // If user has removed the profile photo or left it blank, remove the profile photo,
             // if any, from firebase.
-            loginRef.child(userDetails.get("mobile")).child("picture").removeValue();
+            loginRef.child(userDetails.get("mobile")).child(Config.KEY_PICTURE).removeValue();
         }
         //display success message to user
         Toast.makeText(getApplicationContext(), "Profile updated.", Toast.LENGTH_SHORT).show();
@@ -155,7 +155,8 @@ public class EditProfile extends AppCompatActivity {
      */
     public void editPhoto(View editPhotoButton) {
 
-        //The list of edit photo options
+        //The list of edit photo options. Have to use hardcoded string since this is a
+        //CharSequence[] and R.string values can't be used since they are int indexes
         final CharSequence[] items = {"Take Photo", "Choose from Library", "Remove Photo"};
 
         //creating the alert dialog to show when the edit photo button is clicked
@@ -236,17 +237,17 @@ public class EditProfile extends AppCompatActivity {
                     }
                     profilePhoto.setImageBitmap(thumbnail);
                 } else {
-                    Toast.makeText(getApplicationContext(), "Error: Image not captured!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), R.string.image_capture_error, Toast.LENGTH_SHORT).show();
                 }
 
             } else if (requestCode == SELECT_FILE) {
                 /**
-                 *
+                 * if user chose to upload a file from external storage, set that image to the
+                 * profile photo ImageView.
                  */
                 Uri selectedImageUri = data.getData();
                 String[] projection = {MediaStore.MediaColumns.DATA};
-                CursorLoader cursorLoader = new CursorLoader(this, selectedImageUri, projection, null, null,
-                        null);
+                CursorLoader cursorLoader = new CursorLoader(this, selectedImageUri, projection, null, null, null);
                 Cursor cursor = cursorLoader.loadInBackground();
                 int column_index = cursor.getColumnIndexOrThrow(MediaStore.MediaColumns.DATA);
                 cursor.moveToFirst();

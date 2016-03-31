@@ -168,7 +168,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             requestForSMS(mobile);
 
         } else {
-            Toast.makeText(getApplicationContext(), "Please enter a valid mobile number.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), R.string.invalid_mobile, Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -256,7 +256,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             grapprIntent.putExtra("otp", otp);
             startService(grapprIntent);
         } else {
-            Toast.makeText(getApplicationContext(), "Please enter the OTP", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), R.string.invalid_otp, Toast.LENGTH_SHORT).show();
         }
     }
 
