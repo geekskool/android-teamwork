@@ -25,6 +25,8 @@ public class Config {
     public static final String KEY_CREATOR = "creator_id";
     public static final String KEY_TASK_NAME = "description";
     public static final String KEY_DUE_DATE = "due_date";
+    public static final String KEY_NOTIFY = "notify";
+    public static final String KEY_ASSIGNEE_REF = "assignee_ref";
 
     // SMS provider identification
     // It should match with the ID in your SMS gateway origin

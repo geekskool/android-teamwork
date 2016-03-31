@@ -16,6 +16,7 @@
     <string name="no_task_details">Task details not updated yet.</string>
     <string name="swipe_right_to_save">You can also swipe right to save this task</string>
     <string name="due_date_validation">Due date cannot be earlier than today.</string>
+    <string name="error_field_required">Fields cannot be empty. Please enter some values.</string>
 
     <!-- Strings related to login -->
     <string name="prompt_email">Email</string>
@@ -25,11 +26,10 @@
     <string name="error_invalid_number">This phone number is invalid.</string>
     <string name="error_invalid_password">This password is too short.</string>
     <string name="error_incorrect_password">This password is incorrect.</string>
-    <string name="error_field_required">This field is required.</string>
     <string name="permission_rationale">"Contacts permissions are needed for providing email
         completions."
     </string>
-    <string name="prompt_name">Name</string>
+    <string name="prompt_name">No name specified</string>
     <string name="prompt_phone">Phone number</string>
     <string name="msg_enter_mobile">Enter your mobile number to get started.</string>
     <string name="title_activity_addtask">Tasks</string>
@@ -43,9 +43,15 @@
     <string name="profile_picture">This space shows your profile picture.</string>
     <string name="action_profile_pic">Tap this button to choose an image from gallery or take a new photo.</string>
     <string name="add_photo_dialog_title">Add Photo</string>
-    <string name="loading_task_details">Loading task details...</string>
+    <string name="loading_task_details">Loading task details…</string>
     <string name="lbl_submit">Submit</string>
     <string name="lbl_enter_otp">Enter OTP</string>
-    <string name="msg_manual_otp">(Enter the OTP below in case if we fail to detect the SMS automatically)</string>
-    <string name="msg_wait_for_otp">Please wait while we verify your mobile number.</string>
+    <string name="msg_manual_otp">(Enter the OTP below in case the SMS is not detected automatically.)</string>
+    <string name="msg_wait_for_otp">Please wait while your mobile number is being verified.</string>
+    <string name="action_edit_mobile">Enter mobile number</string>
+    <string name="invalid_user">Assignee could not be found on the list of registered users. Please check your Internet connection if your contact is registered.</string>
+    <string name="task_saved">Task saved.</string>
+    <string name="image_capture_error">Error: Image not captured!</string>
+    <string name="invalid_mobile">Please enter a valid mobile number.</string>
+    <string name="invalid_otp">Please enter the OTP</string>
 </resources>

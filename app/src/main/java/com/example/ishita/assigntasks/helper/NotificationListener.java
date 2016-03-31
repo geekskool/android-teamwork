@@ -43,7 +43,7 @@ public class NotificationListener extends Service {
         userMobile = sharedPreferences.getMobileNumber();
 
         //Creating a firebase object
-        final Firebase tasksRef = new Firebase(Config.LOGIN_REF).child(userMobile).child("user_tasks");
+        final Firebase tasksRef = new Firebase(Config.LOGIN_REF).child(userMobile).child(Config.KEY_USER_TASKS);
 
         //Adding a child event listener to firebase
         //this will help us to  track the value changes on firebase
@@ -54,9 +54,9 @@ public class NotificationListener extends Service {
 
                 /*if the task was assigned to the user logged in and it is a new task, show a
                 * notification for it and remove the flag that indicates that it's a new task */
-                if (taskItem.getAssignee_id().equals(userMobile) && dataSnapshot.hasChild("notify")) {
+                if (taskItem.getAssignee_id().equals(userMobile) && dataSnapshot.hasChild(Config.KEY_NOTIFY)) {
                     showNotification(taskItem.getDescription(), ADD);
-                    dataSnapshot.getRef().child("notify").removeValue();
+                    dataSnapshot.getRef().child(Config.KEY_NOTIFY).removeValue();
                 }
 
             }
@@ -100,7 +100,7 @@ public class NotificationListener extends Service {
 
         final TaskItem taskItem = dataSnapshot.getValue(TaskItem.class);
         //Attach a child event listener to the snapshot so that we would know how its child changed.
-        dataSnapshot.getRef().child("comments").addChildEventListener(new ChildEventListener() {
+        dataSnapshot.getRef().child(Config.KEY_COMMENTS).addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 /*if added child has "notify"
@@ -109,11 +109,11 @@ public class NotificationListener extends Service {
                 *       if CommentsActivity is not in the foreground
                 *           send notification about added child*/
                 CommentItem commentItem = dataSnapshot.getValue(CommentItem.class);
-                if (dataSnapshot.hasChild("notify")) {
+                if (dataSnapshot.hasChild(Config.KEY_NOTIFY)) {
                     if (!TeamkarmaApp.isCommentsActivityVisible() && !commentItem.getContact_from().equals(userMobile)) {
                         showNotification(taskItem.getDescription(), commentItem.getMsg());
                     }
-                    dataSnapshot.getRef().child("notify").removeValue();
+                    dataSnapshot.getRef().child(Config.KEY_NOTIFY).removeValue();
                 }
             }
 

@@ -1,10 +1,7 @@
 package com.example.ishita.assigntasks;
 
 import android.content.Intent;
-import android.database.DataSetObserver;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -16,13 +13,11 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.example.ishita.assigntasks.data.TaskItem;
-import com.example.ishita.assigntasks.data.TasksContract;
 import com.example.ishita.assigntasks.helper.Config;
 import com.example.ishita.assigntasks.helper.PrefManager;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
-import com.firebase.client.Query;
 import com.firebase.client.ValueEventListener;
 import com.firebase.ui.FirebaseListAdapter;
 
@@ -76,7 +71,7 @@ public class TasksFragment extends ListFragment {
         userMobile = prefManager.getMobileNumber();
         //creating the firebase tasks reference for the logged in user
         final Firebase usersRef = new Firebase(Config.LOGIN_REF);
-        tasksRef = usersRef.child(userMobile).child("user_tasks");
+        tasksRef = usersRef.child(userMobile).child(Config.KEY_USER_TASKS);
 
         //creating the firebase list adapter to populate the list view
         adapter = new FirebaseListAdapter<TaskItem>(getActivity(), TaskItem.class, R.layout.fragment_tasks, tasksRef) {
@@ -93,14 +88,14 @@ public class TasksFragment extends ListFragment {
                                 public void onDataChange(DataSnapshot snapshot) {
                                     for (DataSnapshot userSnapshot : snapshot.getChildren()) {
                                         if (taskItem.getAssignee_id().equals(userSnapshot.getKey())) {
-                                            assigneeName = userSnapshot.child("name").getValue().toString();
+                                            assigneeName = userSnapshot.child(Config.KEY_NAME).getValue().toString();
                                             ((TextView) view.findViewById(R.id.creator_id)).setText(taskItem.getCreator_id());
                                             ((TextView) view.findViewById(R.id.task_list_item)).setText(taskItem.getDescription());
                                             ((TextView) view.findViewById(R.id.assignee_taskList)).setText(assigneeName);
                                             ((TextView) view.findViewById(R.id.due_date_taskList)).setText(taskItem.getDue_date());
                                             ((TextView) view.findViewById(R.id.assignee_contact)).setText(taskItem.getAssignee_id());
                                             ((TextView) view.findViewById(R.id.assignee_ref)).setText(taskItem.getAssignee_ref());
-                                            if (taskItem.getDescription().equals(taskSnapshot.child("description").getValue())) {
+                                            if (taskItem.getDescription().equals(taskSnapshot.child(Config.KEY_TASK_NAME).getValue())) {
                                                 ((TextView) view.findViewById(R.id.task_id)).setText(taskSnapshot.getRef().toString());
                                             }
                                         }

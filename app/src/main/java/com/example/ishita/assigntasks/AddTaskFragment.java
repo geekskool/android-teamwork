@@ -9,7 +9,6 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.ContactsContract;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +18,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.ishita.assigntasks.data.CommentItem;
-import com.example.ishita.assigntasks.data.TasksContract;
 import com.example.ishita.assigntasks.helper.Config;
 import com.example.ishita.assigntasks.helper.PrefManager;
 import com.firebase.client.DataSnapshot;
@@ -260,7 +258,6 @@ public class AddTaskFragment extends Fragment {
                 for (DataSnapshot loginSnapshot : dataSnapshot.getChildren()) {
                     if (mAssigneeContact != null && mAssigneeContact.equals(loginSnapshot.getKey())) {
                         setFlag(1);
-                        Log.v("Flag", "" + flag);
                         return;
                     }
                 }
@@ -283,15 +280,15 @@ public class AddTaskFragment extends Fragment {
 
             //upload task data to firebase
             Map<String, String> task = new HashMap<>();
-            task.put(TasksContract.TaskEntry.COL_DESCRIPTION, mTaskName);
-            task.put(TasksContract.TaskEntry.COL_ASSIGNEE_KEY, mAssigneeContact);
-            task.put(TasksContract.TaskEntry.COL_CREATOR_KEY, userMobile);
-            task.put(TasksContract.TaskEntry.COL_DUE_DATE, mDueDate);
+            task.put(Config.KEY_TASK_NAME, mTaskName);
+            task.put(Config.KEY_ASSIGNEE, mAssigneeContact);
+            task.put(Config.KEY_CREATOR, userMobile);
+            task.put(Config.KEY_DUE_DATE, mDueDate);
 
             //also upload assignee details to firebase. if the contact already exists, it will be
             //overwritten by the setValue().
             //push the task details on to the assignee's task list as a new task
-            Firebase assigneeTaskRef = rootrefUsers.child(mAssigneeContact).child("user_tasks").push();
+            Firebase assigneeTaskRef = rootrefUsers.child(mAssigneeContact).child(Config.KEY_USER_TASKS).push();
             assigneeTaskRef.setValue(task);
             Firebase creatorTaskRef = null;
 
@@ -301,22 +298,22 @@ public class AddTaskFragment extends Fragment {
             //Also, add a "notify" field to the assignee's task details so that the assignee can be notified
             //that he/she has a new task. This field will be deleted upon notifying the assignee.
             if (!mAssigneeContact.equals(userMobile)) {
-                task.put("assignee_ref", assigneeTaskRef.toString());
-                creatorTaskRef = rootrefUsers.child(userMobile).child("user_tasks").push();
+                task.put(Config.KEY_ASSIGNEE_REF, assigneeTaskRef.toString());
+                creatorTaskRef = rootrefUsers.child(userMobile).child(Config.KEY_USER_TASKS).push();
                 creatorTaskRef.setValue(task);
                 Map<String, Object> creatorRef = new HashMap<>();
-                creatorRef.put("assignee_ref", creatorTaskRef.toString());
+                creatorRef.put(Config.KEY_ASSIGNEE_REF, creatorTaskRef.toString());
                 assigneeTaskRef.updateChildren(creatorRef);
-                assigneeTaskRef.child("notify").setValue("true");
+                assigneeTaskRef.child(Config.KEY_NOTIFY).setValue("true");
             }
 
             //If there is a comment, upload the comment to the firebase tasks table
             if (!mComments.equals("")) {
                 CommentItem comment = new CommentItem(userMobile, mComments, "" + System.currentTimeMillis());
-                Firebase commentRef = assigneeTaskRef.child("comments");
+                Firebase commentRef = assigneeTaskRef.child(Config.KEY_COMMENTS);
                 commentRef.push().setValue(comment);
                 if (creatorTaskRef != null) {
-                    commentRef = creatorTaskRef.child("comments");
+                    commentRef = creatorTaskRef.child(Config.KEY_COMMENTS);
                     commentRef.push().setValue(comment);
                 }
             }
