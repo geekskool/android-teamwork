@@ -3,6 +3,7 @@ package com.example.ishita.assigntasks.helper;
 import android.content.Context;
 import android.content.SharedPreferences;
 
+import com.example.ishita.assigntasks.R;
 import com.firebase.client.DataSnapshot;
 import com.firebase.client.Firebase;
 import com.firebase.client.FirebaseError;
@@ -73,16 +74,17 @@ public class PrefManager {
     }
 
     //Logging in user and setting the name and profile picture if they exist in firebase
-    public void createLogin(String mobile) {
+    public void createLogin(final String mobile) {
 
         new Firebase(Config.LOGIN_REF).child(mobile).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if (dataSnapshot.hasChild("name")) {
-                    setName(dataSnapshot.child("name").getValue().toString());
-                }
-                if (dataSnapshot.hasChild("picture")) {
-                    setPicture(dataSnapshot.child("picture").getValue().toString());
+                if (dataSnapshot.hasChild(Config.KEY_NAME)) {
+                    setName(dataSnapshot.child(Config.KEY_NAME).getValue().toString());
+                } else
+                    dataSnapshot.getRef().child(mobile).child(Config.KEY_NAME).setValue(R.string.prompt_name);
+                if (dataSnapshot.hasChild(Config.KEY_PICTURE)) {
+                    setPicture(dataSnapshot.child(Config.KEY_PICTURE).getValue().toString());
                 }
             }
 
@@ -106,9 +108,9 @@ public class PrefManager {
 
     public HashMap<String, String> getUserDetails() {
         HashMap<String, String> profile = new HashMap<>();
-        profile.put("name", pref.getString(KEY_NAME, null));
-        profile.put("picture", pref.getString(KEY_PICTURE, null));
-        profile.put("mobile", pref.getString(KEY_MOBILE, null));
+        profile.put(Config.KEY_NAME, pref.getString(KEY_NAME, null));
+        profile.put(Config.KEY_PICTURE, pref.getString(KEY_PICTURE, null));
+        profile.put(KEY_MOBILE, pref.getString(KEY_MOBILE, null));
         return profile;
     }
 }
