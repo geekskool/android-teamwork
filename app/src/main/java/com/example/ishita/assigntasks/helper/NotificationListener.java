@@ -11,7 +11,6 @@ import android.support.v7.app.NotificationCompat;
 import android.util.Log;
 
 import com.example.ishita.assigntasks.AddTask;
-import com.example.ishita.assigntasks.CommentsActivity;
 import com.example.ishita.assigntasks.R;
 import com.example.ishita.assigntasks.TeamkarmaApp;
 import com.example.ishita.assigntasks.data.CommentItem;
