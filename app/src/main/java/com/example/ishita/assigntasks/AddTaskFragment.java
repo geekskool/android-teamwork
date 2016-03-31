@@ -36,19 +36,21 @@ import java.util.Locale;
 import java.util.Map;
 
 /**
- * A placeholder fragment containing a simple view.
+ * This fragment is used to add a new task to Firebase. Tasks can only be assigned to
+ * mobile numbers that are registered on Firebase.
  */
 public class AddTaskFragment extends Fragment {
     /**
      * The fragment argument representing the section number for this
      * fragment.
      */
-    final int PICK_CONTACT = 1;
-
     private static final String ARG_SECTION_NUMBER = "section_number";
+
+    final int PICK_CONTACT = 1;
 
     public static Firebase rootrefUsers;
 
+    //The data that we need to upload to firebase
     public String mAssigneeName = "";
     public String mAssigneeContact = "";
     public String mTaskName = "";
@@ -66,14 +68,16 @@ public class AddTaskFragment extends Fragment {
     public AddTaskFragment() {
     }
 
+    //The views in the layout
     EditText dueDate;
     EditText assignee;
     EditText taskDescription;
     EditText comments;
     Button saveTaskBtn;
     View rootView;
-    Calendar myCalendar = Calendar.getInstance();
 
+    //Creating a date picker dialog to set the due date
+    Calendar myCalendar = Calendar.getInstance();
     DatePickerDialog.OnDateSetListener date = new DatePickerDialog.OnDateSetListener() {
 
         @Override
@@ -91,7 +95,7 @@ public class AddTaskFragment extends Fragment {
         String displayFormat = "MMM dd, yyyy";
         SimpleDateFormat sdf = new SimpleDateFormat(displayFormat, Locale.US);
 
-        //setting today's date to 00 Hours
+        //setting today's date to 00 Hours so that the user can set today as the due date
         Calendar c = new GregorianCalendar();
         c.set(Calendar.HOUR_OF_DAY, 0); //anything 0 - 23
         c.set(Calendar.MINUTE, 0); // 0 - 60
@@ -136,6 +140,7 @@ public class AddTaskFragment extends Fragment {
 
         rootrefUsers = new Firebase(Config.LOGIN_REF);
 
+        //setting the due date according to the date the user picked
         dueDate = (EditText) rootView.findViewById(R.id.due_date);
         dueDate.setOnClickListener(new View.OnClickListener() {
 
@@ -152,6 +157,7 @@ public class AddTaskFragment extends Fragment {
                                    }
 
         );
+        //picking the assignee from the user's contacts
         assignee = (EditText) rootView.findViewById(R.id.assignee);
         assignee.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -166,6 +172,7 @@ public class AddTaskFragment extends Fragment {
             }
         });
 
+        //saving the task if the user clicks on the save task button
         saveTaskBtn = (Button) rootView.findViewById(R.id.save_task);
         saveTaskBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -177,6 +184,9 @@ public class AddTaskFragment extends Fragment {
         return rootView;
     }
 
+    /**
+     * checks form validity and saves the task if all the data is valid
+     */
     public void saveTask() {
         try {
             taskDescription = (EditText) rootView.findViewById(R.id.description);
@@ -184,36 +194,43 @@ public class AddTaskFragment extends Fragment {
             mTaskName = taskDescription.getText().toString().trim();
             mDueDate = dueDate.getText().toString();
             mComments = comments.getText().toString().trim();
+            //All fields except "comments" are required, so checking if the user left any field blank
             if (!mTaskName.equals("") && !mDueDate.equals("") && !mAssigneeName.equals("")) {
-                Log.v("saveTask()", "mTaskName = " + mTaskName);
                 if (flag == 0) {
-                    Toast.makeText(getContext(), "Please assign the task to a registered user.", Toast.LENGTH_SHORT).show();
-                    Log.v("assignee", mAssigneeContact);
+                    Toast.makeText(getContext(), R.string.invalid_user, Toast.LENGTH_SHORT).show();
                     assignee.setText("");
                     assignee.requestFocus();
                     return;
                 }
                 UpdateTask updateDB = new UpdateTask();
                 updateDB.execute();
-                Toast.makeText(getContext(), "Task saved.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), R.string.task_saved, Toast.LENGTH_SHORT).show();
                 taskDescription.setText("");
                 dueDate.setText("");
                 comments.setText("");
                 assignee.setText("");
             } else {
-                Toast.makeText(getContext(), "Fields cannot be empty. Please enter some values.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), R.string.error_field_required, Toast.LENGTH_SHORT).show();
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
+    /**
+     * Takes the data from the Contacts content provider and updates the same in the form details
+     *
+     * @param reqCode    to check what kind of request was made
+     * @param resultCode to check if the data was fetched successfully
+     * @param data       the data that was fetched from the Contacts content provider
+     */
     public void onActivityResult(int reqCode, int resultCode, Intent data) {
         super.onActivityResult(reqCode, resultCode, data);
         switch (reqCode) {
             case (PICK_CONTACT):
                 if (resultCode == Activity.RESULT_OK) {
                     Uri contactData = data.getData();
+                    //fetching the ID, name, and phone number of the contact selected
                     Cursor cursor = getContext().getContentResolver().query(
                             contactData,
                             new String[]{
@@ -224,23 +241,24 @@ public class AddTaskFragment extends Fragment {
                             null,
                             null);
 
+                    //if a null cursor was not returned, set assignee details from the cursor
                     if (cursor.moveToFirst()) {
                         mAssigneeName = cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME)).trim();
                         mAssigneeContact = cursor.getString(cursor.getColumnIndexOrThrow(ContactsContract.CommonDataKinds.Phone.NUMBER)).replaceAll("\\s+", "");
                         if (mAssigneeContact.length() > 10)
                             mAssigneeContact = mAssigneeContact.substring(mAssigneeContact.length() - 10);
                         assignee.setText(mAssigneeName);
-                        /*Toast.makeText(getActivity(), mAssigneeName + " has number " + mAssigneeContact, Toast.LENGTH_LONG).show();*/
                     }
                     cursor.close();
                 }
                 break;
         }
+        //checking if the user is registered on firebase or not
         rootrefUsers.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 for (DataSnapshot loginSnapshot : dataSnapshot.getChildren()) {
-                    if (mAssigneeContact.equals(loginSnapshot.getKey())) {
+                    if (mAssigneeContact != null && mAssigneeContact.equals(loginSnapshot.getKey())) {
                         setFlag(1);
                         Log.v("Flag", "" + flag);
                         return;
@@ -263,22 +281,6 @@ public class AddTaskFragment extends Fragment {
 
             String userMobile = prefManager.getMobileNumber();
 
-//            Log.v("Flag", "" + flag);
-//            if (flag == 0) {
-////                mAssigneeContact = null;
-//                return null;
-//            }
-
-            //Update the task details in the Tasks table
-            /*ContentValues taskDetails = new ContentValues();
-            taskDetails.put(TasksContract.TaskEntry.COL_DESCRIPTION, mTaskName);
-            taskDetails.put(TasksContract.TaskEntry.COL_ASSIGNEE_KEY, mAssigneeContact);
-            taskDetails.put(TasksContract.TaskEntry.COL_CREATOR_KEY, "creatorID");
-            taskDetails.put(TasksContract.TaskEntry.COL_DUE_DATE, mDueDate);
-            taskDetails.put(TasksContract.TaskEntry.COL_COMMENTS, mComments);
-
-            getContext().getContentResolver().insert(TasksContract.TaskEntry.CONTENT_URI, taskDetails);
-*/
             //upload task data to firebase
             Map<String, String> task = new HashMap<>();
             task.put(TasksContract.TaskEntry.COL_DESCRIPTION, mTaskName);
@@ -286,38 +288,13 @@ public class AddTaskFragment extends Fragment {
             task.put(TasksContract.TaskEntry.COL_CREATOR_KEY, userMobile);
             task.put(TasksContract.TaskEntry.COL_DUE_DATE, mDueDate);
 
-//            Firebase taskRef = rootrefTasks.push();
-//            taskRef.setValue(task);
-
-            //If the assignee doesn't already exist in the profiles table, update the assignee name into the profiles table
-            /*Cursor cursor = getContext().getContentResolver().query(
-                    TasksContract.ProfileEntry.CONTENT_URI,
-                    new String[]{TasksContract.ProfileEntry._ID},
-                    TasksContract.ProfileEntry.COL_CONTACT + "=?",
-                    new String[]{mAssigneeContact},
-                    null
-            );
-            if (!cursor.moveToFirst()) {
-                ContentValues contactDetails = new ContentValues();
-                contactDetails.put(TasksContract.ProfileEntry.COL_NAME, mAssigneeName);
-                contactDetails.put(TasksContract.ProfileEntry.COL_CONTACT, mAssigneeContact);
-
-                getContext().getContentResolver().insert(TasksContract.ProfileEntry.CONTENT_URI, contactDetails);
-            }
-            cursor.close();*/
-
             //also upload assignee details to firebase. if the contact already exists, it will be
-            //overwritten by the setValue(). If the users need to be implemented as objects, use
-            //updateChildren() like this, so as to overwrite node:
-            /*Map<String, Object> newFeature = new HashMap<String, Object>();
-            newFeature.put("key", "value"); //use more put() statements to put other attributes into newFeature
-            Map<String, Object> user = new HashMap<String, Object>();
-            user.put(mAssigneeContact, newFeature);
-            rootrefUsers.updateChildren(user);*/
+            //overwritten by the setValue().
             //push the task details on to the assignee's task list as a new task
             Firebase assigneeTaskRef = rootrefUsers.child(mAssigneeContact).child("user_tasks").push();
             assigneeTaskRef.setValue(task);
             Firebase creatorTaskRef = null;
+
             //if the assignee is not the creator, add another field, assignee_ref, to store the key where the
             //task is assigned to the assignee, into the task details. Then push the task details to the
             //creator's task list as well. Add the creator's task ref to the assignee's task as well.
@@ -333,25 +310,8 @@ public class AddTaskFragment extends Fragment {
                 assigneeTaskRef.child("notify").setValue("true");
             }
 
-            //If there is a comment, update the comment and its task key into the messages table
+            //If there is a comment, upload the comment to the firebase tasks table
             if (!mComments.equals("")) {
-                /*Cursor commentCursor = getContext().getContentResolver().query(
-                        TasksContract.TaskEntry.CONTENT_URI,
-                        new String[]{TasksContract.TaskEntry._ID},
-                        TasksContract.TaskEntry.COL_DESCRIPTION + "=?",
-                        new String[]{mTaskName},
-                        TasksContract.TaskEntry._ID + " DESC"
-                );
-                if (commentCursor.moveToFirst()) {
-                    ContentValues messages = new ContentValues();
-                    messages.put(TasksContract.MessageEntry.COL_TASK_KEY, commentCursor.getInt(commentCursor.getColumnIndex(TasksContract.TaskEntry._ID)));
-                    messages.put(TasksContract.MessageEntry.COL_MSG, mComments);
-                    messages.put(TasksContract.MessageEntry.COL_FROM, "creatorID");
-                    getContext().getContentResolver().insert(TasksContract.MessageEntry.CONTENT_URI, messages);
-                }
-                commentCursor.close();*/
-
-                //also upload the comment to the firebase tasks table
                 CommentItem comment = new CommentItem(userMobile, mComments, "" + System.currentTimeMillis());
                 Firebase commentRef = assigneeTaskRef.child("comments");
                 commentRef.push().setValue(comment);
@@ -360,6 +320,9 @@ public class AddTaskFragment extends Fragment {
                     commentRef.push().setValue(comment);
                 }
             }
+
+            //finally set all the values to be null so that the user cannot accidentally save the
+            //same task more than once
             mComments = null;
             mTaskName = null;
             mAssigneeName = null;
