@@ -147,11 +147,7 @@ public class NotificationListener extends Service {
         //Creating a notification
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this);
         builder.setSmallIcon(R.drawable.ic_notification);
-        Intent intent;
-        if (category.equals(ADD) || category.equals(DELETE))
-            intent = new Intent(this, AddTask.class);
-        else
-            intent = new Intent(this, CommentsActivity.class);
+        Intent intent = new Intent(this, AddTask.class);
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, 0);
         builder.setContentIntent(pendingIntent);
         builder.setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.ic_launcher));
