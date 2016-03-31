@@ -9,9 +9,22 @@ public class Config {
     public static final String URL_REQUEST_SMS = "http://192.168.42.110:5000/chatauth";
     public static final String URL_VERIFY_OTP = "http://192.168.42.110:5000/chatauth";
 
-    //Firebase references
+    //Firebase DB references
     public static final String ROOT_REF = "https://teamkarma.firebaseio.com/";
     public static final String LOGIN_REF = "https://teamkarma.firebaseio.com/login";
+
+    //Firebase keys: use these as child names when inserting or retrieving data
+    public static final String KEY_NAME = "name";
+    public static final String KEY_PICTURE = "picture";
+    public static final String KEY_USER_TASKS = "user_tasks";
+    public static final String KEY_ASSIGNEE = "assignee_id";
+    public static final String KEY_COMMENTS = "comments";
+    public static final String KEY_COMMENT_FROM = "contact_from";
+    public static final String KEY_COMMENT_MSG = "msg";
+    public static final String KEY_COMMENT_TIMESTAMP = "timestamp";
+    public static final String KEY_CREATOR = "creator_id";
+    public static final String KEY_TASK_NAME = "description";
+    public static final String KEY_DUE_DATE = "due_date";
 
     // SMS provider identification
     // It should match with the ID in your SMS gateway origin
