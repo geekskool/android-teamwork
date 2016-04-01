@@ -74,50 +74,7 @@ public class TasksFragment extends ListFragment {
         tasksRef = usersRef.child(userMobile).child(Config.KEY_USER_TASKS);
 
         //creating the firebase list adapter to populate the list view
-        adapter = new FirebaseListAdapter<TaskItem>(getActivity(), TaskItem.class, R.layout.fragment_tasks, tasksRef) {
-            String assigneeName;
-
-            @Override
-            protected void populateView(final View view, final TaskItem taskItem, int position) {
-                tasksRef.addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        for (final DataSnapshot taskSnapshot : dataSnapshot.getChildren()) {
-                            usersRef.addValueEventListener(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(DataSnapshot snapshot) {
-                                    for (DataSnapshot userSnapshot : snapshot.getChildren()) {
-                                        if (taskItem.getAssignee_id().equals(userSnapshot.getKey())) {
-                                            assigneeName = userSnapshot.child(Config.KEY_NAME).getValue().toString();
-                                            ((TextView) view.findViewById(R.id.creator_id)).setText(taskItem.getCreator_id());
-                                            ((TextView) view.findViewById(R.id.task_list_item)).setText(taskItem.getDescription());
-                                            ((TextView) view.findViewById(R.id.assignee_taskList)).setText(assigneeName);
-                                            ((TextView) view.findViewById(R.id.due_date_taskList)).setText(taskItem.getDue_date());
-                                            ((TextView) view.findViewById(R.id.assignee_contact)).setText(taskItem.getAssignee_id());
-                                            ((TextView) view.findViewById(R.id.assignee_ref)).setText(taskItem.getAssignee_ref());
-                                            if (taskItem.getDescription().equals(taskSnapshot.child(Config.KEY_TASK_NAME).getValue())) {
-                                                ((TextView) view.findViewById(R.id.task_id)).setText(taskSnapshot.getRef().toString());
-                                            }
-                                        }
-
-                                    }
-                                }
-
-                                @Override
-                                public void onCancelled(FirebaseError firebaseError) {
-                                    Log.e("Firebase EventListener", "The read failed: " + firebaseError.getMessage());
-                                }
-                            });
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(FirebaseError firebaseError) {
-
-                    }
-                });
-            }
-        };
+        adapter = new TasksListAdapter(getActivity(), TaskItem.class, R.layout.fragment_tasks, tasksRef);
 
         //attach the adapter to the list view
         setListAdapter(adapter);
@@ -221,6 +178,10 @@ public class TasksFragment extends ListFragment {
         TextView taskID = (TextView) v.findViewById(R.id.task_id);
         String taskId = taskID.getText().toString();
         String description = taskName.getText().toString();
+
+        String assignee = ((TextView) v.findViewById(R.id.assignee_taskList)).getText().toString();
+        String dueDate = ((TextView) v.findViewById(R.id.due_date_taskList)).getText().toString();
+
         /*if the user is the creator,
         *   pass the assignee ref as well as tasks ref
         * if user is the assignee,
@@ -232,6 +193,8 @@ public class TasksFragment extends ListFragment {
         intent.putExtra("TASK_ID", "" + taskId);
         intent.putExtra("TASK_NAME", description);
         intent.putExtra("ASSIGNEE_REF", assigneeRef);
+        intent.putExtra("ASSIGNEE_NAME", assignee);
+        intent.putExtra("DUE_DATE", dueDate);
 
         startActivity(intent);
     }

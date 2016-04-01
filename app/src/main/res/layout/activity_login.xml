@@ -16,7 +16,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/colorPrimary"
-            android:gravity="center_horizontal"
+            android:gravity="center_horizontal|center_vertical"
             android:orientation="vertical">
 
             <ImageView
@@ -24,7 +24,6 @@
                 android:layout_height="60dp"
                 android:layout_gravity="center_horizontal"
                 android:layout_marginBottom="25dp"
-                android:layout_marginTop="100dp"
                 android:contentDescription="@string/app_name"
                 android:src="@mipmap/ic_launcher" />
 
@@ -88,15 +87,14 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/colorPrimary"
-            android:gravity="center_horizontal"
+            android:gravity="center_horizontal|center_vertical"
             android:orientation="vertical">
 
             <ImageView
                 android:layout_width="60dp"
                 android:layout_height="60dp"
-                android:layout_gravity="center_horizontal"
+                android:layout_gravity="center_horizontal|center_vertical"
                 android:layout_marginBottom="25dp"
-                android:layout_marginTop="150dp"
                 android:src="@mipmap/ic_launcher" />
 
             <TextView
@@ -180,7 +178,6 @@
         </LinearLayout>
 
     </com.example.ishita.assigntasks.helper.LoginViewPager>
-
     <ProgressBar
         android:id="@+id/progressBar"
         android:layout_width="30dp"

@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -52,6 +53,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         setContentView(R.layout.activity_login);
 
         Firebase.setAndroidContext(this);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
 
         //initializing all the views in the layout
         viewPager = (ViewPager) findViewById(R.id.viewPagerVertical);
@@ -185,6 +187,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         try {
             // adding "91" to user mobile since it's required by the server
             jsonBody = new JSONObject("{\"mobile\":\"" + "91" + mobile + "\"}");
+            Log.v(TAG, jsonBody.toString());
         } catch (JSONException e) {
             Log.e(TAG, "Error parsing mobile number to JSON" + e.toString());
         }
@@ -213,6 +216,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
                                 layoutEditMobile.setVisibility(View.VISIBLE);
 
                                 Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                                Log.v(TAG, responseObj.toString());
 
                             } else {
                                 //displaying error message to user

@@ -69,7 +69,7 @@ public class EditProfile extends AppCompatActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         //setting profile details if details are there on Firebase
-        inputName.setText(userDetails.get(Config.KEY_NAME) == null ? "" : userDetails.get(Config.KEY_NAME));
+        inputName.setText((userDetails.get(Config.KEY_NAME) == null || userDetails.get(Config.KEY_NAME).equals("No name specified")) ? "" : userDetails.get(Config.KEY_NAME));
         if (userDetails.get(Config.KEY_PICTURE) != null) {
             String picture64 = userDetails.get(Config.KEY_PICTURE);
             Bitmap bmp = decodeBase64(picture64);

@@ -50,6 +50,8 @@ public class CommentsActivity extends AppCompatActivity {
         taskId = getIntent().getStringExtra("TASK_ID");
         taskName = getIntent().getStringExtra("TASK_NAME");
         assigneeRef = getIntent().getStringExtra("ASSIGNEE_REF");
+        String assigneeName = getIntent().getStringExtra("ASSIGNEE_NAME");
+        String dueDate = getIntent().getStringExtra("DUE_DATE");
 
         msgEdit = (EditText) findViewById(R.id.msg_edit);
         sendBtn = (ImageButton) findViewById(R.id.send_btn);
@@ -59,34 +61,10 @@ public class CommentsActivity extends AppCompatActivity {
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setTitle(taskName);
+        actionBar.setSubtitle("@" + assigneeName + " (" + dueDate + ")");
 
         //creating the list adapter to show the existing comments
-        adapter = new FirebaseListAdapter<CommentItem>(this, CommentItem.class, R.layout.comments_list_item, commentsRef) {
-            @Override
-            protected void populateView(View view, CommentItem commentItem, int position) {
-                LinearLayout box = (LinearLayout) view.findViewById(R.id.box);
-                TextView message = (TextView) view.findViewById(R.id.text1);
-                LinearLayout root = (LinearLayout) view;
-                TextView timeStamp = (TextView) view.findViewById(R.id.text2);
-                //formatting the comment according to who posted the comment
-                if (userMobile.equals(commentItem.getContact_from())) {
-                    GradientDrawable sd = (GradientDrawable) box.getBackground().mutate();
-                    sd.setColor(Color.parseColor("#FBE9E7"));
-                    sd.invalidateSelf();
-                    root.setGravity(Gravity.END);
-                    root.setPadding(50, 10, 10, 10);
-                } else {
-                    GradientDrawable sd = (GradientDrawable) box.getBackground().mutate();
-                    sd.setColor(Color.parseColor("#fffeee"));
-                    sd.invalidateSelf();
-                    root.setGravity(Gravity.START);
-                    root.setPadding(10, 10, 50, 10);
-                }
-                //setting the text in the comment
-                message.setText(commentItem.getMsg());
-                timeStamp.setText(formatDate(commentItem.getTimestamp()));
-            }
-        };
+        adapter = new CommentsListAdapter(this, CommentItem.class, R.layout.comments_list_item, commentsRef);
 
         //setting the list behavior
         ListView list = (ListView) findViewById(R.id.list);
@@ -104,23 +82,6 @@ public class CommentsActivity extends AppCompatActivity {
                 }
             }
         });
-    }
-
-    /**
-     * To set format the milliseconds returned by firebase to a human readable date format
-     *
-     * @param stringDate the milliseconds in a string format
-     * @return the human readable date string
-     */
-    public String formatDate(String stringDate) {
-        DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd' 'HH:mm:ss");
-        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
-        long milliseconds = Long.parseLong(stringDate);
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(milliseconds);
-        TimeZone tz = TimeZone.getDefault();
-        sdf.setTimeZone(tz);
-        return sdf.format(calendar.getTime());
     }
 
 

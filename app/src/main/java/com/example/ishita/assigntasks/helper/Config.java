@@ -32,6 +32,6 @@ public class Config {
     // It should match with the ID in your SMS gateway origin
     public static final String SMS_ORIGIN = "+919895008997";
 
-    // special character to prefix the otp. Make sure this character appears only once in the sms
+    // special character to prefix the otp. This character should appear only once in the sms
     public static final String OTP_DELIMITER = ":";
 }
