@@ -6,6 +6,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,6 +15,7 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,8 +38,9 @@ import java.util.TimeZone;
 
 
 /**
- * This fragment shows the last task created by or for the user logged in.
- * Change this to show team members in the user's team when teams are implemented.
+ * This fragment shows the last task created by or for the user logged in. This class is
+ * implemented almost exactly the same as the comments activity class.
+ * Change this fragment to show team members in the user's team when teams are implemented.
  * Use the {@link CommentsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
@@ -48,15 +51,14 @@ public class CommentsFragment extends Fragment {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
 
-    // Rename and change types of parameters
+    // Auto-generated: Rename and change types of parameters
     private String mParam1;
     private String mParam2;
 
     private EditText msgEdit;
-    private ImageButton sendBtn;
     String taskId, taskName;
     FirebaseListAdapter adapter;
-    Firebase commentsRef;
+    Firebase commentsRef, assigneeRef = null;
     View rootView;
     PrefManager prefManager;
 
@@ -86,112 +88,92 @@ public class CommentsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         prefManager = new PrefManager(getContext());
+        //Auto-generated
         if (getArguments() != null) {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
-        //getting the task whose comments we want to show
+        //getting the task whose comments we want to show: in this case, the last task added under
+        //this user
         final Firebase tasksRef = new Firebase(Config.LOGIN_REF).child(prefManager.getMobileNumber()).child(Config.KEY_USER_TASKS);
         Query queryRef = tasksRef.orderByKey().limitToLast(1);
-        queryRef.addChildEventListener(new ChildEventListener() {
-            @Override
-            public void onChildAdded(DataSnapshot snapshot, String previousChild) {
-                commentsRef = new Firebase(tasksRef.child(snapshot.getKey()).child(Config.KEY_COMMENTS).toString());
-                taskName = snapshot.child(Config.KEY_TASK_NAME).getValue().toString();
-                populateView();
-            }
+        if (queryRef != null)
+            queryRef.addChildEventListener(new ChildEventListener() {
+                @Override
+                public void onChildAdded(DataSnapshot snapshot, String previousChild) {
+                    setCommentsRef(tasksRef.child(snapshot.getKey()).child(Config.KEY_COMMENTS));
+                    taskId = tasksRef.child(snapshot.getKey()).toString();
+                    taskName = snapshot.child(Config.KEY_TASK_NAME).getValue().toString();
+                    if (snapshot.hasChild(Config.KEY_ASSIGNEE_REF))
+                        assigneeRef = new Firebase(snapshot.child(Config.KEY_ASSIGNEE_REF).getValue().toString());
+                }
 
-            @Override
-            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                @Override
+                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
 
-            }
+                }
 
-            @Override
-            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                @Override
+                public void onChildRemoved(DataSnapshot dataSnapshot) {
 
-            }
+                }
 
-            @Override
-            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+                @Override
+                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
 
-            }
+                }
 
-            @Override
-            public void onCancelled(FirebaseError firebaseError) {
+                @Override
+                public void onCancelled(FirebaseError firebaseError) {
 
-            }
-        });
+                }
+            });
+    }
+
+    /**
+     * Another stupid setter method created because of Firebase's handicap
+     *
+     * @param commentsRef base url to populate the comments list
+     */
+    private void setCommentsRef(Firebase commentsRef) {
+        this.commentsRef = commentsRef;
+        populateView();
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
+        // Inflate the layout for this fragment. Since we need the rootView in other
+        // methods, we not only inflate and return it, we store it in a global variable.
         rootView = inflater.inflate(R.layout.fragment_comments, container, false);
 
         return rootView;
     }
 
-    private void populateView() {
-        msgEdit = (EditText) rootView.findViewById(R.id.frag_msg_edit);
-        sendBtn = (ImageButton) rootView.findViewById(R.id.frag_send_btn);
-        setTaskDetails();
-    }
-
-    //formatting the date in milliseconds to a human readable format
-    public String formatDate(String stringDate) {
-        DateFormat sdf = new SimpleDateFormat("yyyy-MM-dd' 'HH:mm:ss");
-        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
-        long milliseconds = Long.parseLong(stringDate);
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(milliseconds);
-        TimeZone tz = TimeZone.getDefault();
-        sdf.setTimeZone(tz);
-        return sdf.format(calendar.getTime());
-    }
 
     //Populating the list view
-    private void setTaskDetails() {
-        adapter = new FirebaseListAdapter<CommentItem>(getActivity(), CommentItem.class, R.layout.comments_list_item, commentsRef) {
-            @Override
-            protected void populateView(View view, CommentItem commentItem, int position) {
-                LinearLayout box = (LinearLayout) view.findViewById(R.id.box);
-                TextView message = (TextView) view.findViewById(R.id.text1);
-                LinearLayout root = (LinearLayout) view;
-                TextView timeStamp = (TextView) view.findViewById(R.id.text2);
-                if (prefManager.getMobileNumber().equals(commentItem.getContact_from())) {
-                    GradientDrawable sd = (GradientDrawable) box.getBackground().mutate();
-                    sd.setColor(Color.parseColor("#FBE9E7"));
-                    sd.invalidateSelf();
-                    root.setGravity(Gravity.END);
-                    root.setPadding(50, 10, 10, 10);
-                } else {
-                    GradientDrawable sd = (GradientDrawable) box.getBackground().mutate();
-                    sd.setColor(Color.parseColor("#fffeee"));
-                    sd.invalidateSelf();
-                    root.setGravity(Gravity.START);
-                    root.setPadding(10, 10, 50, 10);
-                }
-                message.setText(commentItem.getMsg());
-                timeStamp.setText(formatDate(commentItem.getTimestamp()));
-            }
-        };
-
+    private void populateView() {
+        msgEdit = (EditText) rootView.findViewById(R.id.frag_msg_edit);
+        ImageButton sendBtn = (ImageButton) rootView.findViewById(R.id.frag_send_btn);
         ListView list = (ListView) rootView.findViewById(R.id.frag_comment_list);
+        list.setEmptyView(new ProgressBar(getContext()));
+        TextView listEmptyText = (TextView) rootView.findViewById(R.id.frag_task_details);
+        adapter = new CommentsListAdapter(getActivity(), CommentItem.class, R.layout.comments_list_item, commentsRef);
+        listEmptyText.setVisibility(View.GONE);
         list.setAdapter(adapter);
         list.setSelection(list.getAdapter().getCount() - 1);
 
-            sendBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    String msg = msgEdit.getText().toString();
-                    if (!msg.equals("")) {
-                        send(msg);
-                        msgEdit.setText(null);
-                    }
+        sendBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String msg = msgEdit.getText().toString();
+                if (!msg.equals("")) {
+                    send(msg);
+                    msgEdit.setText(null);
                 }
-            });
+            }
+        });
     }
 
     private void send(final String txt) {
@@ -204,12 +186,20 @@ public class CommentsFragment extends Fragment {
                     comment.put(Config.KEY_COMMENT_MSG, txt);
                     comment.put(Config.KEY_COMMENT_FROM, prefManager.getMobileNumber());
                     comment.put(Config.KEY_COMMENT_TIMESTAMP, "" + System.currentTimeMillis());
-                    commentsRef.push().setValue(comment);
+                    Firebase newCommentRef = commentsRef.push();
+                    newCommentRef.setValue(comment);
+                    newCommentRef.child(Config.KEY_NOTIFY).setValue("true");
+                    if (assigneeRef != null) {
+                        Firebase assigneeCommentsRef = assigneeRef.child(Config.KEY_COMMENTS);
+                        Firebase assigneeNewComment = assigneeCommentsRef.push();
+                        assigneeNewComment.setValue(comment);
+                        assigneeNewComment.child(Config.KEY_NOTIFY).setValue("true");
+                    }
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
                 return msg;
-                    }
+            }
 
             @Override
             protected void onPostExecute(String msg) {

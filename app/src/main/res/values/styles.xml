@@ -1,5 +1,6 @@
 <resources>
 
+    <style name="MyMaterialTheme" parent="AppTheme" />
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
         <!-- Primary theme color of the app (sets background color of app bar) -->

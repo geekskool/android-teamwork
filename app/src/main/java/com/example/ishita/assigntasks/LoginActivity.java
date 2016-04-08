@@ -186,7 +186,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         JSONObject jsonBody = null;
         try {
             // adding "91" to user mobile since it's required by the server
-            jsonBody = new JSONObject("{\"mobile\":\"" + "91" + mobile + "\"}");
+            jsonBody = new JSONObject("{\"mobile\":\"" + mobile + "\"}");
             Log.v(TAG, jsonBody.toString());
         } catch (JSONException e) {
             Log.e(TAG, "Error parsing mobile number to JSON" + e.toString());

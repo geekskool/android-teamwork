@@ -12,6 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
+        android:text="@string/no_task_details"
         android:elevation="2dp"
         android:visibility="gone"
         android:padding="10dp" />

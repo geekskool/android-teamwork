@@ -6,8 +6,8 @@ package com.example.ishita.assigntasks.helper;
 public class Config {
     // server URL configuration
     // change VERIFY_OTP url in case you decide to use two separate urls
-    public static final String URL_REQUEST_SMS = "http://192.168.42.110:5000/chatauth";
-    public static final String URL_VERIFY_OTP = "http://192.168.42.110:5000/chatauth";
+    public static final String URL_REQUEST_SMS = "http://www.geekskool.com/chatauth";
+    public static final String URL_VERIFY_OTP = "http://www.geekskool.com/chatauth";
 
     //Firebase DB references
     public static final String ROOT_REF = "https://teamkarma.firebaseio.com/";
